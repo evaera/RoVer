@@ -92,6 +92,8 @@ class DiscordBot {
 
         if (action.status) {
             member.send(`Welcome to the server, ${action.robloxUsername}!`);
+        } else {
+            member.send("Welcome to the server! Visit the following link to verify your Roblox account: https://verify.eryn.io");
         }
     }
 

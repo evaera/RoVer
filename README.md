@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <a href="#"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
+    <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
 </p>
 
 # What is it?
@@ -45,6 +45,6 @@ The user is verified and can participate in your community.
 
 # Getting Started with RoVer
 
-The quickest and easiest way to use RoVer is to [add the hosted version](#) to your server.
+The quickest and easiest way to use RoVer is to [add the hosted version](https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264) to your server.
 
 You can also clone this repository and host it yourself and make any modifications you wish. 

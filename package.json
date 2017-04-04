@@ -1,5 +1,14 @@
 {
   "dependencies": {
-    "discord.js": "^11.0.0"
-  }
+    "discord.js": "^11.0.0",
+    "express": "^4.15.2",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0"
+  },
+  "name": "RoVer",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "https://github.com/evaera/RoVer",
+  "author": "evaera",
+  "license": "Apache-2.0"
 }

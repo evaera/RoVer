@@ -76,4 +76,7 @@ You should probably make a read-only channel in the server explaining these proc
 
 - Allow admins to customize the nickname format, so for example could have user id in the nickname as well
 - Add a nickname command so that, if the admins choose, the users can modify their nickname and then have their roblox name in brackets behind it
+- Add more commands for admins for things like fixing name, banning per server by roblox account, and a !whois command
+- Redo the command logic so it's not a mess
+- Add support for discord role and channel mentions
 - More cowbell

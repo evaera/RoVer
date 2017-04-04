@@ -1,7 +1,9 @@
 const express       = require('express')
 const DiscordServer = require('./DiscordServer')
 
-module.exports = function(discordBot, config) {
+module.exports = 
+
+function(discordBot, config) {
     let server = express();
 
     server.get('/update-user', (req, res) => {

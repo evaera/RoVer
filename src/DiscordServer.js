@@ -10,7 +10,9 @@ DefaultSettings = {
     announceChannel: null
 }
 
-module.exports = class DiscordServer {
+module.exports = 
+
+class DiscordServer {
     constructor(discordBot, id) {
         this.id = id;
         this.discordBot = discordBot;

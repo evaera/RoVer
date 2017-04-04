@@ -3,7 +3,9 @@ const request       = require('request-promise')
 const config        = require('./data/client.json')
 const DiscordServer = require('./DiscordServer')
 
-module.exports = class DiscordBot {
+module.exports = 
+
+class DiscordBot {
     constructor() {
         this.initialize();
         this.servers = {};

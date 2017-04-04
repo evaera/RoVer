@@ -61,3 +61,19 @@ You can run these commands without arguments to set them back to their default s
 When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
 
 You should probably make a read-only channel in the server explaining these processes to your members. 
+
+# Self-hosting instructions
+
+1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on. 
+2. **Node.js version 7.8.0 or higher is required to run RoVer.**
+3. Install yarn if you don't already have it: `npm install -g yarn`
+4. Use yarn to install the dependencies: `yarn install`
+5. Edit the file `src/data/client.json` and insert your bot token.
+6. Start the bot: `node ./src/index.js`
+7. You should set up a process manager like [PM2](http://pm2.keymetrics.io/) or forever.js to ensure that the bot remains online.
+
+# To-do list and plans
+
+- Allow admins to customize the nickname format, so for example could have user id in the nickname as well
+- Add a nickname command so that, if the admins choose, the users can modify their nickname and then have their roblox name in brackets behind it
+- More cowbell

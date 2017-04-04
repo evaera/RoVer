@@ -76,7 +76,7 @@ class DiscordServer {
                 case 404:
                     return {
                         status: false,
-                        error: "Not verified."
+                        error: "Not verified. Go to https://verify.eryn.io to verify."
                     }
                 case 429: 
                     return {
@@ -115,6 +115,7 @@ class DiscordServer {
             } catch (e) {
                 return {
                     status: false,
+                    nonFatal: true,
                     error: "The bot couldn't modify the member in this server. Either the bot doesn't have permission or the target user cannot be modified by the bot (such as higher rank in the server)."
                 }
             }

@@ -110,7 +110,7 @@ class DiscordBot {
 
             let action = await server.verifyMember(id);
 
-            if (!action.status) {
+            if (!action.status && !action.nonFatal) {
                 break;
             }
         }

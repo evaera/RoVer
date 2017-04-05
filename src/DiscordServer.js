@@ -7,7 +7,8 @@ const config      = require('./data/client.json')
 DefaultSettings = {
     verifiedRole: null,
     nicknameUsers: true,
-    announceChannel: null
+    announceChannel: null,
+    nicknameFormat: "%USERNAME%"
 }
 
 module.exports = 
@@ -64,9 +65,29 @@ class DiscordServer {
     }
 
     static clearMemberCache(id) {
-        if (DiscordServer.DataCache[id]) {
+        if (DiscordServer.DataCache && DiscordServer.DataCache[id]) {
             delete DiscordServer.DataCache[id];
         }
+    }
+
+    getMemberNickname(data, member) {
+        let formatString = this.getSetting('nicknameFormat');
+
+        let replacements = {
+            "%USERNAME%": data.robloxUsername,
+            "%USERID%": data.robloxId,
+            "%DISCORDNAME%": "",
+            "%DISCORDID%": "",
+        }
+
+        if (member != null) {
+            replacements["%DISCORDNAME%"] = member.user.username;
+            replacements["%DISCORDID%"] = member.id;
+        }
+
+        return formatString.replace(/%\w+%/g, (all) => {
+            return replacements[all] || all;
+        });
     }
 
     async verifyMember(id) {
@@ -104,7 +125,7 @@ class DiscordServer {
                 let member = await this.server.fetchMember(id);
 
                 if (this.getSetting('nicknameUsers')) {
-                    await member.setNickname(data.robloxUsername);
+                    await member.setNickname(this.getMemberNickname(data, member));
                 }
 
                 if (this.getSetting('verifiedRole')) {

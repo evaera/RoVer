@@ -85,6 +85,14 @@ class DiscordBot {
                 } else {
                     msg.reply("Requires argument (true|false)");
                 }
+            } else if (command === "!rovernicknameformat") {
+                if (argument.length > 0) {
+                    server.setSetting('nicknameFormat', argument);
+                    msg.reply(`Set nickname format to \`${argument}\``)
+                } else {
+                    server.setSetting('nicknameFormat', undefined);
+                    msg.reply("Nickname format set back to default");
+                }
             }
         }
     }
@@ -115,6 +123,7 @@ class DiscordBot {
             let action = await server.verifyMember(id);
 
             if (!action.status && !action.nonFatal) {
+                console.log(action);
                 break;
             }
         }

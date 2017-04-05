@@ -184,9 +184,11 @@ class DiscordBot {
                             msg.reply(`Role not found: \`${argument}\``);
                         }
                     }
+                    break;
                 case "!roverunbindallgroupranks": 
                     server.deleteGroupRankBinding('all');
                     msg.reply("Deleted all group rank bindings.");
+                    break;
                 case "!roverupdate":
                     if (msg.mentions.users.array().length > 0) {
                         let user = msg.mentions.users.first();
@@ -201,6 +203,7 @@ class DiscordBot {
                             msg.reply(`${action.robloxUsername} verified.`);
                         }
                     }
+                    break;
             }
         }
     }

@@ -72,27 +72,27 @@ You should probably make a read-only channel in the server explaining these proc
 
 - Use the following command to set up giving a role to all members of a group:
 
-`!RoVerBindGroupRank 372:Group member` where `372` is your *group id* and `Group member` is the *Discord role name*
+  `!RoVerBindGroupRank 372:Group member` where `372` is your *group id* and `Group member` is the *Discord role name*
 
 - Use the following command to set up giving a role to members of a certain rank in a group:
 
-`!RoVerBindGroupRank 372:255:Group owner` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
+  `!RoVerBindGroupRank 372:255:Group owner` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
 
 - Use the following command to set up giving a role to members of a **rank or higher** in a group: (*Note! This uses a "greater than or equal to" comparison*)
 
-`!RoVerBindGroupRank 372:>200:Group owner` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
+  `!RoVerBindGroupRank 372:>200:Group owner` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
 
 - Use the following command to set up giving a role to members lower than a rank in a group: (*Note! This uses a "less than" comparison*)
 
-`!RoVerBindGroupRank 372:<200:Group owner` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
+  `!RoVerBindGroupRank 372:<200:Group owner` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
 
 - Use the following command to unbind a role from a group:
 
-`!RoVerUnbindGroupRank Group member` where `Group member` is the *Discord role name*
+  `!RoVerUnbindGroupRank Group member` where `Group member` is the *Discord role name*
 
 - Use the following command to unbind all roles from groups in your server:
 
-`!RoVerUnbindAllGroupRanks`
+  `!RoVerUnbindAllGroupRanks`
 
 ### Virtual groups
 

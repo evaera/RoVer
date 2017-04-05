@@ -141,6 +141,9 @@ class DiscordServer {
             if (VirtualGroups[binding.group]){
                 returnValue = VirtualGroups[binding.group](userid);
             } else {
+                if (config.loud) {
+                    console.log(`https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`);
+                }
                 let rank = await request({
                     uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`,
                     simple: false
@@ -203,6 +206,9 @@ class DiscordServer {
         let member;
 
         try {
+            if (config.loud) {
+                console.log(`https://verify.eryn.io/api/user/${id}`);
+            }
             data = DiscordServer.DataCache[id] || await request({
                 uri: `https://verify.eryn.io/api/user/${id}`,
                 json: true,
@@ -256,11 +262,17 @@ class DiscordServer {
 
                 if (this.getSetting('groupRankBindings').length > 0) {
                     for (let binding of this.getSetting('groupRankBindings')) {
-                        if (await DiscordServer.resolveGroupRankBinding(binding, data.robloxId) === true) {
-                            await member.addRole(binding.role);
-                        } else {
-                            await member.removeRole(binding.role);
-                        }
+                        DiscordServer.resolveGroupRankBinding(binding, data.robloxId)
+                            .then((state) => {
+                                if (state === true) {
+                                    member.addRole(binding.role);
+                                } else {
+                                    member.removeRole(binding.role);
+                                }
+                            })
+                            .catch(() => {
+                                console.log('Resolution error for binding');
+                            });
                     }
                 }
             } catch (e) {

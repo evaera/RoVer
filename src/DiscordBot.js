@@ -234,7 +234,8 @@ class DiscordBot {
             let server = this.getServer(guild.id);
 
             let action = await server.verifyMember(id, {
-                clearBindingsCache: clearCache
+                clearBindingsCache: clearCache,
+                announce: false
             });
 
             if (!action.status && !action.nonFatal) {

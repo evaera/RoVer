@@ -47,61 +47,68 @@ class DiscordBot {
 
             let server = this.getServer(msg.guild.id);
 
-            if (command === "!rover") {
-                msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>` - Set the role that users get when they are verified.\n`!RoVerNickname <true|false>` - Choose whether or not the bot changes nicknames.\n`!RoVerAnnounceChannel <exact channel name>` - A channel where the bot will announce new verifications, useful for admins.\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`\n`!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Same format as above.");
-            } else if (command === "!roververifiedrole") {
-                if (argument.length > 0) {
-                    let role = msg.guild.roles.find('name', argument);
-                    if (role) {
-                        server.setSetting('verifiedRole', role.id);
-                        msg.reply(`Set verified role to ${argument}`);
+            switch (command) {
+                case "!rover":
+                    msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>` - Set the role that users get when they are verified.\n`!RoVerNickname <true|false>` - Choose whether or not the bot changes nicknames.\n`!RoVerAnnounceChannel <exact channel name>` - A channel where the bot will announce new verifications, useful for admins.\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`\n`!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Same format as above.");
+                    break;
+                case "!roververifiedrole":
+                    if (argument.length > 0) {
+                        let role = msg.guild.roles.find('name', argument);
+                        if (role) {
+                            server.setSetting('verifiedRole', role.id);
+                            msg.reply(`Set verified role to ${argument}`);
+                        } else {
+                            msg.reply(`Couldn't find role \`${argument}\`. Make sure you type it exactly (including capitalization).`);
+                        }
                     } else {
-                        msg.reply(`Couldn't find role \`${argument}\`. Make sure you type it exactly (including capitalization).`);
+                        server.setSetting('verifiedRole', null);
+                        msg.reply("Cleared verified role, users will no longer receive a role when they verify.");
                     }
-                } else {
-                    server.setSetting('verifiedRole', null);
-                    msg.reply("Cleared verified role, users will no longer receive a role when they verify.");
-                }
-            } else if (command === "!roverannouncechannel") {
-                if (argument.length > 0) {
-                    let channel = msg.guild.channels.find('name', argument);
-                    if (channel) {
-                        server.setSetting('announceChannel', channel.id);
-                        msg.reply(`Set verify announcement channel to ${argument}`);
+                    break;
+                case "!roverannouncechannel":
+                     if (argument.length > 0) {
+                        let channel = msg.guild.channels.find('name', argument);
+                        if (channel) {
+                            server.setSetting('announceChannel', channel.id);
+                            msg.reply(`Set verify announcement channel to ${argument}`);
+                        } else {
+                            msg.reply(`Couldn't find channel \`${argument}\`. Make sure you type it exactly (including capitalization).`);
+                        }
                     } else {
-                        msg.reply(`Couldn't find channel \`${argument}\`. Make sure you type it exactly (including capitalization).`);
+                        server.setSetting('announceChannel', null);
+                        msg.reply("Verified users will no longer be announced.");
                     }
-                } else {
-                    server.setSetting('announceChannel', null);
-                    msg.reply("Verified users will no longer be announced.");
-                }
-            } else if (command === "!rovernickname") {
-                if (argument.length > 0) {
-                    server.setSetting('nicknameUsers', argument === 'true');
-                    if (argument === 'true') {
-                        msg.reply("The bot will now nickname users to their Roblox username.");
+                    break;
+                case "!rovernickname":
+                     if (argument.length > 0) {
+                        server.setSetting('nicknameUsers', argument === 'true');
+                        if (argument === 'true') {
+                            msg.reply("The bot will now nickname users to their Roblox username.");
+                        } else {
+                            msg.reply("The bot will no longer nickname users to their Roblox name.");
+                        }
                     } else {
-                        msg.reply("The bot will no longer nickname users to their Roblox name.");
+                        msg.reply("Requires argument (true|false)");
                     }
-                } else {
-                    msg.reply("Requires argument (true|false)");
-                }
-            } else if (command === "!rovernicknameformat") {
-                if (argument.length > 0) {
-                    server.setSetting('nicknameFormat', argument);
-                    msg.reply(`Set nickname format to \`${argument}\``);
-                } else {
-                    server.setSetting('nicknameFormat', undefined);
-                    msg.reply("Nickname format set back to default");
-                }
-            } else if (command === "!roverwelcomemessage") {
-                if (argument.length > 0) {
-                    server.setSetting('welcomeMessage', argument);
-                    msg.reply(`Set welcome message to \`${argument}\``);
-                } else {
-                    server.setSetting('welcomeMessage', undefined);
-                    msg.reply("Set welcome message back to default");
-                }
+                    break;
+                case "!rovernicknameformat":
+                     if (argument.length > 0) {
+                        server.setSetting('nicknameFormat', argument);
+                        msg.reply(`Set nickname format to \`${argument}\``);
+                    } else {
+                        server.setSetting('nicknameFormat', undefined);
+                        msg.reply("Nickname format set back to default");
+                    }
+                    break;
+                case "!roverwelcomemessage":
+                    if (argument.length > 0) {
+                        server.setSetting('welcomeMessage', argument);
+                        msg.reply(`Set welcome message to \`${argument}\``);
+                    } else {
+                        server.setSetting('welcomeMessage', undefined);
+                        msg.reply("Set welcome message back to default");
+                    }
+                    break;
             }
         }
     }

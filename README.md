@@ -60,6 +60,7 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!RoVerBindGroupRank <groupid:rank number:role name|groupid:role name>` - See section below.
 - `!RoVerUnbindGroupRank <role name>` - See section below.
 - `!RoVerUnbindAllGroupRanks` - See section below.
+- `!RoVerUpdate <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.
 
 You can run these commands without arguments to set them back to their default state.
 

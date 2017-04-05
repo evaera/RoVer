@@ -64,7 +64,7 @@ class DiscordBot {
 
             switch (command) {
                 case "!rover":
-                    msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>` - Set the role that users get when they are verified.\n`!RoVerNickname <true|false>` - Choose whether or not the bot changes nicknames.\n`!RoVerAnnounceChannel <exact channel name>` - A channel where the bot will announce new verifications, useful for admins.\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`\n`!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Same format as above.\n`!RoVerBindGroupRank <groupid:rank number:role name|groupid:role name>` - Bind a rank in a group to a role in discord.\n`!RoVerUnbindGroupRank <role name>` - Unbind a group rank binding associated with this role.\n`!RoVerUnbindAllGroupRanks` - Unbind all group ranks in this server.");
+                    msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>` - Set the role that users get when they are verified.\n`!RoVerNickname <true|false>` - Choose whether or not the bot changes nicknames.\n`!RoVerAnnounceChannel <exact channel name>` - A channel where the bot will announce new verifications, useful for admins.\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`\n`!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Same format as above.\n`!RoVerBindGroupRank <groupid:rank number:role name|groupid:role name>` - Bind a rank in a group to a role in discord.\n`!RoVerUnbindGroupRank <role name>` - Unbind a group rank binding associated with this role.\n`!RoVerUnbindAllGroupRanks` - Unbind all group ranks in this server.\n`!RoVerUpdate <@targetUser>` - Update a user, same as them running !verify. Make sure you @mention them.");
                     break;
                 case "!roververifiedrole":
                     if (argument.length > 0) {
@@ -177,6 +177,20 @@ class DiscordBot {
                 case "!roverunbindallgroupranks": 
                     server.deleteGroupRankBinding('all');
                     msg.reply("Deleted all group rank bindings.");
+                case "!roverupdate":
+                    if (msg.mentions.users.array().length > 0) {
+                        let user = msg.mentions.users.first();
+                        DiscordServer.clearMemberCache(user.id);
+
+                        let server = this.getServer(msg.guild.id)
+                        let action = await server.verifyMember(user.id);
+
+                        if (!action.status) {
+                            msg.reply(action.error);
+                        } else {
+                            msg.reply(`${action.robloxUsername} verified.`);
+                        }
+                    }
             }
         }
     }

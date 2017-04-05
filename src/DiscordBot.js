@@ -53,6 +53,10 @@ class DiscordBot {
                     break;
                 case "!roververifiedrole":
                     if (argument.length > 0) {
+                        if (argument.startsWith("@")) {
+                            argument = argument.substring(1);
+                        }
+
                         let role = msg.guild.roles.find('name', argument);
                         if (role) {
                             server.setSetting('verifiedRole', role.id);
@@ -67,7 +71,12 @@ class DiscordBot {
                     break;
                 case "!roverannouncechannel":
                      if (argument.length > 0) {
+                        if (argument.startsWith("#")) {
+                            argument = argument.substring(1);
+                        }
+
                         let channel = msg.guild.channels.find('name', argument);
+
                         if (channel) {
                             server.setSetting('announceChannel', channel.id);
                             msg.reply(`Set verify announcement channel to ${argument}`);

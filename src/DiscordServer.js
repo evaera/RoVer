@@ -9,7 +9,34 @@ DefaultSettings = {
     nicknameUsers: true,
     announceChannel: null,
     nicknameFormat: "%USERNAME%",
-    welcomeMessage: "Welcome to the server, %USERNAME%!"
+    welcomeMessage: "Welcome to the server, %USERNAME%!",
+    groupRankBindings: []
+}
+
+VirtualGroups = {
+    DevForum: async (userid) => {
+        let userData = await request({
+            uri: `http://api.roblox.com/users/${userid}`,
+            json: true
+        });
+
+        let username = userData.Username;
+
+        if (!username) {
+            return false;
+        }
+
+        let devForumData = await request({
+            uri: `http://devforum.roblox.com/users/${username}.json`,
+            json: true
+        });
+        
+        if (devForumData.user.trust_level > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 module.exports = 
@@ -24,6 +51,7 @@ class DiscordServer {
 
         if (DiscordServer.DataCache == null) {
             DiscordServer.DataCache = {};
+            DiscordServer.BindingsCache = {};
         }
 
         this.settings = {};
@@ -89,6 +117,58 @@ class DiscordServer {
         });
     }
 
+    static async resolveGroupRankBinding(binding, userid) {
+        if (DiscordServer.BindingsCache[userid] && typeof DiscordServer.BindingsCache[userid][JSON.stringify(binding)] !== 'undefined') {
+            return DiscordServer.BindingsCache[userid][JSON.stringify(binding)];
+        }
+
+        let returnValue = false;
+
+        try {
+            if (VirtualGroups[binding.group]){
+                returnValue = VirtualGroups[binding.group](userid);
+            } else {
+                let rank = await request(`https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`);
+                rank = parseInt(rank.replace(/[^\d]/g, ''), 10);
+                
+                if (binding.rank) {
+                    if (rank === binding.rank) {
+                        returnValue = true;
+                    }
+                } else {
+                    if (rank > 0) {
+                        returnValue = true;
+                    }
+                }
+            }
+        } catch (e) {
+            console.log("Encountered an error while trying to resolve a rank binding:");
+            console.log(binding);
+        }
+        
+        if (!DiscordServer.BindingsCache[userid]) {
+            DiscordServer.BindingsCache[userid] = {};
+        }
+
+        DiscordServer.BindingsCache[userid][JSON.stringify(binding)] = returnValue;
+
+        return returnValue;
+    }
+
+    deleteGroupRankBinding(roleid) {
+        let rankBindings = this.getSetting('groupRankBindings');
+
+        for (var i=0; i < rankBindings.length; i++) {
+            let binding = rankBindings[i];
+
+            if (binding.role === roleid || roleid === 'all') {
+                rankBindings.splice(i, 1);
+            }
+        }
+        
+        this.setSetting('groupRankBindings', rankBindings);
+    }
+
     getMemberNickname(data, member) {
         return DiscordServer.formatDataString(this.getSetting('nicknameFormat'), data, member)
     }
@@ -150,6 +230,20 @@ class DiscordServer {
 
                     if (channel) {
                         channel.send(`**User verified:** <@${id}> as ${data.robloxUsername}`);
+                    }
+                }
+
+                if (options.clearBindingsCache !== false) {
+                    DiscordServer.BindingsCache[data.robloxId] = {};
+                }
+
+                if (this.getSetting('groupRankBindings').length > 0) {
+                    for (let binding of this.getSetting('groupRankBindings')) {
+                        if (await DiscordServer.resolveGroupRankBinding(binding, data.robloxId) === true) {
+                            await member.addRole(binding.role);
+                        } else {
+                            await member.removeRole(binding.role);
+                        }
                     }
                 }
             } catch (e) {

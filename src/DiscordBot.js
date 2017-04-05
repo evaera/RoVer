@@ -36,7 +36,8 @@ class DiscordBot {
         }
 
         this.getServer(channel.guild.id).verifyMember(user.id, {
-            announce: false
+            announce: false,
+            clearBindingsCache: false
         });
     }
 
@@ -63,7 +64,7 @@ class DiscordBot {
 
             switch (command) {
                 case "!rover":
-                    msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>` - Set the role that users get when they are verified.\n`!RoVerNickname <true|false>` - Choose whether or not the bot changes nicknames.\n`!RoVerAnnounceChannel <exact channel name>` - A channel where the bot will announce new verifications, useful for admins.\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`\n`!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Same format as above.");
+                    msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>` - Set the role that users get when they are verified.\n`!RoVerNickname <true|false>` - Choose whether or not the bot changes nicknames.\n`!RoVerAnnounceChannel <exact channel name>` - A channel where the bot will announce new verifications, useful for admins.\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`\n`!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Same format as above.\n`!RoVerBindGroupRank <groupid:rank number:role name|groupid:role name>` - Bind a rank in a group to a role in discord.\n`!RoVerUnbindGroupRank <role name>` - Unbind a group rank binding associated with this role.\n`!RoVerUnbindAllGroupRanks` - Unbind all group ranks in this server.");
                     break;
                 case "!roververifiedrole":
                     if (argument.length > 0) {
@@ -132,6 +133,50 @@ class DiscordBot {
                         msg.reply("Set welcome message back to default");
                     }
                     break;
+                case "!roverbindgrouprank":
+                    if (argument.length > 0) {
+                        let bindArgs = argument.split(':');
+                        let binding = {};
+
+                        if (bindArgs.length === 2) {
+                            binding.group = bindArgs[0];
+                            binding.role = bindArgs[1];
+                        } else if (bindArgs.length === 3) {
+                            binding.group = bindArgs[0];
+                            binding.rank = parseInt(bindArgs[1], 10);
+                            binding.role = bindArgs[2];
+                        } else {
+                            return msg.reply("Wrong number of arguments: needs 2 or 3");
+                        }
+
+                        let role = msg.guild.roles.find('name', binding.role);
+                        if (role) {
+                            binding.role = role.id;
+                        } else {
+                            return msg(`Couldn't find role: \`${binding.role}\``);
+                        }
+
+                        server.deleteGroupRankBinding(binding.role);
+                        let serverBindings = server.getSetting('groupRankBindings');
+                        serverBindings.push(binding);
+                        server.setSetting('groupRankBindings', serverBindings);
+
+                        msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${role.name}`);
+                    }
+                    break;
+                case "!roverunbindgrouprank":
+                    if (argument.length > 0) {
+                        let role = msg.guild.roles.find('name', argument);
+                        if (role) {
+                            server.deleteGroupRankBinding(role.id);
+                            msg.reply(`Cleared all bindings associated to \`${role.name}\``);
+                        } else {
+                            msg.reply(`Role not found: \`${argument}\``);
+                        }
+                    }
+                case "!roverunbindallgroupranks": 
+                    server.deleteGroupRankBinding('all');
+                    msg.reply("Deleted all group rank bindings.");
             }
         }
     }
@@ -157,10 +202,13 @@ class DiscordBot {
     async globallyUpdateMember(id) {
         DiscordServer.clearMemberCache(id);
 
+        let clearCache = true;
         for (let guild of this.bot.guilds.array()) {
             let server = this.getServer(guild.id);
 
-            let action = await server.verifyMember(id);
+            let action = await server.verifyMember(id, {
+                clearBindingsCache: clearCache
+            });
 
             if (!action.status && !action.nonFatal) {
                 break;
@@ -168,6 +216,8 @@ class DiscordBot {
                 let member = await this.bot.guilds.get(guild.id).fetchMember(id);
                 member.send(server.getWelcomeMessage(action));
             }
+
+            clearCache = false;
         }
     }
 }

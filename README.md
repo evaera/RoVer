@@ -57,12 +57,43 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!RoVerAnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!RoVerNicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
 - `!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`. 
+- `!RoVerBindGroupRank <groupid:rank number:role name|groupid:role name>` - See section below.
+- `!RoVerUnbindGroupRank <role name>` - See section below.
+- `!RoVerUnbindAllGroupRanks` - See section below.
 
 You can run these commands without arguments to set them back to their default state.
 
 When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
 
 You should probably make a read-only channel in the server explaining these processes to your members. 
+
+## Setting up roles for Roblox group members and group ranks
+
+Use the following command to set up giving a role to all members of a group:
+
+`!RoVerBindGroupRank 372:Group member` where `372` is your *group id* and `Group member` is the *Discord role name*
+
+Use the following command to set up giving a role to members of a certain rank in a group:
+
+`!RoVerBindGroupRank 255:255:Group owner` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
+
+Use the following command to unbind a role from a group:
+
+`!RoVerUnbindGroupRank Group member` where `Group member` is the *Discord role name*
+
+Use the following command to unbind all roles from groups in your server:
+
+`!RoVerUnbindAllGroupRanks`
+
+### Virtual groups
+
+Virtual groups are a way to bind ranks using the group rank binding system for external services that aren't actually Roblox groups, such as the dev forum. Currently, only one virtual group is implemented, but more could be easily added if you fork this project:
+
+- `DevForum`
+
+To create a role for all members of the dev forum min your server, use the following command:
+
+`!RoVerBindGroupRank DevForum:DevForum Member`, where `DevForum` is the *Virtual Group* and `DevForum Member` is the *Discord role name*
 
 # Self-hosting instructions
 
@@ -76,8 +107,5 @@ You should probably make a read-only channel in the server explaining these proc
 
 # To-do list and plans
 
-- Add a nickname command so that, if the admins choose, the users can modify their nickname and then have their roblox name in brackets behind it
 - Add more commands for admins for things like fixing name, banning per server by roblox account, and a !whois command
-- Redo the command logic so it's not a mess
-- Add support for discord role and channel mentions
 - More cowbell

@@ -6,6 +6,8 @@
     <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
 </p>
 
+[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn)
+
 # What is it?
 
 RoVer is an open source, drop-in verification bot that will allow your members to safely authenticate their Roblox account on your Discord server. This empowers your Roblox community with the following advantages:

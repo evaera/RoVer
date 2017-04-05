@@ -76,7 +76,7 @@ Use the following command to set up giving a role to all members of a group:
 
 Use the following command to set up giving a role to members of a certain rank in a group:
 
-`!RoVerBindGroupRank 255:255:Group owner` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
+`!RoVerBindGroupRank 372:255:Group owner` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `Group owner` is the *Discord role name*
 
 Use the following command to unbind a role from a group:
 

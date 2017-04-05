@@ -8,7 +8,8 @@ DefaultSettings = {
     verifiedRole: null,
     nicknameUsers: true,
     announceChannel: null,
-    nicknameFormat: "%USERNAME%"
+    nicknameFormat: "%USERNAME%",
+    welcomeMessage: "Welcome to the server, %USERNAME%!"
 }
 
 module.exports = 
@@ -70,14 +71,12 @@ class DiscordServer {
         }
     }
 
-    getMemberNickname(data, member) {
-        let formatString = this.getSetting('nicknameFormat');
-
+    static formatDataString(formatString, data, member) {
         let replacements = {
             "%USERNAME%": data.robloxUsername,
             "%USERID%": data.robloxId,
-            "%DISCORDNAME%": "",
-            "%DISCORDID%": "",
+            "%DISCORDNAME%": data.discordName || "",
+            "%DISCORDID%": data.discordId || "",
         }
 
         if (member != null) {
@@ -90,8 +89,21 @@ class DiscordServer {
         });
     }
 
+    getMemberNickname(data, member) {
+        return DiscordServer.formatDataString(this.getSetting('nicknameFormat'), data, member)
+    }
+
+    getWelcomeMessage(data) {
+        return DiscordServer.formatDataString(this.getSetting('welcomeMessage'), data);
+    }
+    
+    hasCustomWelcomeMessage() {
+        return DefaultSettings.welcomeMessage !== this.getSetting('welcomeMessage');
+    }
+
     async verifyMember(id) {
         let data = {};
+        let member;
 
         try {
             data = DiscordServer.DataCache[id] || await request({
@@ -122,7 +134,7 @@ class DiscordServer {
             DiscordServer.DataCache[id] = data;
 
             try {
-                let member = await this.server.fetchMember(id);
+                member = await this.server.fetchMember(id);
 
                 if (this.getSetting('nicknameUsers')) {
                     await member.setNickname(this.getMemberNickname(data, member));
@@ -143,14 +155,16 @@ class DiscordServer {
                 return {
                     status: false,
                     nonFatal: true,
-                    error: "The bot couldn't modify the member in this server. Either the bot doesn't have permission or the target user cannot be modified by the bot (such as higher rank in the server)."
+                    error: "RoVer couldn't modify the member in this server. Either the bot doesn't have permission or the target user cannot be modified by the bot (such as higher rank in the server)."
                 }
             }
 
             return {
                 status: true,
                 robloxUsername: data.robloxUsername,
-                robloxId: data.robloxId
+                robloxId: data.robloxId,
+                discordId: member.id,
+                discordName: member.user.username
             }
         }
     }

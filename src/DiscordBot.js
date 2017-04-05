@@ -30,12 +30,13 @@ class DiscordBot {
         if (msg.content.toLowerCase() === "!verify" && msg.guild) {
             DiscordServer.clearMemberCache(msg.author.id);
 
-            let action = await this.getServer(msg.guild.id).verifyMember(msg.author.id);
+            let server = this.getServer(msg.guild.id)
+            let action = await server.verifyMember(msg.author.id);
 
             if (!action.status) {
                 msg.reply(action.error);
             } else {
-                msg.reply(`Welcome to the server, ${action.robloxUsername}!`);
+                msg.reply(server.getWelcomeMessage(action));
             }
         }else if (msg.guild && msg.member && msg.member.hasPermission('ADMINISTRATOR')) {
             let command = msg.cleanContent.toLowerCase().split(' ')[0];
@@ -47,7 +48,7 @@ class DiscordBot {
             let server = this.getServer(msg.guild.id);
 
             if (command === "!rover") {
-                msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>`\n`!RoVerNickname <true|false>`\n`!RoVerAnnounceChannel <exact channel name>`\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`");
+                msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>` - Set the role that users get when they are verified.\n`!RoVerNickname <true|false>` - Choose whether or not the bot changes nicknames.\n`!RoVerAnnounceChannel <exact channel name>` - A channel where the bot will announce new verifications, useful for admins.\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`\n`!RoVerWelcomeMessage <welcome message>` - Set the message the user gets when they verify. Same format as above.");
             } else if (command === "!roververifiedrole") {
                 if (argument.length > 0) {
                     let role = msg.guild.roles.find('name', argument);
@@ -88,22 +89,31 @@ class DiscordBot {
             } else if (command === "!rovernicknameformat") {
                 if (argument.length > 0) {
                     server.setSetting('nicknameFormat', argument);
-                    msg.reply(`Set nickname format to \`${argument}\``)
+                    msg.reply(`Set nickname format to \`${argument}\``);
                 } else {
                     server.setSetting('nicknameFormat', undefined);
                     msg.reply("Nickname format set back to default");
+                }
+            } else if (command === "!roverwelcomemessage") {
+                if (argument.length > 0) {
+                    server.setSetting('welcomeMessage', argument);
+                    msg.reply(`Set welcome message to \`${argument}\``);
+                } else {
+                    server.setSetting('welcomeMessage', undefined);
+                    msg.reply("Set welcome message back to default");
                 }
             }
         }
     }
 
     async guildMemberAdd(member) {
-        let action = await this.getServer(member.guild.id).verifyMember(member.id);
+        let server = this.getServer(member.guild.id);
+        let action = await server.verifyMember(member.id);
 
         if (action.status) {
-            member.send(`Welcome to the server, ${action.robloxUsername}!`);
+            member.send(server.getWelcomeMessage(action));
         } else {
-            member.send("Welcome to the server! Visit the following link to verify your Roblox account: https://verify.eryn.io");
+            member.send("Welcome! Visit the following link to verify your Roblox account: https://verify.eryn.io");
         }
     }
 
@@ -123,8 +133,10 @@ class DiscordBot {
             let action = await server.verifyMember(id);
 
             if (!action.status && !action.nonFatal) {
-                console.log(action);
                 break;
+            } else if (server.hasCustomWelcomeMessage()) {
+                let member = await this.bot.guilds.get(guild.id).fetchMember(id);
+                member.send(server.getWelcomeMessage(action));
             }
         }
     }

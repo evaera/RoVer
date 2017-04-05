@@ -237,6 +237,8 @@ class DiscordBot {
             if (!action.status && !action.nonFatal) {
                 break;
             } else if (server.hasCustomWelcomeMessage()) {
+                await this.bot.fetchUser(id);
+                
                 let member = await this.bot.guilds.get(guild.id).fetchMember(id);
                 member.send(server.getWelcomeMessage(action));
             }

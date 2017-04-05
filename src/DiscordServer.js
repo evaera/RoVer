@@ -63,6 +63,12 @@ class DiscordServer {
         fs.writeFileSync(this.settingsPath, JSON.stringify(this.settings));
     }
 
+    static clearMemberCache(id) {
+        if (DiscordServer.DataCache[id]) {
+            delete DiscordServer.DataCache[id];
+        }
+    }
+
     async verifyMember(id) {
         let data = {};
 

@@ -28,6 +28,8 @@ class DiscordBot {
 
     async message(msg) {
         if (msg.content.toLowerCase() === "!verify" && msg.guild) {
+            DiscordServer.clearMemberCache(msg.author.id);
+
             let action = await this.getServer(msg.guild.id).verifyMember(msg.author.id);
 
             if (!action.status) {
@@ -105,6 +107,8 @@ class DiscordBot {
     }
 
     async globallyUpdateMember(id) {
+        DiscordServer.clearMemberCache(id);
+
         for (let guild of this.bot.guilds.array()) {
             let server = this.getServer(guild.id);
 

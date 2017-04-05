@@ -279,7 +279,7 @@ class DiscordServer {
                 discordName: member.user.username
             }
         } else {
-             switch (body.errorCode){
+             switch (data.errorCode){
                 case 404:
                     return {
                         status: false,

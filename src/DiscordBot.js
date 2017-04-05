@@ -18,12 +18,26 @@ class DiscordBot {
         this.bot.on("message", this.message.bind(this));
         this.bot.on("guildMemberAdd", this.guildMemberAdd.bind(this));
 
+        if (config.lockNicknames) {
+            this.bot.on("typingStart", this.typingStart.bind(this));
+        }
+
         this.bot.login(config.token);
     }
 
     ready() {
         console.log("RoVer is ready.");
         this.bot.user.setGame("http://eryn.io/RoVer");
+    }
+
+    async typingStart(channel, user) {
+        if (channel.type !== "text") {
+            return;
+        }
+
+        this.getServer(channel.guild.id).verifyMember(user.id, {
+            announce: false
+        });
     }
 
     async message(msg) {

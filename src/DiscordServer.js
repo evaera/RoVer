@@ -101,7 +101,8 @@ class DiscordServer {
         return DefaultSettings.welcomeMessage !== this.getSetting('welcomeMessage');
     }
 
-    async verifyMember(id) {
+    async verifyMember(id, options) {
+        var options = options || {};
         let data = {};
         let member;
 
@@ -144,7 +145,7 @@ class DiscordServer {
                     await member.addRole(this.getSetting('verifiedRole'));
                 }
 
-                if (this.getSetting('announceChannel')) {
+                if (this.getSetting('announceChannel') && options.announce !== false) {
                     let channel = await this.server.channels.get(this.getSetting('announceChannel'));
 
                     if (channel) {

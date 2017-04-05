@@ -47,7 +47,7 @@ class DiscordBot {
             let server = this.getServer(msg.guild.id);
 
             if (command === "!rover") {
-                msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>`\n`!RoVerNickname <true|false>`\n`!RoVerAnnounceChannel <exact channel name>`");
+                msg.reply("**RoVer Admin Commands:**\n\n`!RoVerVerifiedRole <exact role name>`\n`!RoVerNickname <true|false>`\n`!RoVerAnnounceChannel <exact channel name>`\n`!RoVerNicknameFormat <format>` - sets the nickname format. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`");
             } else if (command === "!roververifiedrole") {
                 if (argument.length > 0) {
                     let role = msg.guild.roles.find('name', argument);

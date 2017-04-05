@@ -52,9 +52,10 @@ You can also clone this repository and host it yourself and make any modificatio
 After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Administrator` permission in the Discord server in order to use these commands.
 
 - `!RoVer` - Displays a list of commands
-- `!RoVerVerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`
+- `!RoVerVerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`.
 - `!RoVerNickname <true|false>` - Set whether or not new users will be nicknamed to their Roblox name. Default `true`.
 - `!RoVerAnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
+- `!RoVerNicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
 
 You can run these commands without arguments to set them back to their default state.
 
@@ -74,7 +75,6 @@ You should probably make a read-only channel in the server explaining these proc
 
 # To-do list and plans
 
-- Allow admins to customize the nickname format, so for example could have user id in the nickname as well
 - Add a nickname command so that, if the admins choose, the users can modify their nickname and then have their roblox name in brackets behind it
 - Add more commands for admins for things like fixing name, banning per server by roblox account, and a !whois command
 - Redo the command logic so it's not a mess

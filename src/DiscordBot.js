@@ -142,8 +142,18 @@ class DiscordBot {
                             binding.group = bindArgs[0];
                             binding.role = bindArgs[1];
                         } else if (bindArgs.length === 3) {
+                            let rankUnparsed = bindArgs[1];
+
+                            if (rankUnparsed.startsWith('>')) {
+                                binding.operator = 'gt';
+                                rankUnparsed = rankUnparsed.substring(1);
+                            } else if (rankUnparsed.startsWith('<')) {
+                                binding.operator = 'lt';
+                                rankUnparsed = rankUnparsed.substring(1);
+                            }
+
                             binding.group = bindArgs[0];
-                            binding.rank = parseInt(bindArgs[1], 10);
+                            binding.rank = parseInt(rankUnparsed, 10);
                             binding.role = bindArgs[2];
                         } else {
                             return msg.reply("Wrong number of arguments: needs 2 or 3");
@@ -161,7 +171,7 @@ class DiscordBot {
                         serverBindings.push(binding);
                         server.setSetting('groupRankBindings', serverBindings);
 
-                        msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${role.name}`);
+                        msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${role.name}, Comparison: ${binding.operator || 'eq'}`);
                     }
                     break;
                 case "!roverunbindgrouprank":

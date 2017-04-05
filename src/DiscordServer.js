@@ -132,7 +132,7 @@ class DiscordServer {
                 rank = parseInt(rank.replace(/[^\d]/g, ''), 10);
                 
                 if (binding.rank) {
-                    if (rank === binding.rank) {
+                    if ((!binding.operator && rank === binding.rank) || (binding.operator === 'gt' && rank >= binding.rank) || (binding.operator === 'lt' && rank < binding.rank)) {
                         returnValue = true;
                     }
                 } else {

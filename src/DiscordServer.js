@@ -19,7 +19,8 @@ VirtualGroups = {
         try {
             userData = await request({
                 uri: `http://api.roblox.com/users/${userid}`,
-                json: true
+                json: true,
+                simple: false
             });
         } catch (e) {
             return false;
@@ -36,7 +37,8 @@ VirtualGroups = {
         try {
             devForumData = await request({
                 uri: `http://devforum.roblox.com/users/${username}.json`,
-                json: true
+                json: true,
+                simple: false
             });
         } catch (e) {
             return false;
@@ -139,7 +141,10 @@ class DiscordServer {
             if (VirtualGroups[binding.group]){
                 returnValue = VirtualGroups[binding.group](userid);
             } else {
-                let rank = await request(`https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`);
+                let rank = await request({
+                    uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`,
+                    simple: false
+                });
                 rank = parseInt(rank.replace(/[^\d]/g, ''), 10);
                 
                 if (binding.rank) {
@@ -200,7 +205,8 @@ class DiscordServer {
         try {
             data = DiscordServer.DataCache[id] || await request({
                 uri: `https://verify.eryn.io/api/user/${id}`,
-                json: true
+                json: true,
+                simple: false
             })
         } catch (e) {
             switch (e.response.statusCode){
@@ -271,6 +277,24 @@ class DiscordServer {
                 robloxId: data.robloxId,
                 discordId: member.id,
                 discordName: member.user.username
+            }
+        } else {
+             switch (body.errorCode){
+                case 404:
+                    return {
+                        status: false,
+                        error: "Not verified. Go to https://verify.eryn.io to verify."
+                    }
+                case 429: 
+                    return {
+                        status: false,
+                        error: "Server is busy. Please try again later."
+                    }
+                default:
+                    return {
+                        status: false,
+                        error: "Unknown error."
+                    }
             }
         }
     }

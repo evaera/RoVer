@@ -15,10 +15,15 @@ DefaultSettings = {
 
 VirtualGroups = {
     DevForum: async (userid) => {
-        let userData = await request({
-            uri: `http://api.roblox.com/users/${userid}`,
-            json: true
-        });
+        let userData = {}
+        try {
+            userData = await request({
+                uri: `http://api.roblox.com/users/${userid}`,
+                json: true
+            });
+        } catch (e) {
+            return false;
+        }
 
         let username = userData.Username;
 
@@ -26,10 +31,16 @@ VirtualGroups = {
             return false;
         }
 
-        let devForumData = await request({
-            uri: `http://devforum.roblox.com/users/${username}.json`,
-            json: true
-        });
+        let devForumData = {}
+        
+        try {
+            devForumData = await request({
+                uri: `http://devforum.roblox.com/users/${username}.json`,
+                json: true
+            });
+        } catch (e) {
+            return false;
+        }
         
         if (devForumData.user.trust_level > 0) {
             return true;

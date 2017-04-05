@@ -37,7 +37,7 @@ class DiscordBot {
             } else {
                 msg.reply(`Welcome to the server, ${action.robloxUsername}!`);
             }
-        }else if (msg.guild && msg.member.hasPermission('ADMINISTRATOR')) {
+        }else if (msg.guild && msg.member && msg.member.hasPermission('ADMINISTRATOR')) {
             let command = msg.cleanContent.toLowerCase().split(' ')[0];
 
             let args = msg.cleanContent.split(' ');

@@ -17,6 +17,9 @@ VirtualGroups = {
     DevForum: async (userid) => {
         let userData = {}
         try {
+            if (config.loud){
+                console.log(`http://api.roblox.com/users/${userid}`);
+            }
             userData = await request({
                 uri: `http://api.roblox.com/users/${userid}`,
                 json: true,
@@ -35,6 +38,9 @@ VirtualGroups = {
         let devForumData = {}
         
         try {
+            if (config.loud){
+                console.log(`http://devforum.roblox.com/users/${username}.json`);
+            }
             devForumData = await request({
                 uri: `http://devforum.roblox.com/users/${username}.json`,
                 json: true,
@@ -239,6 +245,10 @@ class DiscordServer {
 
             try {
                 member = await this.server.fetchMember(id);
+
+                if (!member) {
+                    return;
+                }
 
                 if (this.getSetting('nicknameUsers')) {
                     await member.setNickname(this.getMemberNickname(data, member));

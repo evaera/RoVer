@@ -12,7 +12,9 @@ class DiscordBot {
     }
 
     initialize() {
-        this.bot = new Discord.Client();
+        this.bot = new Discord.Client({
+            fetchAllMembers: true
+        });
 
         this.bot.on("ready", this.ready.bind(this));
         this.bot.on("message", this.message.bind(this));

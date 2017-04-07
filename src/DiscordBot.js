@@ -233,20 +233,35 @@ class DiscordBot {
         for (let guild of this.bot.guilds.array()) {
             let server = this.getServer(guild.id);
 
-            let action = await server.verifyMember(id, {
-                clearBindingsCache: clearCache,
-                announce: false
-            });
+            if (clearCache) {
+                 let action = await server.verifyMember(id, {
+                    clearBindingsCache: clearCache,
+                    announce: false
+                });
 
-            if (!action.status && !action.nonFatal) {
-                break;
-            } else if (server.hasCustomWelcomeMessage()) {
-                await this.bot.fetchUser(id);
-                
-                let member = await this.bot.guilds.get(guild.id).fetchMember(id);
-                member.send(server.getWelcomeMessage(action));
+                if (!action.status && !action.nonFatal) {
+                    break;
+                } else if (server.hasCustomWelcomeMessage()) {
+                    await this.bot.fetchUser(id);
+                    
+                    let member = await this.bot.guilds.get(guild.id).fetchMember(id);
+                    member.send(server.getWelcomeMessage(action));
+                }
+            } else {
+                (async function(){
+                    let action = await server.verifyMember(id, {
+                        clearBindingsCache: clearCache,
+                        announce: false
+                    });
+
+                    if (action.status && server.hasCustomWelcomeMessage()) {
+                        await this.bot.fetchUser(id);
+                        
+                        let member = await this.bot.guilds.get(guild.id).fetchMember(id);
+                        member.send(server.getWelcomeMessage(action));
+                    }
+                }).apply(this);
             }
-
             clearCache = false;
         }
     }

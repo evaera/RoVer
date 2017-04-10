@@ -2,7 +2,9 @@ const express       = require('express')
 const DiscordServer = require('./DiscordServer')
 
 module.exports = 
-
+// This function starts the update server. This is used
+// to cause the bot to download new information about a
+// target user and update the user's state in all servers.
 function(discordBot, config) {
     let server = express();
 

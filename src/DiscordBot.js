@@ -4,60 +4,87 @@ const config        = require('./data/client.json')
 const DiscordServer = require('./DiscordServer')
 
 module.exports = 
-
+// The main Discord bot class, only one per bot.
 class DiscordBot {
     constructor() {
         this.initialize();
         this.servers = {};
     }
 
+    // Initialize the bot, hook up events, and log in.
     initialize() {
         this.bot = new Discord.Client({
             fetchAllMembers: true
         });
 
+        // Events
+
+        // We use .bind(this) so that the context remains within
+        // the class and not the event.
         this.bot.on("ready", this.ready.bind(this));
         this.bot.on("message", this.message.bind(this));
         this.bot.on("guildMemberAdd", this.guildMemberAdd.bind(this));
 
+        // Only hook up typingStart if lockNicknames mode is enabled.
         if (config.lockNicknames) {
             this.bot.on("typingStart", this.typingStart.bind(this));
         }
 
+        // Login.
         this.bot.login(config.token);
     }
 
+    // Called when the bot is ready and has logged in.
     ready() {
         console.log("RoVer is ready.");
         this.bot.user.setGame("http://eryn.io/RoVer");
     }
 
+    // This method is called when a user starts typing, but it's used
+    // for setting their nickname back to what it should be if they've
+    // changed it. Only active if lockNicknames is true in config.
     async typingStart(channel, user) {
+        // Don't want to do anything if this is a DM.
         if (channel.type !== "text") {
             return;
         }
 
+        // We call verifyMember but we want to retain the cache and we
+        // don't want it to post any announcements.
         this.getServer(channel.guild.id).verifyMember(user.id, {
             announce: false,
             clearBindingsCache: false
         });
     }
 
+    // This method is called when the bot can read a message in any
+    // channel it's in, even DMs.
     async message(msg) {
         if (msg.content.toLowerCase() === "!verify" && msg.guild) {
+            // The user ran `!verify`, we are checking their status now.
+            
+            // Clear the request cache so we get fresh information.
             DiscordServer.clearMemberCache(msg.author.id);
 
             let server = this.getServer(msg.guild.id)
             let action = await server.verifyMember(msg.author.id);
 
+            // We reply with the status of the verification in the
+            // channel the command was sent.
             if (!action.status) {
                 msg.reply(action.error);
             } else {
                 msg.reply(server.getWelcomeMessage(action));
             }
         }else if (msg.guild && msg.member && msg.member.hasPermission('ADMINISTRATOR')) {
+            // These are admin commands, and only work if the user has
+            // the Administrator permission.
+
+            // Get the first word in the message.
             let command = msg.cleanContent.toLowerCase().split(' ')[0];
 
+            // Get the command argument, which is just a string excluding
+            // the first word. 
             let args = msg.cleanContent.split(' ');
             args.shift();
             let argument = args.join(' ');
@@ -71,6 +98,8 @@ class DiscordBot {
                 case "!roververifiedrole":
                     if (argument.length > 0) {
                         if (argument.startsWith("@")) {
+                            // Support for role mentions. Since we use cleanContent,
+                            // it will just be the role's display name.
                             argument = argument.substring(1);
                         }
 
@@ -89,6 +118,8 @@ class DiscordBot {
                 case "!roverannouncechannel":
                      if (argument.length > 0) {
                         if (argument.startsWith("#")) {
+                            // Support for channel mentions. Since we use cleanContent,
+                            // it will just be the channel's display name.
                             argument = argument.substring(1);
                         }
 
@@ -141,9 +172,14 @@ class DiscordBot {
                         let binding = {};
 
                         if (bindArgs.length === 2) {
+                            // The user excluded the rank argument.
                             binding.group = bindArgs[0];
                             binding.role = bindArgs[1];
                         } else if (bindArgs.length === 3) {
+                            // Rank argument included
+
+                            // Support for operators, so we parse them out before
+                            // saving the rank number.
                             let rankUnparsed = bindArgs[1];
 
                             if (rankUnparsed.startsWith('>')) {
@@ -161,6 +197,7 @@ class DiscordBot {
                             return msg.reply("Wrong number of arguments: needs 2 or 3");
                         }
 
+                        // Verify that the role the user provided is real.
                         let role = msg.guild.roles.find('name', binding.role);
                         if (role) {
                             binding.role = role.id;
@@ -168,7 +205,10 @@ class DiscordBot {
                             return msg(`Couldn't find role: \`${binding.role}\``);
                         }
 
+                        // Delete any previous binding with that role.
                         server.deleteGroupRankBinding(binding.role);
+
+                        // Add the new binding.
                         let serverBindings = server.getSetting('groupRankBindings');
                         serverBindings.push(binding);
                         server.setSetting('groupRankBindings', serverBindings);
@@ -210,6 +250,7 @@ class DiscordBot {
         }
     }
 
+    // This is called when a user joins any Discord server.
     async guildMemberAdd(member) {
         let server = this.getServer(member.guild.id);
         let action = await server.verifyMember(member.id);
@@ -221,6 +262,8 @@ class DiscordBot {
         }
     }
 
+    // This is used to get the DiscordServer instance associated
+    // with the specific guild id.
     getServer(id) {
         if (!this.servers[id]) {
             this.servers[id] = new DiscordServer(this, id);
@@ -228,31 +271,50 @@ class DiscordBot {
         return this.servers[id];
     }
 
+    // This is called by the update server when a user verifies 
+    // online. It updates the member in every DiscordServer they
+    // are in. 
     async globallyUpdateMember(id) {
+        // Start off by clearing their global cache.
         DiscordServer.clearMemberCache(id);
 
-        let clearCache = true;
+        let firstRun = true;
+        
+        // Iterate through all of the guilds the bot is in.
         for (let guild of this.bot.guilds.array()) {
             let server = this.getServer(guild.id);
 
-            if (clearCache) {
-                 let action = await server.verifyMember(id, {
-                    clearBindingsCache: clearCache,
+            if (firstRun) {
+                // This only runs on the first iteration. We do this so that
+                // we have time to cache the user information, so it only
+                // sends out the request once. 
+
+                let action = await server.verifyMember(id, {
+                    // We want to clear the group rank bindings cache because
+                    // this is the first iteration.
+                    clearBindingsCache: true,
                     announce: false
                 });
 
                 if (!action.status && !action.nonFatal) {
+                    // If there's a fatal error, don't continue with the rest.
                     break;
                 } else if (server.hasCustomWelcomeMessage()) {
+                    // It worked, checking if there's a custom welcome message.
                     await this.bot.fetchUser(id);
                     
                     let member = await this.bot.guilds.get(guild.id).fetchMember(id);
                     member.send(server.getWelcomeMessage(action));
                 }
             } else {
+                // This is for all bit the first iteration.
+
+                // We define an inline function and call it with the current
+                // context so that we can run these commands synchronously
+                // but still execute the requests all at the same time.
                 (async function(){
                     let action = await server.verifyMember(id, {
-                        clearBindingsCache: clearCache,
+                        clearBindingsCache: false,
                         announce: false
                     });
 
@@ -264,7 +326,7 @@ class DiscordBot {
                     }
                 }).apply(this);
             }
-            clearCache = false;
+            firstRun = false;
         }
     }
 }

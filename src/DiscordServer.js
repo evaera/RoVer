@@ -113,7 +113,7 @@ class DiscordServer {
     }
 
     static clearMemberCache(id) {
-        if (DiscordServer.DataCache && DiscordServer.DataCache[id]) {
+        if (DiscordServer.DataCache) {
             delete DiscordServer.DataCache[id];
         }
     }

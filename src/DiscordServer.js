@@ -254,7 +254,7 @@ class DiscordServer {
         let member;
 
         try {
-            if (config.loud) {
+            if (config.loud && !DiscordServer.DataCache[id]) {
                 console.log(`https://verify.eryn.io/api/user/${id}`);
             }
             // Read user data from memory, or request it if there isn't any cached.
@@ -281,6 +281,10 @@ class DiscordServer {
                         error: "Unknown error."
                     }
             }
+        }
+
+        if (config.loud) {
+            console.log(`data.status = ${data.status}`);
         }
 
         // If the status is ok, the user is in the database.

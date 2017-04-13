@@ -3,8 +3,7 @@ const request       = require('request-promise')
 const config        = require('./data/client.json')
 const DiscordServer = require('./DiscordServer')
 
-module.exports = 
-// The main Discord bot class, only one per bot.
+// The main Discord bot class, only one per shard.
 class DiscordBot {
     constructor() {
         this.initialize();
@@ -14,7 +13,8 @@ class DiscordBot {
     // Initialize the bot, hook up events, and log in.
     initialize() {
         this.bot = new Discord.Client({
-            fetchAllMembers: true
+            shardId: parseInt(process.env.SHARD_ID, 10),
+            shardCount: parseInt(process.env.SHARD_COUNT, 10)
         });
 
         // Events
@@ -31,12 +31,12 @@ class DiscordBot {
         }
 
         // Login.
-        this.bot.login(config.token);
+        this.bot.login(process.env.CLIENT_TOKEN);
     }
 
     // Called when the bot is ready and has logged in.
     ready() {
-        console.log("RoVer is ready.");
+        console.log(`Shard ${process.env.SHARD_ID} is ready, serving ${this.bot.guilds.array().length} guilds.`);
         this.bot.user.setGame("http://eryn.io/RoVer");
     }
 
@@ -330,3 +330,14 @@ class DiscordBot {
         }
     }
 }
+
+// Instantiate the bot.
+let discordBot = new DiscordBot();
+
+// Listen for when we need to globally update a member
+// from the Update Server.
+process.on('message', msg => {
+    if (msg.action === 'globallyUpdateMember') {
+        discordBot.globallyUpdateMember(msg.argument);
+    }
+});

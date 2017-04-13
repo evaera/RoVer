@@ -1,14 +1,24 @@
 // This file is the entry point for the bot.
 
-const DiscordBot    = require('./DiscordBot')
+const Discord       = require('discord.js')
 const config        = require('./data/client.json')
 
-// Start the actual bot
-let discordBot = new DiscordBot();
+// Set up the sharding manager, a helper class that separates handling
+// guilds into grouped processes called Shards. 
+let shardingManager = new Discord.ShardingManager('DiscordBot.js', {
+    token: config.token,
+    totalShards: config.totalShards || 'auto'
+});
+
+shardingManager.on('launch', shard => {
+    console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`);
+});
+
+shardingManager.spawn();
 
 // If updateServer is defined, start that up as well.
 if (config.updateServer) {
-    require('./UpdateServer.js')(discordBot, config.updateServer);
+    require('./UpdateServer.js')(shardingManager, config.updateServer);
 }
 
 // client.json documentation:

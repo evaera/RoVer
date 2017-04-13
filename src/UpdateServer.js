@@ -5,7 +5,7 @@ module.exports =
 // This function starts the update server. This is used
 // to cause the bot to download new information about a
 // target user and update the user's state in all servers.
-function(discordBot, config) {
+function(shardingManager, config) {
     let server = express();
 
     server.get('/update-user', (req, res) => {
@@ -21,10 +21,13 @@ function(discordBot, config) {
 
         res.end('ok');
 
-        discordBot.globallyUpdateMember(id);
+        shardingManager.broadcast({
+            action: 'globallyUpdateMember',
+            argument: id
+        });
     })
 
     server.listen(config.port, () => {
-        console.log(`Update server listening on ${config.port}`);
+        console.log(`Update server listening on http://localhost:${config.port}/`);
     });
 }

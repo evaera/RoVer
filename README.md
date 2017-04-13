@@ -102,7 +102,7 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 
 - `DevForum`
 
-To create a role for all members of the dev forum min your server, use the following command:
+To create a role for all members of the dev forum in your server, use the following command:
 
 `!RoVerBindGroupRank DevForum:DevForum Member`, where `DevForum` is the *Virtual Group* and `DevForum Member` is the *Discord role name*
 
@@ -112,9 +112,32 @@ To create a role for all members of the dev forum min your server, use the follo
 2. **Node.js version 7.8.0 or higher is required to run RoVer.**
 3. Install yarn if you don't already have it: `npm install -g yarn`
 4. Use yarn to install the dependencies: `yarn install`
-5. Edit the file `src/data/client.json` and insert your bot token.
+5. Edit the file `src/data/client.json` and insert your [bot token](https://discordapp.com/developers/applications/me).
 6. Start the bot: `node ./src/index.js`
 7. You should set up a process manager like [PM2](http://pm2.keymetrics.io/) or forever.js to ensure that the bot remains online.
+
+### Update Server
+
+The *Update Server* is an optional part of RoVer that can be enabled in `client.json`. It is an HTTP server that can listen for requests and globally update a member in all guilds that the bot is in, similar to if they ran `!verify` in every guild. This is used internally on the hosted version for when the user verifies on verify.eryn.io, but you could use it for whatever purpose you wish. 
+
+### client.json options
+
+```
+    "token"             : String. The bot token that is used to log in to your bot.
+    "lockNicknames"     : Boolean. Default false. If true, the bot will run DiscordServer.verifyMember every time
+                          they begin typing. This will quickly eat up API requests if you aren't careful. Mostly
+                          used on the hosted version.
+    "updateServer"      : {
+                          If this object is present, the update server will be started.
+                      
+        "port"          : Integer. The port the Update server runs on.
+        "apiKey"        : String. The API key the server checks against before updating the user.
+    }
+    "loud"              : Boolean. Default false. Logs every request made to stdout.
+    "totalShards"       : Integer. Default auto. The number of shards to launch.
+    "apiRequestMethod"  : String. Default 'sequential'. sequential' or 'burst'. Sequential executes all requests in the order 
+                          they are triggered, whereas burst runs multiple at a time, and doesn't guarantee a particular order.
+```
 
 # To-do list and plans
 

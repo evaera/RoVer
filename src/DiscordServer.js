@@ -283,10 +283,6 @@ class DiscordServer {
             }
         }
 
-        if (config.loud) {
-            console.log(`data.status = ${data.status}`);
-        }
-
         // If the status is ok, the user is in the database.
         if (data.status === "ok"){
             // Cache the data for future use.
@@ -299,15 +295,19 @@ class DiscordServer {
                     return;
                 }
 
+                if (config.loud) {
+                    console.log(member.id);
+                }
+
                 // Check if these settings are enabled for this specific server,
                 // if so, then put the member in the correct state.
 
                 if (this.getSetting('nicknameUsers')) {
-                    await member.setNickname(this.getMemberNickname(data, member));
+                    member.setNickname(this.getMemberNickname(data, member));
                 }
 
                 if (this.getSetting('verifiedRole')) {
-                    await member.addRole(this.getSetting('verifiedRole'));
+                    member.addRole(this.getSetting('verifiedRole'));
                 }
 
                 if (this.getSetting('announceChannel') && options.announce !== false) {
@@ -343,6 +343,7 @@ class DiscordServer {
             } catch (e) {
                 // If anything failed here, it's most likely because the bot
                 // couldn't modify the member due to a permission problem.
+                if (config.loud) console.log(e.message);
                 return {
                     status: false,
                     nonFatal: true,

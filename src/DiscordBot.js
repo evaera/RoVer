@@ -15,7 +15,8 @@ class DiscordBot {
         this.bot = new Discord.Client({
             shardId: parseInt(process.env.SHARD_ID, 10),
             shardCount: parseInt(process.env.SHARD_COUNT, 10),
-            apiRequestMethod: config.apiRequestMethod || 'sequential'
+            apiRequestMethod: config.apiRequestMethod || 'sequential',
+            fetchAllMembers: true
         });
 
         // Events

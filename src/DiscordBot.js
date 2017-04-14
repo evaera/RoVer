@@ -343,3 +343,9 @@ process.on('message', msg => {
         discordBot.globallyUpdateMember(msg.argument);
     }
 });
+
+// Max shard life time (2 hours)
+
+setTimeout( () => {
+    process.exit();
+}, 2 * 60 * 60 * 1000);

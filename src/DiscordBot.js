@@ -83,7 +83,7 @@ class DiscordBot {
         } else if (msg.cleanContent === "!eshard") {
             let currentTime = new Date();
             let difference = Math.abs(currentTime - startTime);
-            difference = Math.floor((diff / 1000) / 60);
+            difference = Math.floor((difference / 1000) / 60);
             msg.reply(`Shard #${process.env.SHARD_ID}. Uptime: ${difference} minutes.`);
         } else if (msg.guild && msg.member && msg.member.hasPermission('ADMINISTRATOR')) {
             // These are admin commands, and only work if the user has

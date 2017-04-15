@@ -3,6 +3,8 @@ const request       = require('request-promise')
 const config        = require('./data/client.json')
 const DiscordServer = require('./DiscordServer')
 
+let startTime = new Date();
+
 // The main Discord bot class, only one per shard.
 class DiscordBot {
     constructor() {
@@ -78,7 +80,12 @@ class DiscordBot {
             } else {
                 msg.reply(server.getWelcomeMessage(action));
             }
-        }else if (msg.guild && msg.member && msg.member.hasPermission('ADMINISTRATOR')) {
+        } else if (msg.cleanContent === "!eshard") {
+            let currentTime = new Date();
+            let difference = Math.abs(currentTime - startTime);
+            difference = Math.floor((diff / 1000) / 60);
+            msg.reply(`Shard #${process.env.SHARD_ID}. Uptime: ${difference} minutes.`);
+        } else if (msg.guild && msg.member && msg.member.hasPermission('ADMINISTRATOR')) {
             // These are admin commands, and only work if the user has
             // the Administrator permission.
 

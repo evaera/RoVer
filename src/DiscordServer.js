@@ -289,8 +289,8 @@ class DiscordServer {
             DiscordServer.DataCache[id] = data;
 
             try {
-                await this.bot.fetchUser(id);
-                member = await this.server.fetchMember(id);
+                let user = await this.bot.fetchUser(id);
+                member = await this.server.fetchMember(user);
 
                 if (!member) {
                     return;

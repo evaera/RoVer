@@ -28,6 +28,7 @@ class DiscordBot {
         this.bot.on("ready", this.ready.bind(this));
         this.bot.on("message", this.message.bind(this));
         this.bot.on("guildMemberAdd", this.guildMemberAdd.bind(this));
+        this.bot.on("debug", (message) => console.log(message));
 
         // Only hook up typingStart if lockNicknames mode is enabled.
         if (config.lockNicknames) {

@@ -304,11 +304,11 @@ class DiscordServer {
                 // if so, then put the member in the correct state.
 
                 if (this.getSetting('nicknameUsers')) {
-                    setTimeout( () => { member.setNickname(this.getMemberNickname(data, member)) }, 1000);
+                    await member.setNickname(this.getMemberNickname(data, member));
                 }
 
                 if (this.getSetting('verifiedRole')) {
-                    setTimeout( () => { member.addRole(this.getSetting('verifiedRole')) }, 2000);
+                    await member.addRole(this.getSetting('verifiedRole'));
                 }
 
                 if (this.getSetting('announceChannel') && options.announce !== false) {

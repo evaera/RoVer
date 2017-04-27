@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "discord.js": "^11.0.0",
+    "discord.js": "hydrabolt/discord.js",
     "express": "^4.15.2",
     "request": "^2.81.0",
     "request-promise": "^4.2.0"

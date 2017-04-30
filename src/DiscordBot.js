@@ -201,7 +201,7 @@ class DiscordBot {
                             }
 
                             binding.group = bindArgs[0];
-                            binding.rank = parseInt(rankUnparsed, 10);
+                            binding.rank = parseInt(rankUnparsed, 10) ? parseInt(rankUnparsed, 10) : rankUnparsed;
                             binding.role = bindArgs[2];
                         } else {
                             return msg.reply("Wrong number of arguments: needs 2 or 3");

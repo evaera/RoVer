@@ -5,7 +5,7 @@ const request     = require('request-promise')
 const config      = require('./data/client.json')
 
 // The default settings for DiscordServer.
-DefaultSettings = {
+const DefaultSettings = {
     verifiedRole: null,
     nicknameUsers: true,
     announceChannel: null,
@@ -18,16 +18,13 @@ DefaultSettings = {
 // group bindings. They are defined as keys in the
 // VirtualGroups object. It must be a function that
 // returns true or false. 
-VirtualGroups = {
+const VirtualGroups = {
     // Check if the given user is in the Roblox Dev Forum.
     // userid: ROBLOX user id.
     DevForum: async (userid) => {
         // Resolve the Roblox username from the user id.
         let userData = {}
         try {
-            if (config.loud){
-                console.log(`http://api.roblox.com/users/${userid}`);
-            }
             userData = await request({
                 uri: `http://api.roblox.com/users/${userid}`,
                 json: true,
@@ -47,9 +44,6 @@ VirtualGroups = {
         let devForumData = {}
         
         try {
-            if (config.loud){
-                console.log(`http://devforum.roblox.com/users/${username}.json`);
-            }
             devForumData = await request({
                 uri: `http://devforum.roblox.com/users/${username}.json`,
                 json: true,
@@ -68,7 +62,7 @@ VirtualGroups = {
     }
 }
 
-module.exports = 
+module.exports =
 // A DiscordServer class, it represents a guild that
 // the bot is in.
 class DiscordServer {
@@ -177,9 +171,6 @@ class DiscordServer {
                 returnValue = VirtualGroups[binding.group](userid);
             } else {
                 // Check the rank of the user in the Roblox group. 
-                if (config.loud) {
-                    console.log(`https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`);
-                }
                 let rank = await request({
                     uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`,
                     simple: false
@@ -254,9 +245,6 @@ class DiscordServer {
         let member;
 
         try {
-            if (config.loud && !DiscordServer.DataCache[id]) {
-                console.log(`https://verify.eryn.io/api/user/${id}`);
-            }
             // Read user data from memory, or request it if there isn't any cached.
             data = DiscordServer.DataCache[id] || await request({
                 uri: `https://verify.eryn.io/api/user/${id}`,
@@ -264,23 +252,10 @@ class DiscordServer {
                 simple: false
             })
         } catch (e) {
-            switch (e.response.statusCode){
-                case 404:
-                    return {
-                        status: false,
-                        error: "Not verified. Go to https://verify.eryn.io to verify."
-                    }
-                case 429: 
-                    return {
-                        status: false,
-                        error: "Server is busy. Please try again later."
-                    }
-                default:
-                    return {
-                        status: false,
-                        error: "Unknown error."
-                    }
-            }
+            return {
+                status: false,
+                error: "Unknown error."
+             }
         }
 
         // If the status is ok, the user is in the database.
@@ -292,13 +267,7 @@ class DiscordServer {
                 let user = await this.bot.fetchUser(id);
                 member = await this.server.fetchMember(user);
 
-                if (!member) {
-                    return;
-                }
-
-                if (config.loud) {
-                    console.log(member.id);
-                }
+                if (!member) return;
 
                 // Check if these settings are enabled for this specific server,
                 // if so, then put the member in the correct state.
@@ -344,7 +313,6 @@ class DiscordServer {
             } catch (e) {
                 // If anything failed here, it's most likely because the bot
                 // couldn't modify the member due to a permission problem.
-                if (config.loud) console.log(e.message);
                 return {
                     status: false,
                     nonFatal: true,

@@ -178,7 +178,7 @@ class DiscordBot {
                     break;
                 case "!roverbindgrouprank":
                     if (argument.length > 0) {
-                        let bindArgs = argument.split(':');
+                        let bindArgs = argument.split(' ');
                         let binding = {};
 
                         if (bindArgs.length === 2) {

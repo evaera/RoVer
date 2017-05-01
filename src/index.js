@@ -5,7 +5,7 @@ const config        = require('./data/client.json')
 
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards. 
-let shardingManager = new Discord.ShardingManager('DiscordBot.js', {
+let shardingManager = new Discord.ShardingManager('Shard.js', {
     token: config.token,
     totalShards: config.totalShards || 'auto'
 });
@@ -37,4 +37,6 @@ if (config.updateServer) {
     "totalShards"       : Integer. Default auto. The number of shards to launch.
     "apiRequestMethod"  : String. Default 'sequential'. sequential' or 'burst'. Sequential executes all requests in the order 
                           they are triggered, whereas burst runs multiple at a time, and doesn't guarantee a particular order.
+    "owner"             : String. Default "0". The Discord ID of the bot's owner.
+    "commandPrefix"     : String. Default "!". The prefix for commands. 
 */

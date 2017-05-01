@@ -36,9 +36,7 @@ const VirtualGroups = {
 
         let username = userData.Username;
 
-        if (!username) {
-            return false;
-        }
+        if (!username) return false;
 
         // Fetch the DevForum data for this user.
         let devForumData = {}
@@ -53,9 +51,13 @@ const VirtualGroups = {
             return false;
         }
         
-        // If the trust_level in the user data is above 0, then they are a member.
-        if (devForumData.user.trust_level > 0) {
-            return true;
+        try {
+            // If the trust_level in the user data is above 0, then they are a member.
+            if (devForumData.user.trust_level > 0) {
+                return true;
+            }
+        } catch(e) {
+            return false;
         }
 
         return false;
@@ -305,7 +307,8 @@ class DiscordServer {
                                     member.removeRole(binding.role);
                                 }
                             })
-                            .catch(() => {
+                            .catch((e) => {
+                                console.log(e);
                                 console.log('Resolution error for binding');
                             });
                     }

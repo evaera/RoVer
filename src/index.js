@@ -5,7 +5,7 @@ const config        = require('./data/client.json')
 
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards. 
-let shardingManager = new Discord.ShardingManager('DiscordBot.js', {
+let shardingManager = new Discord.ShardingManager('Shard.js', {
     token: config.token,
     totalShards: config.totalShards || 'auto'
 });

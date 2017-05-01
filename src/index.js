@@ -37,4 +37,6 @@ if (config.updateServer) {
     "totalShards"       : Integer. Default auto. The number of shards to launch.
     "apiRequestMethod"  : String. Default 'sequential'. sequential' or 'burst'. Sequential executes all requests in the order 
                           they are triggered, whereas burst runs multiple at a time, and doesn't guarantee a particular order.
+    "owner"             : String. Default "0". The Discord ID of the bot's owner.
+    "commandPrefix"     : String. Default "!". The prefix for commands. 
 */

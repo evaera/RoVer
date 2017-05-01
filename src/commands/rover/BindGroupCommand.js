@@ -7,23 +7,24 @@ class BindGroupCommand extends Command {
         super(client, {
             name: 'bindgrouprank',
             aliases: ['roverbindgrouprank', 'bindgroup', 'bindrank', 'roverbind'],
-            description: "`<roblox group id> <((>|<|)group rank|\"all\")> <Discord Role>` Binds Roblox group membership or group rank to a Discord role. Middle argument can be either the required rank number (from Roblox group admin page), or the word `all` to indicate all group members. If you choose to use rank number, you can also use operators: `>` will match all members who have a rank **greater than or equal to** the given rank, and `<` will match all members who have a rank **less than** the given rank. If you exclude the operator, an exact rank number match is used.",
+            description: "`<roblox group id> <Discord Role> <((>|<|)group rank|\"all\")>` Binds Roblox group membership or group rank to a Discord role. Last argument can be either the required rank number (from Roblox group admin page), or the word `all` to indicate all group members. If you choose to use rank number, you can also use operators: `>` will match all members who have a rank **greater than or equal to** the given rank, and `<` will match all members who have a rank **less than** the given rank. If you exclude the operator, an exact rank number match is used.",
             
             args: [
                 {
                     key: 'group',
                     prompt: "Group",
-                    type: 'integer'
-                },
-                {
-                    key: 'rank',
-                    prompt: "Rank",
                     type: 'string'
                 },
                 {
                     key: 'role',
                     prompt: "Role",
                     type: 'role'
+                },
+                {
+                    key: 'rank',
+                    prompt: "Rank",
+                    type: 'string',
+                    default: 'all'
                 }
             ]
         });

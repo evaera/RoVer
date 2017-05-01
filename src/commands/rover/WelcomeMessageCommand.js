@@ -25,10 +25,10 @@ class WelcomeMessageCommand extends Command {
     async fn(msg, args) {
         if (args.message) {
             args.message = args.message.join(' ');
-            server.setSetting('welcomeMessage', args.message);
+            this.server.setSetting('welcomeMessage', args.message);
             msg.reply(`Set welcome message to \`${args.message}\``);
         } else {
-            server.setSetting('welcomeMessage', undefined);
+            this.server.setSetting('welcomeMessage', undefined);
             msg.reply("Set welcome message back to default");
         }
     }

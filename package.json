@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "discord.js": "hydrabolt/discord.js",
-    "discord.js-commando": "^0.9.0",
+    "discord.js-commando": "Gawdl3y/discord.js-commando",
     "express": "^4.15.2",
     "request": "^2.81.0",
     "request-promise": "^4.2.0"

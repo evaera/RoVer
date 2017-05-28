@@ -14,7 +14,7 @@ class Command extends Commando.Command {
     }
 
     hasPermission(msg) {
-        return msg.member.hasPermissions(this.userPermissions);
+        return msg.member.hasPermission(this.userPermissions);
     }
 
     async run(msg, args, pattern) {

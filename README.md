@@ -110,7 +110,7 @@ To create a role for all members of the dev forum in your server, use the follow
 # Self-hosting instructions
 
 1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on. 
-2. **Node.js version 7.8.0 or higher is required to run RoVer.**
+2. **Node.js version 8.0.0 or newer is required to run RoVer.**
 3. Install yarn if you don't already have it: `npm install -g yarn`
 4. Use yarn to install the dependencies: `yarn install`
 5. Edit the file `src/data/client.json` and insert your [bot token](https://discordapp.com/developers/applications/me).

@@ -6,8 +6,8 @@ module.exports =
 class WhoisCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'roblox',
-            aliases: ['whois'],
+            name: 'whois',
+            aliases: ['roblox'],
             userPermissions: [],
             description: "<person> Get a verified person's ROBLOX & profile link.",
             

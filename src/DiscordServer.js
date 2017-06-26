@@ -7,6 +7,7 @@ const config      = require('./data/client.json')
 // The default settings for DiscordServer.
 const DefaultSettings = {
     verifiedRole: null,
+    verifiedRemovedRole: null,
     nicknameUsers: true,
     announceChannel: null,
     nicknameFormat: "%USERNAME%",
@@ -280,6 +281,10 @@ class DiscordServer {
 
                 if (this.getSetting('verifiedRole')) {
                     await member.addRole(this.getSetting('verifiedRole'));
+                }
+                
+                if (this.getSetting('verifiedRemovedRole')){
+                    await member.removeRole(this.getSetting('verifiedRemovedRole'));
                 }
 
                 if (this.getSetting('announceChannel') && options.announce !== false) {

@@ -9,7 +9,7 @@ class WhoisCommand extends Command {
             name: 'whois',
             aliases: ['roblox'],
             userPermissions: [],
-            description: "<person> Get a verified person's ROBLOX & profile link.",
+            description: "`<person>` Get a verified person's ROBLOX & profile link.",
             
             args: [
                 {

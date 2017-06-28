@@ -12,6 +12,6 @@ class HelpCommand extends Command {
 
     async fn(msg) {
         let commandGroup = this.client.registry.groups.get('rover');
-        msg.reply(commandGroup.commands.map(cmd => `**!${cmd.name}:** ${cmd.description}`).join('\n\n'));
+        msg.reply(commandGroup.commands.map(cmd => `**!${cmd.name}:** ${cmd.description}`).join('\n\n'), {split: true});
     }
 }

@@ -24,28 +24,28 @@ class WhoisCommand extends Command {
     }
 
     async fn(msg, args) {
-    let member = args.member;
-    let data = {};
-    if (member) { // If the member specified exists,
-        let id = member.user.id;
-        try {
-            // Read user data from memory, or request it if there isn't any cached.
-            data = DiscordServer.DataCache[member.user.id] || await request({
-                uri: `https://verify.eryn.io/api/user/${id}`,
-                json: true,
-                simple: false
-            })
-        } catch (e) {
-            console.log(e);
-            return msg.reply("An error occured while fetching that user's data.")
+        let member = args.member;
+        let data = {};
+        if (member) { // If the member specified exists,
+            let id = member.user.id;
+            try {
+                // Read user data from memory, or request it if there isn't any cached.
+                data = DiscordServer.DataCache[member.user.id] || await request({
+                    uri: `https://verify.eryn.io/api/user/${id}`,
+                    json: true,
+                    simple: false
+                })
+            } catch (e) {
+                console.log(e);
+                return msg.reply("An error occured while fetching that user's data.")
+            }
+            if (data.status === "ok"){
+                // Make sure the data is cached so we don't have to use the API in the future
+                DiscordServer.DataCache[id] = data;
+                msg.reply(`${member.displayName}: https://www.roblox.com/users/${data.robloxId}/profile`);
+            } else {
+                msg.reply(`${member.displayName} doesn't seem to be verified.`);
+            }
         }
-        if (data.status === "ok"){
-            // Make sure the data is cached so we don't have to use the API in the future
-            DiscordServer.DataCache[id] = data;
-            msg.reply(`${member.displayName}: https://www.roblox.com/users/${data.robloxId}/profile`);
-        } else {
-            msg.reply(`${member.displayName} doesn't seem to be verified.`)
-        }
-    }
     }
 }

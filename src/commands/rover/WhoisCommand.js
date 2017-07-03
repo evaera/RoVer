@@ -26,8 +26,8 @@ class WhoisCommand extends Command {
     async fn(msg, args) {
     let member = args.member;
     let data = {};
-    let id = member.user.id;
     if (member) { // If the member specified exists,
+        let id = member.user.id;
         try {
             // Read user data from memory, or request it if there isn't any cached.
             data = DiscordServer.DataCache[member.user.id] || await request({

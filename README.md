@@ -140,6 +140,8 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
                           they are triggered, whereas burst runs multiple at a time, and doesn't guarantee a particular order.
     "owner"             : String. Default "0". The Discord ID of the bot's owner.
     "commandPrefix"     : String. Default "!". The prefix for commands. 
+    "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
+    "mainLifeTime"      : Integer. Number of seconds the main process will run before closing. (Need a process manager if you want it to relaunch)
 ```
 
 # To-do list and plans

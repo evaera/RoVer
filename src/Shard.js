@@ -1,5 +1,6 @@
 // This file is the entry point for Shard processes.
 
+const config      = require('./data/client.json')
 const DiscordBot = require('./DiscordBot')
 const startTime = new Date();
 
@@ -14,7 +15,9 @@ process.on('message', msg => {
     }
 });
 
-// Max shard life time (2 hours)
-setTimeout( () => {
-    process.exit();
-}, 2 * 60 * 60 * 1000);
+// Max shard life time
+if (config.shardLifeTime) {
+    setTimeout( () => {
+        process.exit();
+    }, config.shardLifeTime * 1000);
+}

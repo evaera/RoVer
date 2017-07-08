@@ -21,6 +21,12 @@ if (config.updateServer) {
     require('./UpdateServer.js')(shardingManager, config.updateServer);
 }
 
+if (config.mainLifeTime) {
+    setTimeout( () => {
+        process.exit();
+    }, config.mainLifeTime * 1000);
+}
+
 // client.json documentation:
 /*
     "token"             : String. The bot token that is used to log in to your bot.
@@ -39,4 +45,6 @@ if (config.updateServer) {
                           they are triggered, whereas burst runs multiple at a time, and doesn't guarantee a particular order.
     "owner"             : String. Default "0". The Discord ID of the bot's owner.
     "commandPrefix"     : String. Default "!". The prefix for commands. 
+    "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
+    "mainLifeTime"      : Integer. Number of seconds the main process will run before closing.
 */

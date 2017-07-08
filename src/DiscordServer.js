@@ -3,6 +3,7 @@ const fs          = require('fs')
 const Discord     = require('discord.js')
 const request     = require('request-promise')
 const config      = require('./data/client.json')
+const VirtualGroups = require('./VirtualGroups.js')
 
 // The default settings for DiscordServer.
 const DefaultSettings = {
@@ -13,56 +14,6 @@ const DefaultSettings = {
     nicknameFormat: "%USERNAME%",
     welcomeMessage: "Welcome to the server, %USERNAME%!",
     groupRankBindings: []
-}
-
-// VirtualGroups can be used in place of group IDs for
-// group bindings. They are defined as keys in the
-// VirtualGroups object. It must be a function that
-// returns true or false. 
-const VirtualGroups = {
-    // Check if the given user is in the Roblox Dev Forum.
-    // userid: ROBLOX user id.
-    DevForum: async (userid) => {
-        // Resolve the Roblox username from the user id.
-        let userData = {}
-        try {
-            userData = await request({
-                uri: `http://api.roblox.com/users/${userid}`,
-                json: true,
-                simple: false
-            });
-        } catch (e) {
-            return false;
-        }
-
-        let username = userData.Username;
-
-        if (!username) return false;
-
-        // Fetch the DevForum data for this user.
-        let devForumData = {}
-        
-        try {
-            devForumData = await request({
-                uri: `http://devforum.roblox.com/users/${username}.json`,
-                json: true,
-                simple: false
-            });
-        } catch (e) {
-            return false;
-        }
-        
-        try {
-            // If the trust_level in the user data is above 0, then they are a member.
-            if (devForumData.user.trust_level > 0) {
-                return true;
-            }
-        } catch(e) {
-            return false;
-        }
-
-        return false;
-    }
 }
 
 module.exports =
@@ -193,6 +144,7 @@ class DiscordServer {
             }
         } catch (e) {
             console.log("Encountered an error while trying to resolve a rank binding:");
+            console.log(e);
             console.log(binding);
         }
         

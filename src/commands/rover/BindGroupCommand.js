@@ -5,8 +5,8 @@ module.exports =
 class BindGroupCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'bindgrouprank',
-            aliases: ['roverbindgrouprank', 'bindgroup', 'bindrank', 'roverbind'],
+            name: 'bindrank',
+            aliases: ['roverbindgrouprank', 'bindgroup', 'bindgrouprank', 'roverbind'],
             description: "`<roblox group id> <Discord Role> <((>|<|)group rank|\"all\")>` Binds Roblox group membership or group rank to a Discord role. Last argument can be either the required rank number (from Roblox group admin page), or the word `all` to indicate all group members. If you choose to use rank number, you can also use operators: `>` will match all members who have a rank **greater than or equal to** the given rank, and `<` will match all members who have a rank **less than** the given rank. If you exclude the operator, an exact rank number match is used.",
             
             args: [
@@ -64,9 +64,19 @@ class BindGroupCommand extends Command {
         this.server.setSetting('groupRankBindings', serverBindings);
 
         if (!all) {
-            msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${args.role.name}, Comparison: ${binding.operator || 'eq'}`);
+            if (binding.group.match(/[a-z]/i)) {
+                // This is a virtual group, since the id has letters.
+                msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Argument: \`${binding.rank}\`, Role: \`${args.role.name}\``)
+            } else {
+                msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${args.role.name}, Comparison: ${binding.operator || 'eq'}`);
+            }
         } else {
-            msg.reply(`Added rank binding for all members in group: Group: ${binding.group}, Role: ${args.role.name}`);
+            if (binding.group.match(/[a-z]/i)) {
+                // This is a virtual group, since the id has letters.
+                msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Role: \`${args.role.name}\``);
+            } else {
+                msg.reply(`Added rank binding for all members in group: Group: ${binding.group}, Role: ${args.role.name}`);
+            }
         }
     }
 }

@@ -51,5 +51,22 @@ module.exports = {
         }
 
         return false;
+    },
+
+    HasAsset: async (userid, assetid) => {
+        try {
+            let responseData = await request({
+                uri: `http://api.roblox.com/ownership/hasasset?userId=${userid}&assetId=${assetid}`,
+                simple: false
+            });
+
+            if (responseData === 'true') {
+                return true;
+            }
+        } catch (e) {
+            // do nothing
+        }
+
+        return false;
     }
 }

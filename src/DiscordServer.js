@@ -122,7 +122,7 @@ class DiscordServer {
         try {
             if (VirtualGroups[binding.group]){
                 // If this group is a virtual group, then execute that function instead.
-                returnValue = VirtualGroups[binding.group](userid);
+                returnValue = VirtualGroups[binding.group](userid, binding.rank);
             } else {
                 // Check the rank of the user in the Roblox group. 
                 let rank = await request({

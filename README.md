@@ -99,13 +99,18 @@ You should probably make a read-only channel in the server explaining these proc
 
 ### Virtual groups
 
-Virtual groups are a way to bind ranks using the group rank binding system for external services that aren't actually Roblox groups, such as the dev forum. Currently, only one virtual group is implemented, but more could be easily added if you fork this project:
+Virtual groups are a way to bind ranks using the group rank binding system for external services that aren't actually Roblox groups, such as the dev forum. More could be easily added if you fork this project. Currently, these are in by default:
 
 - `DevForum`
+- `HasAsset` 
 
 To create a role for all members of the dev forum in your server, use the following command:
 
-`!RoVerBindGroupRank DevForum DevForumMember`, where `DevForum` is the *Virtual Group* and `DevForum Member` is the *Discord role name*
+`!BindRank DevForum DevForumMember`, where `DevForum` is the *Virtual Group* and `DevForum Member` is the *Discord role name*
+
+To create a role for all members who own a specific asset, use the following command:
+
+`!BindRank HasAsset Winner 424242`, where `HasAsset` is the *Virtual Group*, `Winner` is the *Discord role name*, and `424242` is the *asset id*
 
 # Self-hosting instructions
 

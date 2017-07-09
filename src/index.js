@@ -23,8 +23,13 @@ if (config.updateServer) {
 
 if (config.mainLifeTime) {
     setTimeout( () => {
-        process.exit();
+        shardingManager.respawn = false;
+        shardingManager.broadcastEval('process.exit()');
     }, config.mainLifeTime * 1000);
+
+    setTimeout( () => {
+        process.exit();
+    }, (config.mainLifeTime + 5) * 1000);
 }
 
 // client.json documentation:

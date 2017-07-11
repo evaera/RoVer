@@ -2,7 +2,7 @@ const Command = require('../Command')
 const DiscordServer = require('../../DiscordServer')
 
 module.exports =
-class VerifiedRoleCommand extends Command {
+class VerifiedRemovedRoleCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'verifiedremovedrole',

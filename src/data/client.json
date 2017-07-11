@@ -1,3 +1,4 @@
 {
-    "token": "Your bot token here"
+    "token": "Your bot token here",
+    "showRAP": true
 }

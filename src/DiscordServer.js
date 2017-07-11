@@ -81,6 +81,7 @@ class DiscordServer {
         if (DiscordServer.DataCache == null) {
             DiscordServer.DataCache = {};
             DiscordServer.BindingsCache = {};
+            DiscordServer.RAPCache = {};
         }
 
         // Load this server's settings. 
@@ -357,6 +358,46 @@ class DiscordServer {
                         error: "Unknown error."
                     }
             }
+        }
+    }
+    
+    // This gets (and caches if addToCache is true) the rap of a user.
+    // The cache could benefit from an added timeout, since RAP is fairly dynamic.
+    static async getRAP(userId, addToCache){
+        if (!this.RAPCache[userId]){
+            try {
+                let RAP = 0;
+				
+				// Collectible AssetsTypes
+                const CollectibleAssetTypes = [
+                     "Hat", "Face", "Gear", "HairAccessory", "FaceAccessory", "NeckAccessory", "ShoulderAccessory", "FrontAccessory", "BackAccessory", "WaistAccessory"
+                ]
+                
+                for (var i = 0; i < CollectibleAssetTypes.length; i++){
+                    let CurrentAssetType = CollectibleAssetTypes[i]
+                    let inventory = await request({
+                        uri: `https://inventory.roblox.com/v1/users/${userId}/assets/collectibles?assetType=${CurrentAssetType}&sortOrder=Asc`,
+                        json: true,
+                        simple: false
+                    });
+                    
+                    if (inventory){
+                        for (var x = 0; x < inventory.data.length; x++){
+                            if (inventory.data[x].recentAveragePrice){
+                                RAP += inventory.data[x].recentAveragePrice;
+                            }
+                        }
+                    }
+                }
+                
+                if (addToCache) this.RAPCache[userId] = RAP;
+                
+                return RAP;
+            } catch (e) {
+                return `Error fetching rap: ${e}`;
+            }
+        } else {
+            return this.RAPCache[userId];
         }
     }
 }

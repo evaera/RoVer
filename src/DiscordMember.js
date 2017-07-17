@@ -50,6 +50,10 @@ class DiscordMember {
         var options = options || {};
         let data = {};
 
+        if (!this.member) {
+            await this.prepareMember();
+        }
+
         try {
             // Read user data from memory, or request it if there isn't any cached.
             data = DiscordServer.DataCache[this.id] || await request({

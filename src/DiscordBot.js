@@ -123,7 +123,7 @@ class DiscordBot {
                 // we have time to cache the user information, so it only
                 // sends out the request once. 
 
-                let action = await server.verifyMember(id, {
+                let action = await (await server.getMember(id)).verify({
                     // We want to clear the group rank bindings cache because
                     // this is the first iteration.
                     clearBindingsCache: true,

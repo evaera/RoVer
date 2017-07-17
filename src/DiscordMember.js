@@ -1,7 +1,7 @@
-const request       = require('request-promise')
 const config        = require('./data/client.json')
 const Util          = require('./Util')
 
+const request       = require('request-promise').defaults({pool: {maxSockets: Infinity}});
 
 let DiscordServer;
 
@@ -60,7 +60,7 @@ class DiscordMember {
                 uri: `https://verify.eryn.io/api/user/${this.id}`,
                 json: true,
                 simple: false
-            })
+            });
         } catch (e) {
             console.log(e);
             return {
@@ -70,7 +70,7 @@ class DiscordMember {
         }
 
         // If the status is ok, the user is in the database.
-        if (data.status === "ok"){
+        if (data.status === "ok") {
             // Cache the data for future use.
             DiscordServer.DataCache[this.id] = data;
 

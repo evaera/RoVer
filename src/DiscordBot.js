@@ -75,7 +75,9 @@ class DiscordBot {
 
         // We call verifyMember but we want to retain the cache and we
         // don't want it to post any announcements.
-        await this.getServer(channel.guild.id).verifyMember(user.id, {
+        let server = await this.getServer(channel.guild.id);
+        let member = await this.getMember(user.id);
+        await member.verify({
             announce: false,
             clearBindingsCache: false
         });
@@ -84,7 +86,7 @@ class DiscordBot {
     // This is called when a user joins any Discord server.
     async guildMemberAdd(member) {
         let server = await this.getServer(member.guild.id);
-        let action = await server.verifyMember(member.id);
+        let action = await (await server.getMember(member.id)).verify();
 
         if (action.status) {
             member.send(server.getWelcomeMessage(action));
@@ -145,7 +147,7 @@ class DiscordBot {
                 // context so that we can run these commands synchronously
                 // but still execute the requests all at the same time.
                 (async function(){
-                    let action = await server.verifyMember(id, {
+                    let action = await (await server.getMember(id)).verify({
                         clearBindingsCache: false,
                         announce: false
                     });

@@ -75,7 +75,7 @@ class DiscordBot {
 
         // We call verifyMember but we want to retain the cache and we
         // don't want it to post any announcements.
-        this.getServer(channel.guild.id).verifyMember(user.id, {
+        await this.getServer(channel.guild.id).verifyMember(user.id, {
             announce: false,
             clearBindingsCache: false
         });
@@ -83,7 +83,7 @@ class DiscordBot {
 
     // This is called when a user joins any Discord server.
     async guildMemberAdd(member) {
-        let server = this.getServer(member.guild.id);
+        let server = await this.getServer(member.guild.id);
         let action = await server.verifyMember(member.id);
 
         if (action.status) {
@@ -95,9 +95,10 @@ class DiscordBot {
 
     // This is used to get the DiscordServer instance associated
     // with the specific guild id.
-    getServer(id) {
+    async getServer(id) {
         if (!this.servers[id]) {
             this.servers[id] = new DiscordServer(this, id);
+            await this.servers[id].loadSettings();
         }
         return this.servers[id];
     }
@@ -113,7 +114,7 @@ class DiscordBot {
         
         // Iterate through all of the guilds the bot is in.
         for (let guild of this.bot.guilds.array()) {
-            let server = this.getServer(guild.id);
+            let server = await this.getServer(guild.id);
 
             if (firstRun) {
                 // This only runs on the first iteration. We do this so that

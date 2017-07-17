@@ -17,7 +17,7 @@ class VerifyCommand extends Command {
         // Clear the request cache so we get fresh information.
         DiscordServer.clearMemberCache(msg.author.id);
 
-        let server = this.discordBot.getServer(msg.guild.id)
+        let server = await this.discordBot.getServer(msg.guild.id)
         let action = await server.verifyMember(msg.author.id);
 
         // We reply with the status of the verification in the

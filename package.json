@@ -5,6 +5,7 @@
     "discord.js-commando": "Gawdl3y/discord.js-commando",
     "erlpack": "hammerandchisel/erlpack",
     "express": "^4.15.2",
+    "mz": "^2.6.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.0"
   },

@@ -1,8 +1,8 @@
-const path        = require('path')
-const fs          = require('fs')
-const Discord     = require('discord.js')
-const request     = require('request-promise')
-const config      = require('./data/client.json')
+const path          = require('path')
+const fs            = require('mz/fs')
+const Discord       = require('discord.js')
+const request       = require('request-promise')
+const config        = require('./data/client.json')
 const VirtualGroups = require('./VirtualGroups.js')
 
 // The default settings for DiscordServer.
@@ -36,27 +36,36 @@ class DiscordServer {
 
         // Load this server's settings. 
         this.settings = {};
+        this.areSettingsLoaded = false;
         this.settingsPath = path.join(__dirname, "data", `${id}.json`);
-        this.loadSettings();
+
+        // We will load the settings in DiscordBot.getServer in order to know when
+        // the server is ready from the promise it returns.
+        // this.loadSettings();
     }
 
     // This method loads the settings specific for this server.
     // It also creates a settings file if there isn't one.
-    loadSettings() {
+    async loadSettings() {
+        if (this.areSettingsLoaded) {
+            return;
+        }
+        
         // If there's no settings file for this server, create one.
-        if (!fs.existsSync(this.settingsPath)) {
-            fs.writeFileSync(this.settingsPath, JSON.stringify(DefaultSettings));
+        if (!await fs.exists(this.settingsPath)) {
+            await fs.writeFile(this.settingsPath, JSON.stringify(DefaultSettings));
         }
 
-        if (!fs.existsSync(this.settingsPath)) {
+        if (!await fs.exists(this.settingsPath)) {
             throw `Couldn't write settings file: ${this.settingsPath}`;
         }
 
         // Load the settings file.
-        let fileData = fs.readFileSync(this.settingsPath);
+        let fileData = await fs.readFile(this.settingsPath);
         
         try {
             this.settings = JSON.parse(fileData);
+            this.areSettingsLoaded = true;
         } catch (e) {
             console.log(`${this.settingsPath} appears to be corrupted.`);
         }
@@ -78,7 +87,7 @@ class DiscordServer {
     setSetting(key, value) {
         this.settings[key] = value;
 
-        fs.writeFileSync(this.settingsPath, JSON.stringify(this.settings));
+        fs.writeFile(this.settingsPath, JSON.stringify(this.settings));
     }
 
     // Static, clears the member cache for a specific Discord user.

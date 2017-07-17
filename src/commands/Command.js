@@ -18,7 +18,7 @@ class Command extends Commando.Command {
     }
 
     async run(msg, args, pattern) {
-        this.server = this.discordBot.getServer(msg.guild.id);
+        this.server = await this.discordBot.getServer(msg.guild.id);
         return await this.fn(msg, args, pattern);
     }
 }

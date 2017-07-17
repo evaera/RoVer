@@ -196,21 +196,29 @@ destroy@~1.0.4:
 
 discord.js-commando@Gawdl3y/discord.js-commando:
   version "0.9.0"
-  resolved "https://codeload.github.com/Gawdl3y/discord.js-commando/tar.gz/4b093926559bee700d84442e325c18606cdabf91"
+  resolved "https://codeload.github.com/Gawdl3y/discord.js-commando/tar.gz/de635acde97359828c97db237895e728f00e7fef"
   dependencies:
     common-tags "^1.4.0"
     escape-string-regexp "^1.0.0"
     require-all "^2.2.0"
 
+discord.js-commando@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/discord.js-commando/-/discord.js-commando-0.9.0.tgz#f9dcfeb6b8cab8cc585cd5cc7ca6c1c4a99a2e94"
+  dependencies:
+    common-tags "^1.4.0"
+    escape-string-regexp "^1.0.0"
+    require-all "^2.0.0"
+
 discord.js@hydrabolt/discord.js:
-  version "12.0.0"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/555317043e53103718bad1e47a6cf3757982beca"
+  version "12.0.0-dev"
+  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/fdb8f046b57aca685c71848d29b10bbec95e513a"
   dependencies:
     long "^3.2.0"
     prism-media "^0.0.1"
-    snekfetch "^3.1.0"
-    tweetnacl "^0.14.0"
-    ws "^2.0.0"
+    snekfetch "^3.2.0"
+    tweetnacl "^1.0.0"
+    ws "^3.0.0"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"
@@ -700,7 +708,7 @@ request@^2.81.0:
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
-require-all@^2.2.0:
+require-all@^2.0.0, require-all@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/require-all/-/require-all-2.2.0.tgz#b4420c233ac0282d0ff49b277fb880a8b5de0894"
 
@@ -755,9 +763,9 @@ simple-get@^1.4.2:
     unzip-response "^1.0.0"
     xtend "^4.0.0"
 
-snekfetch@^3.1.0:
-  version "3.1.8"
-  resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-3.1.8.tgz#a871a6208f9ec6ec72e2c61416f40880ee1aea92"
+snekfetch@^3.2.0:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-3.2.4.tgz#74fed1f0530e312e5b08ecb189a529c14727afaf"
 
 sntp@1.x.x:
   version "1.0.9"
@@ -850,9 +858,13 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-tweetnacl@^0.14.0, tweetnacl@^0.14.3, tweetnacl@~0.14.0:
+tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
+
+tweetnacl@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.0.tgz#713d8b818da42068740bf68386d0479e66fc8a7b"
 
 type-is@~1.6.15:
   version "1.6.15"
@@ -905,9 +917,9 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
 
-ws@^2.0.0:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-2.3.1.tgz#6b94b3e447cb6a363f785eaf94af6359e8e81c80"
+ws@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.0.0.tgz#98ddb00056c8390cb751e7788788497f99103b6c"
   dependencies:
     safe-buffer "~5.0.1"
     ultron "~1.1.0"

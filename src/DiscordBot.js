@@ -18,7 +18,7 @@ class DiscordBot {
             shardId: parseInt(process.env.SHARD_ID, 10),
             shardCount: parseInt(process.env.SHARD_COUNT, 10),
             apiRequestMethod: config.apiRequestMethod || 'sequential',
-            fetchAllMembers: true,
+            disabledEvents: ['TYPING_START', 'VOICE_STATE_UPDATE', 'PRESENCE_UPDATE', 'MESSAGE_DELETE', 'MESSAGE_UPDATE'],
             owner: config.owner || '0',
             commandPrefix: config.commandPrefix || '!',
             unknownCommandResponse: false
@@ -38,7 +38,7 @@ class DiscordBot {
 
         // Only hook up typingStart if lockNicknames mode is enabled.
         if (config.lockNicknames) {
-            this.bot.on("typingStart", this.typingStart.bind(this));
+            this.bot.on("message", this.typingStart.bind(this));
         }
         
         // Register commands

@@ -24,7 +24,7 @@ class UpdateCommand extends Command {
         DiscordServer.clearMemberCache(user.id);
 
         let server = await this.discordBot.getServer(msg.guild.id)
-        let action = await (await server.getMember(msg.author.id)).verify();
+        let action = await (await server.getMember(user.id)).verify();
 
         if (!action.status) {
             msg.reply(action.error);

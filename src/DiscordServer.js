@@ -4,6 +4,8 @@ const Discord       = require('discord.js')
 const request       = require('request-promise')
 const config        = require('./data/client.json')
 const VirtualGroups = require('./VirtualGroups.js')
+const DiscordMember = require('./DiscordMember')
+const Util          = require('./Util')
 
 // The default settings for DiscordServer.
 const DefaultSettings = {
@@ -71,6 +73,13 @@ class DiscordServer {
         }
     }
 
+    // Static, clears the member cache for a specific Discord user.
+    static clearMemberCache(id) {
+        if (DiscordServer.DataCache) {
+            delete DiscordServer.DataCache[id];
+        }
+    }
+
     // Returns a setting value. Tries the saved settings, then tries
     // the default settings. 
     getSetting(key) {
@@ -88,33 +97,6 @@ class DiscordServer {
         this.settings[key] = value;
 
         fs.writeFile(this.settingsPath, JSON.stringify(this.settings));
-    }
-
-    // Static, clears the member cache for a specific Discord user.
-    static clearMemberCache(id) {
-        if (DiscordServer.DataCache) {
-            delete DiscordServer.DataCache[id];
-        }
-    }
-
-    // Static, performs string formatting for things like
-    // custom nicknames. 
-    static formatDataString(formatString, data, member) {
-        let replacements = {
-            "%USERNAME%": data.robloxUsername,
-            "%USERID%": data.robloxId,
-            "%DISCORDNAME%": data.discordName || "",
-            "%DISCORDID%": data.discordId || "",
-        }
-
-        if (member != null) {
-            replacements["%DISCORDNAME%"] = member.user.username;
-            replacements["%DISCORDID%"] = member.id;
-        }
-
-        return formatString.replace(/%\w+%/g, (all) => {
-            return replacements[all] || all;
-        });
     }
 
     // Static, checks if a group rank binding passes or fails for
@@ -183,16 +165,10 @@ class DiscordServer {
         this.setSetting('groupRankBindings', rankBindings);
     }
 
-    // Gets a member's nickname, formatted with this server's
-    // specific settings.
-    getMemberNickname(data, member) {
-        return DiscordServer.formatDataString(this.getSetting('nicknameFormat'), data, member)
-    }
-
     // Gets this server's specific welcome message, or the default
     // one if none is configured.
     getWelcomeMessage(data) {
-        return DiscordServer.formatDataString(this.getSetting('welcomeMessage'), data);
+        return Util.formatDataString(this.getSetting('welcomeMessage'), data);
     }
     
     // Checks to see if this server has configured a custom welcome
@@ -201,123 +177,8 @@ class DiscordServer {
         return DefaultSettings.welcomeMessage !== this.getSetting('welcomeMessage');
     }
 
-    // This method is called to update the state of a specific member
-    // in this Discord server.
-    async verifyMember(id, options) {
-        var options = options || {};
-        let data = {};
-        let member;
-
-        try {
-            // Read user data from memory, or request it if there isn't any cached.
-            data = DiscordServer.DataCache[id] || await request({
-                uri: `https://verify.eryn.io/api/user/${id}`,
-                json: true,
-                simple: false
-            })
-        } catch (e) {
-            return {
-                status: false,
-                error: "Unknown error."
-             }
-        }
-
-        // If the status is ok, the user is in the database.
-        if (data.status === "ok"){
-            // Cache the data for future use.
-            DiscordServer.DataCache[id] = data;
-
-            try {
-                let user = await this.bot.fetchUser(id, false);
-                member = await this.server.fetchMember(user, false);
-
-                if (!member) return;
-
-                // Check if these settings are enabled for this specific server,
-                // if so, then put the member in the correct state.
-
-                if (this.getSetting('nicknameUsers')) {
-                    await member.setNickname(this.getMemberNickname(data, member));
-                }
-
-                if (this.getSetting('verifiedRole')) {
-                    await member.addRole(this.getSetting('verifiedRole'));
-                }
-                
-                if (this.getSetting('verifiedRemovedRole')){
-                    await member.removeRole(this.getSetting('verifiedRemovedRole'));
-                }
-
-                if (this.getSetting('announceChannel') && options.announce !== false) {
-                    let channel = await this.server.channels.get(this.getSetting('announceChannel'));
-
-                    if (channel) {
-                        channel.send(`**User verified:** <@${id}> as ${data.robloxUsername}`);
-                    }
-                }
-
-                // Check if we want to resolve group rank bindings with cached or fresh data.
-                if (options.clearBindingsCache !== false) {
-                    DiscordServer.BindingsCache[data.robloxId] = {};
-                }
-
-                // Resolve group rank bindings for this member.
-                if (this.getSetting('groupRankBindings').length > 0) {
-                    for (let binding of this.getSetting('groupRankBindings')) {
-                        // We use a Promise.then here so that they all execute asynchronously. 
-                        DiscordServer.resolveGroupRankBinding(binding, data.robloxId)
-                            .then((state) => {
-                                if (state === true) {
-                                    member.addRole(binding.role);
-                                } else {
-                                    member.removeRole(binding.role);
-                                }
-                            })
-                            .catch((e) => {
-                                console.log(e);
-                                console.log('Resolution error for binding');
-                            });
-                    }
-                }
-            } catch (e) {
-                // If anything failed here, it's most likely because the bot
-                // couldn't modify the member due to a permission problem.
-                return {
-                    status: false,
-                    nonFatal: true,
-                    error: "RoVer couldn't modify the member in this server. Either the bot doesn't have permission or the target user cannot be modified by the bot (such as higher rank in the server)."
-                }
-            }
-
-            return {
-                status: true,
-                robloxUsername: data.robloxUsername,
-                robloxId: data.robloxId,
-                discordId: member.id,
-                discordName: member.user.username
-            }
-        } else {
-            // Status was not "ok".
-             switch (data.errorCode){
-                case 404:
-                    // User isn't in the database.
-                    return {
-                        status: false,
-                        error: "Not verified. Go to https://verify.eryn.io to verify."
-                    }
-                case 429: 
-                    // This client has exceeded the amount of requests allowed in a 60 second period.
-                    return {
-                        status: false,
-                        error: "Server is busy. Please try again later."
-                    }
-                default:
-                    // Something else is wrong.
-                    return {
-                        status: false,
-                        error: "Unknown error."
-                    }
-            }
-        }
+    // Returns a DiscordMember belonging to this DiscordServer.
+    async getMember(id) {
+        return await DiscordMember.new(this, id);
     }
 }

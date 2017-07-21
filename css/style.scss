@@ -51,6 +51,10 @@ header {
     }
 }
 
+.center {
+    text-align: center;
+}
+
 section {
     &:nth-of-type(2n+1) {
         background: rgba(255, 255, 255, 0.1);

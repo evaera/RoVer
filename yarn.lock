@@ -216,6 +216,16 @@ discord.js@hydrabolt/discord.js:
     tweetnacl "^1.0.0"
     ws "^3.0.0"
 
+discord.js@hydrabolt/discord.js#master:
+  version "12.0.0-dev"
+  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/57b69803132355b506f9919f37a55915ccdf86d3"
+  dependencies:
+    long "^3.2.0"
+    prism-media "^0.0.1"
+    snekfetch "^3.2.0"
+    tweetnacl "^1.0.0"
+    ws "^3.0.0"
+
 ecc-jsbn@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"

@@ -68,8 +68,8 @@ class DiscordBot {
     // for setting their nickname back to what it should be if they've
     // changed it. Only active if lockNicknames is true in config.
     async message(message) {
-        // Don't want to do anything if this is a DM.
-        if (!message.guild) {
+        // Don't want to do anything if this is a DM or message was sent by the bot itself.
+        if (!message.guild || message.author.id === this.bot.user.id) {
             return;
         }
 

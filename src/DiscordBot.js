@@ -36,9 +36,9 @@ class DiscordBot {
         this.bot.on("guildMemberAdd", this.guildMemberAdd.bind(this));
         if (config.loud) this.bot.on("error", (message) => console.log(message));
 
-        // Only hook up typingStart if lockNicknames mode is enabled.
+        // Only hook up if lockNicknames mode is enabled.
         if (config.lockNicknames) {
-            this.bot.on("message", this.typingStart.bind(this));
+            this.bot.on("message", this.message.bind(this));
         }
         
         // Register commands
@@ -64,17 +64,17 @@ class DiscordBot {
         this.bot.user.setGame("http://eryn.io/RoVer");
     }
 
-    // This method is called when a user starts typing, but it's used
+    // This method is called when a user sends a message, but it's used
     // for setting their nickname back to what it should be if they've
     // changed it. Only active if lockNicknames is true in config.
-    async typingStart(channel, user) {
+    async message(channel, user) {
         // Don't want to do anything if this is a DM.
         if (channel.type !== "text") {
             return;
         }
 
-        // We call verifyMember but we want to retain the cache and we
-        // don't want it to post any announcements.
+        // We call discordMember.verify but we want to retain the cache
+        // and we don't want it to post any announcements.
         let server = await this.getServer(channel.guild.id);
         let member = await this.getMember(user.id);
         await member.verify({

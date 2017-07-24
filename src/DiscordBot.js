@@ -67,16 +67,16 @@ class DiscordBot {
     // This method is called when a user sends a message, but it's used
     // for setting their nickname back to what it should be if they've
     // changed it. Only active if lockNicknames is true in config.
-    async message(channel, user) {
+    async message(message) {
         // Don't want to do anything if this is a DM.
-        if (channel.type !== "text") {
+        if (!message.guild) {
             return;
         }
 
         // We call discordMember.verify but we want to retain the cache
         // and we don't want it to post any announcements.
-        let server = await this.getServer(channel.guild.id);
-        let member = await this.getMember(user.id);
+        let server = await this.getServer(message.guild.id);
+        let member = await server.getMember(message.author.id);
         await member.verify({
             announce: false,
             clearBindingsCache: false

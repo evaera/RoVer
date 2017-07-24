@@ -1,4 +1,5 @@
 src/data/*
+.vscode/
 
 # Logs
 logs

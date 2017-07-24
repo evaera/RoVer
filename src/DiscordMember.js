@@ -145,6 +145,12 @@ class DiscordMember {
              switch (data.errorCode){
                 case 404:
                     // User isn't in the database.
+
+                    // Add the "Not Verified" role to the user.
+                    if (this.discordServer.getSetting('verifiedRemovedRole')){
+                        await this.member.addRole(this.discordServer.getSetting('verifiedRemovedRole'));
+                    }
+
                     return {
                         status: false,
                         error: "Not verified. Go to https://verify.eryn.io to verify."

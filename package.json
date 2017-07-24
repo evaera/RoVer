@@ -2,7 +2,7 @@
   "dependencies": {
     "bufferutil": "^3.0.1",
     "discord.js": "hydrabolt/discord.js#master",
-    "discord.js-commando": "Gawdl3y/discord.js-commando",
+    "discord.js-commando": "Gawdl3y/discord.js-commando#master",
     "erlpack": "hammerandchisel/erlpack",
     "express": "^4.15.2",
     "mz": "^2.6.0",

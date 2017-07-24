@@ -198,23 +198,13 @@ destroy@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
 
-discord.js-commando@Gawdl3y/discord.js-commando:
+discord.js-commando@Gawdl3y/discord.js-commando, discord.js-commando@Gawdl3y/discord.js-commando#master:
   version "0.9.0"
   resolved "https://codeload.github.com/Gawdl3y/discord.js-commando/tar.gz/de635acde97359828c97db237895e728f00e7fef"
   dependencies:
     common-tags "^1.4.0"
     escape-string-regexp "^1.0.0"
     require-all "^2.2.0"
-
-discord.js@hydrabolt/discord.js:
-  version "12.0.0-dev"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/fdb8f046b57aca685c71848d29b10bbec95e513a"
-  dependencies:
-    long "^3.2.0"
-    prism-media "^0.0.1"
-    snekfetch "^3.2.0"
-    tweetnacl "^1.0.0"
-    ws "^3.0.0"
 
 discord.js@hydrabolt/discord.js#master:
   version "12.0.0-dev"

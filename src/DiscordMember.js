@@ -22,7 +22,11 @@ class DiscordMember {
 
     static async new(discordServer, id) {
         let discordMember = new DiscordMember(discordServer, id);
-        discordMember.prepareMember();
+
+        if (!discordMember.prepareMember()) {
+            return false;
+        }
+        
         return discordMember;
     }
 
@@ -34,8 +38,13 @@ class DiscordMember {
     }
 
     async prepareMember() {
-        this.user = await this.bot.fetchUser(this.id, false);
-        this.member = await this.server.fetchMember(this.user, false);
+        try {
+            this.user = await this.bot.fetchUser(this.id, false);
+            this.member = await this.server.fetchMember(this.user, false);
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     // Gets a member's nickname, formatted with this server's
@@ -50,8 +59,11 @@ class DiscordMember {
         var options = options || {};
         let data = {};
 
-        if (!this.member) {
-            await this.prepareMember();
+        if (!this.member && !await this.prepareMember()) {
+            return {
+                status: false,
+                error: "User not in guild."
+            }
         }
 
         try {

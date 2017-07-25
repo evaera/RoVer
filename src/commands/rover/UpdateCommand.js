@@ -23,8 +23,14 @@ class UpdateCommand extends Command {
         let user = args.user;
         DiscordServer.clearMemberCache(user.id);
 
-        let server = await this.discordBot.getServer(msg.guild.id)
-        let action = await (await server.getMember(user.id)).verify();
+        let server = await this.discordBot.getServer(msg.guild.id);
+        let member = await server.getMember(user.id);
+
+        if (!member) {
+            return msg.reply("User not in guild.");
+        }
+
+        let action = await member.verify();
 
         if (!action.status) {
             msg.reply(action.error);

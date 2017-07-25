@@ -62,7 +62,8 @@ class DiscordMember {
         if (!this.member && !await this.prepareMember()) {
             return {
                 status: false,
-                error: "User not in guild."
+                error: "User not in guild.",
+                nonFatal: true
             }
         }
 

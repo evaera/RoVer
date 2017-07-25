@@ -118,17 +118,15 @@ class DiscordBot {
         for (let guild of this.bot.guilds.array()) {
             let server = await this.getServer(guild.id);
 
-            if (true) {
+            if (firstRun) {
                 // This only runs on the first iteration. We do this so that
                 // we have time to cache the user information, so it only
                 // sends out the request once. 
 
-                console.log(server.id);
-
                 let action = await (await server.getMember(id)).verify({
                     // We want to clear the group rank bindings cache because
                     // this is the first iteration.
-                    clearBindingsCache: firstRun,
+                    clearBindingsCache: true,
                     announce: false
                 });
 
@@ -149,20 +147,16 @@ class DiscordBot {
                 // context so that we can run these commands synchronously
                 // but still execute the requests all at the same time.
                 (async function(){
-                    try {
-                        let action = await (await server.getMember(id)).verify({
-                            clearBindingsCache: false,
-                            announce: false
-                        });
+                    let action = await (await server.getMember(id)).verify({
+                        clearBindingsCache: false,
+                        announce: false
+                    });
 
-                        if (action.status && server.hasCustomWelcomeMessage()) {
-                            await this.bot.fetchUser(id);
-                            
-                            let member = await this.bot.guilds.get(guild.id).fetchMember(id);
-                            member.send(server.getWelcomeMessage(action));
-                        }
-                    } catch (e) {
-                        // Do nothing
+                    if (action.status && server.hasCustomWelcomeMessage()) {
+                        await this.bot.fetchUser(id);
+                        
+                        let member = await this.bot.guilds.get(guild.id).fetchMember(id);
+                        member.send(server.getWelcomeMessage(action));
                     }
                 }).apply(this);
             }

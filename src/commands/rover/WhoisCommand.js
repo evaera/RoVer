@@ -30,18 +30,21 @@ class WhoisCommand extends Command {
             let id = member.user.id;
             try {
                 // Read user data from memory, or request it if there isn't any cached.
-                data = DiscordServer.DataCache[member.user.id] || await request({
-                    uri: `https://verify.eryn.io/api/user/${id}`,
-                    json: true,
-                    simple: false
-                })
+                data = await Cache.get("users", this.id);
+                if (!data) {
+                    data =  await request({
+                        uri: `https://verify.eryn.io/api/user/${this.id}`,
+                        json: true,
+                        simple: false
+                    });
+                }
             } catch (e) {
                 console.log(e);
                 return msg.reply("An error occured while fetching that user's data.")
             }
             if (data.status === "ok"){
                 // Make sure the data is cached so we don't have to use the API in the future
-                DiscordServer.DataCache[id] = data;
+                Cache.set("users", this.id, data);
                 msg.reply(`${member.displayName}: https://www.roblox.com/users/${data.robloxId}/profile`);
             } else {
                 msg.reply(`${member.displayName} doesn't seem to be verified.`);

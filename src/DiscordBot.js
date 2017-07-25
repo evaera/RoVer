@@ -133,7 +133,7 @@ class DiscordBot {
             if (!action.status && !action.nonFatal) {
                 // If there's a fatal error, don't continue with the rest.
                 break;
-            } else if (server.hasCustomWelcomeMessage()) {
+            } else if (action.status && server.hasCustomWelcomeMessage()) {
                 // It worked, checking if there's a custom welcome message.
                 await this.bot.fetchUser(id);
                 

@@ -102,8 +102,13 @@ You should probably make a read-only channel in the server explaining these proc
 
 Virtual groups are a way to bind ranks using the group rank binding system for external services that aren't actually Roblox groups, such as the dev forum. More could be easily added if you fork this project. Currently, these are in by default:
 
-- `DevForum`
-- `HasAsset` 
+- `DevForum` - Checks dev forum membership (devforum.roblox.com)
+- `HasAsset <asset id>` - Checks if user owns an asset, takes the id as an argument
+- `BC` - Builders club
+- `TBC`
+- `OBC`
+- `NBC` - No builders club
+- `BuildersClub` - Any form of BC
 
 To create a role for all members of the dev forum in your server, use the following command:
 

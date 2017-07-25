@@ -117,7 +117,7 @@ class DiscordMember {
                 if (this.discordServer.getSetting('groupRankBindings').length > 0) {
                     for (let binding of this.discordServer.getSetting('groupRankBindings')) {
                         // We use a Promise.then here so that they all execute asynchronously. 
-                        DiscordServer.resolveGroupRankBinding(binding, data.robloxId)
+                        DiscordServer.resolveGroupRankBinding(binding, data.robloxId, data.robloxUsername)
                             .then((state) => {
                                 if (state === true) {
                                     this.member.addRole(binding.role);

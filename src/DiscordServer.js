@@ -87,12 +87,12 @@ class DiscordServer {
     setSetting(key, value) {
         this.settings[key] = value;
 
-        fs.writeFile(this.settingsPath, JSON.stringify(this.settings));
+        fs.writeFileSync(this.settingsPath, JSON.stringify(this.settings));
     }
 
     // Static, checks if a group rank binding passes or fails for
     // a specific Roblox user. 
-    static async resolveGroupRankBinding(binding, userid) {
+    static async resolveGroupRankBinding(binding, userid, username) {
         // Check if the return value of this method has already been
         // cached in memory. If so, return that.
         let cachedBinding = await Cache.get(`bindings.${userid}`, JSON.stringify(binding));
@@ -103,7 +103,8 @@ class DiscordServer {
         try {
             if (VirtualGroups[binding.group]){
                 // If this group is a virtual group, then execute that function instead.
-                returnValue = VirtualGroups[binding.group](userid, binding.rank);
+                // 'all' is remapped to >1. Since this is the equivalent of no argument, we set it to null here.
+                returnValue = VirtualGroups[binding.group]({id: userid, username}, (binding.operator === 'gt' && binding.rank === 1) ? null : binding.rank);
             } else {
                 // Check the rank of the user in the Roblox group. 
                 let rank = await request({

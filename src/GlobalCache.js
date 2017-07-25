@@ -11,6 +11,7 @@ class GlobalCache {
     }
 
     onMessage(shard, message) {
+        // console.log(message);
         switch (message.action) {
             case "get":
                 this.get(shard, message);
@@ -24,8 +25,8 @@ class GlobalCache {
         }
     }
 
-    getCollection(name, forceNew) {
-        if (forceNew || typeof this.collections[name] === 'undefined') {
+    getCollection(name) {
+        if (typeof this.collections[name] === 'undefined') {
             this.collections[name] = {};
         }
 
@@ -90,7 +91,7 @@ class Cache {
 
     // Called when a new message comes in from the master process
     onMessage(msg) {
-        if (!msg.id || typeof msg.value === 'undefined' || !this.promises[msg.id]) {
+        if (typeof msg.id === 'undefined' || typeof msg.value === 'undefined' || !this.promises[msg.id]) {
             return;
         }
 

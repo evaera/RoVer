@@ -3,6 +3,7 @@ const Discord       = require('discord.js-commando')
 const request       = require('request-promise')
 const config        = require('./data/client.json')
 const DiscordServer = require('./DiscordServer')
+const {Cache}       = require('./GlobalCache')
 
 module.exports =
 // The main Discord bot class, only one per shard.
@@ -23,6 +24,13 @@ class DiscordBot {
             commandPrefix: config.commandPrefix || '!',
             unknownCommandResponse: false
         });
+
+        // Instantiate the shard's Cache singleton to interface with the main process.
+        // A global variable is used here because the cache is dependent on the client
+        // being initialized, but I don't like the idea of having to pass down the cache
+        // from this object into every instance (DiscordMember, DiscordServer). This seemed
+        // like the best solution. 
+        global.Cache = new Cache(this.bot);
 
         // Set a reference to this instance inside of the client
         // for use in Commando modules. Is this bad? Probably.
@@ -69,7 +77,9 @@ class DiscordBot {
     // changed it. Only active if lockNicknames is true in config.
     async message(message) {
         // Don't want to do anything if this is a DM or message was sent by the bot itself.
-        if (!message.guild || message.author.id === this.bot.user.id) {
+        // Additionally, if the message is !verify, we don't want to run it twice (since it
+        // will get picked up by the command anyway)
+        if (!message.guild || message.author.id === this.bot.user.id || message.cleanContent.toLowerCase() === "!verify") {
             return;
         }
 

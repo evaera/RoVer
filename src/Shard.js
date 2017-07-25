@@ -1,8 +1,7 @@
 // This file is the entry point for Shard processes.
 
 const config      = require('./data/client.json')
-const DiscordBot = require('./DiscordBot')
-const startTime = new Date();
+const DiscordBot  = require('./DiscordBot')
 
 // Instantiate the bot.
 let discordBot = new DiscordBot();

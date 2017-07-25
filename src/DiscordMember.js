@@ -30,13 +30,6 @@ class DiscordMember {
         return discordMember;
     }
 
-    // Clears the member cache for a specific Discord user.
-    clearCache() {
-        if (DiscordServer.DataCache) {
-            delete DiscordServer.DataCache[this.id];
-        }
-    }
-
     async prepareMember() {
         try {
             this.user = await this.bot.fetchUser(this.id, false);
@@ -69,11 +62,14 @@ class DiscordMember {
 
         try {
             // Read user data from memory, or request it if there isn't any cached.
-            data = DiscordServer.DataCache[this.id] || await request({
-                uri: `https://verify.eryn.io/api/user/${this.id}`,
-                json: true,
-                simple: false
-            });
+            data = await Cache.get("users", this.id);
+            if (!data) {
+                data =  await request({
+                    uri: `https://verify.eryn.io/api/user/${this.id}`,
+                    json: true,
+                    simple: false
+                });
+            }
         } catch (e) {
             if (config.loud) console.log(e);
             return {
@@ -85,7 +81,7 @@ class DiscordMember {
         // If the status is ok, the user is in the database.
         if (data.status === "ok") {
             // Cache the data for future use.
-            DiscordServer.DataCache[this.id] = data;
+            Cache.set("users", this.id, data);
 
             try {
 
@@ -114,7 +110,7 @@ class DiscordMember {
 
                 // Check if we want to resolve group rank bindings with cached or fresh data.
                 if (options.clearBindingsCache !== false) {
-                    DiscordServer.BindingsCache[data.robloxId] = {};
+                    await Cache.clear(`bindings.${data.robloxId}`);
                 }
 
                 // Resolve group rank bindings for this member.

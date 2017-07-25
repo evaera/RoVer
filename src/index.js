@@ -2,6 +2,7 @@
 
 const path          = require('path')
 const Discord       = require('discord.js')
+const {GlobalCache}   = require('./GlobalCache')
 const config        = require('./data/client.json')
 
 // Set up the sharding manager, a helper class that separates handling
@@ -16,6 +17,9 @@ shardingManager.on('launch', shard => {
 });
 
 shardingManager.spawn();
+
+// Instantiate a GlobalCache, which will cache information from the shards.
+new GlobalCache(shardingManager);
 
 // If updateServer is defined, start that up as well.
 if (config.updateServer) {

@@ -29,13 +29,6 @@ class DiscordServer {
 
         this.server = this.bot.guilds.get(id);
 
-        // if the static object DataCache is null, then
-        // create the static objects for DiscordServer.
-        if (DiscordServer.DataCache == null) {
-            DiscordServer.DataCache = {};
-            DiscordServer.BindingsCache = {};
-        }
-
         // Load this server's settings. 
         this.settings = {};
         this.areSettingsLoaded = false;
@@ -75,9 +68,7 @@ class DiscordServer {
 
     // Static, clears the member cache for a specific Discord user.
     static clearMemberCache(id) {
-        if (DiscordServer.DataCache) {
-            delete DiscordServer.DataCache[id];
-        }
+        Cache.set("users", id, null);
     }
 
     // Returns a setting value. Tries the saved settings, then tries
@@ -104,9 +95,8 @@ class DiscordServer {
     static async resolveGroupRankBinding(binding, userid) {
         // Check if the return value of this method has already been
         // cached in memory. If so, return that.
-        if (DiscordServer.BindingsCache[userid] && typeof DiscordServer.BindingsCache[userid][JSON.stringify(binding)] !== 'undefined') {
-            return DiscordServer.BindingsCache[userid][JSON.stringify(binding)];
-        }
+        let cachedBinding = await Cache.get(`bindings.${userid}`, JSON.stringify(binding));
+        if (cachedBinding) return cachedBinding;
 
         let returnValue = false;
 
@@ -139,13 +129,8 @@ class DiscordServer {
             if (config.loud) console.log(binding);
         }
         
-        // If the user doesn't have a cache object, create one.
-        if (!DiscordServer.BindingsCache[userid]) {
-            DiscordServer.BindingsCache[userid] = {};
-        }
-
         // Cache the return value in memory.
-        DiscordServer.BindingsCache[userid][JSON.stringify(binding)] = returnValue;
+        Cache.set(`bindings.${userid}`, JSON.stringify(binding), returnValue);
 
         return returnValue;
     }

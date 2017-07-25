@@ -134,9 +134,9 @@ class DiscordServer {
                 }
             }
         } catch (e) {
-            console.log("Encountered an error while trying to resolve a rank binding:");
-            console.log(e);
-            console.log(binding);
+            if (config.loud) console.log("Encountered an error while trying to resolve a rank binding:");
+            if (config.loud) console.log(e);
+            if (config.loud) console.log(binding);
         }
         
         // If the user doesn't have a cache object, create one.

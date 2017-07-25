@@ -26,7 +26,7 @@ class DiscordMember {
         if (!discordMember.prepareMember()) {
             return false;
         }
-        
+
         return discordMember;
     }
 
@@ -74,7 +74,7 @@ class DiscordMember {
                 simple: false
             });
         } catch (e) {
-            console.log(e);
+            if (config.loud) console.log(e);
             return {
                 status: false,
                 error: "Unknown error."
@@ -129,13 +129,13 @@ class DiscordMember {
                                 }
                             })
                             .catch((e) => {
-                                console.log(e);
+                                if (config.loud) console.log(e);
                                 console.log('Resolution error for binding');
                             });
                     }
                 }
             } catch (e) {
-                console.log(e);
+                if (config.loud) console.log(e);
                 // If anything failed here, it's most likely because the bot
                 // couldn't modify the member due to a permission problem.
                 return {

@@ -43,7 +43,6 @@ class WhoisCommand extends Command {
                 console.log(e);
                 return msg.reply("An error occured while fetching that user's data.")
             }
-            console.log(data);
             if (data.status === "ok"){
                 // Make sure the data is cached so we don't have to use the API in the future
                 Cache.set("users", id, data);

@@ -96,7 +96,7 @@ class DiscordServer {
         // Check if the return value of this method has already been
         // cached in memory. If so, return that.
         let cachedBinding = await Cache.get(`bindings.${userid}`, JSON.stringify(binding));
-        if (cachedBinding) return cachedBinding;
+        if (cachedBinding !== null) return cachedBinding;
 
         let returnValue = false;
 
@@ -104,7 +104,7 @@ class DiscordServer {
             if (VirtualGroups[binding.group]){
                 // If this group is a virtual group, then execute that function instead.
                 // 'all' is remapped to >1. Since this is the equivalent of no argument, we set it to null here.
-                returnValue = VirtualGroups[binding.group]({id: userid, username}, (binding.operator === 'gt' && binding.rank === 1) ? null : binding.rank);
+                returnValue = await VirtualGroups[binding.group]({id: userid, username}, (binding.operator === 'gt' && binding.rank === 1) ? null : binding.rank);
             } else {
                 // Check the rank of the user in the Roblox group. 
                 let rank = await request({

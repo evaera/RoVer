@@ -11,7 +11,6 @@ class GlobalCache {
     }
 
     onMessage(shard, message) {
-        // console.log(message);
         switch (message.action) {
             case "get":
                 this.get(shard, message);

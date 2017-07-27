@@ -24,8 +24,12 @@ class VerifiedRoleCommand extends Command {
     async fn(msg, args, pattern) {
         let role = args.role;
         if (role) {
-            this.server.setSetting('verifiedRole', role.id);
-            msg.reply(`Set verified role to ${role.name}`);
+            if (this.server.isRoleInUse(role.id)) {
+                msg.reply("That role is already in use. (verified role, not verified role, or from a group binding)");
+            } else {
+                this.server.setSetting('verifiedRole', role.id);
+                msg.reply(`Set verified role to ${role.name}`);
+            }
         } else {
             this.server.setSetting('verifiedRole', null);
             msg.reply("Cleared verified role, users will no longer receive a role when they verify.");

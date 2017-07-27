@@ -24,8 +24,12 @@ class NotVerifiedRoleCommand extends Command {
     async fn(msg, args, pattern) {
         let role = args.role;
         if (role) {
-            this.server.setSetting('verifiedRemovedRole', role.id);
-            msg.reply(`Set non-verified role to ${role.name}`);
+            if (this.server.isRoleInUse(role.id)) {
+                msg.reply("That role is already in use. (verified role, not verified role, or from a group binding)");
+            } else {
+                this.server.setSetting('verifiedRemovedRole', role.id);
+                msg.reply(`Set non-verified role to ${role.name}`);
+            }
         } else {
             this.server.setSetting('verifiedRemovedRole', null);
             msg.reply("Cleared removed verification role, users will no longer be removed from it on verification.");

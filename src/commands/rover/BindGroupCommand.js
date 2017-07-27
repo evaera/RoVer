@@ -33,6 +33,11 @@ class BindGroupCommand extends Command {
     async fn(msg, args) {
         let binding = {};
 
+        if (this.server.isRoleInUse(args.role.id)) {
+            msg.reply("That role is already in use. (verified role, not verified role, or from a group binding)");
+            return;
+        }
+
         // Support for operators, so we parse them out before
         // saving the rank number.
         let rankUnparsed = args.rank;

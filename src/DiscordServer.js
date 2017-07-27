@@ -167,4 +167,16 @@ class DiscordServer {
     async getMember(id) {
         return await DiscordMember.new(this, id);
     }
+
+    // Returns whether or not a role is in use by the verified, not verified, or binding roles
+    isRoleInUse(id) {
+        if (this.getSetting('verifiedRole') === id) return true;
+        if (this.getSetting('verifiedRemovedRole') === id) return true;
+
+        for (let binding of this.getSetting('groupRankBindings')) {
+            if (binding.role === id) return true;
+        }
+
+        return false;
+    }
 }

@@ -34,7 +34,7 @@ class BindGroupCommand extends Command {
         let binding = {};
 
         if (this.server.isRoleInUse(args.role.id)) {
-            msg.reply("That role is already in use. (verified role, not verified role, or from a group binding)");
+            msg.reply("That role is already in use. (verified role, not verified role, or from a group binding). Run `!bindings` to see all role bindings.");
             return;
         }
 

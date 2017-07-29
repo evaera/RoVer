@@ -9,7 +9,7 @@ class Command extends Commando.Command {
         
         super(client, info);
 
-        this.userPermissions = info.userPermissions || ['ADMINISTRATOR'];
+        this.userPermissions = info.userPermissions || ['MANAGE_GUILD'];
         this.discordBot = this.client.discordBot;
     }
 

@@ -51,7 +51,7 @@ The quickest and easiest way to use RoVer is to [add the hosted version](https:/
 
 You can also clone this repository and host it yourself and make any modifications you wish. 
 
-After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Administrator` permission in the Discord server in order to use these commands.
+After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission in the Discord server in order to use these commands.
 
 - `!RoVer` - Displays a list of commands
 - `!VerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`.

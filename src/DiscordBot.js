@@ -121,14 +121,19 @@ class DiscordBot {
     // This is called by the update server when a user verifies 
     // online. It updates the member in every DiscordServer they
     // are in. 
-    async globallyUpdateMember(id) {
+    async globallyUpdateMember(args) {
+        let {id, guilds} = args;
+
         // Start off by clearing their global cache.
         DiscordServer.clearMemberCache(id);
 
         let firstRun = true;
         
         // Iterate through all of the guilds the bot is in.
-        for (let guild of this.bot.guilds.array()) {
+        for (let guildId of guilds) {
+            if (!this.bot.guilds.has(guildId)) continue;
+
+            let guild = this.bot.guilds.get(guildId);
             let server = await this.getServer(guild.id);
 
             let member = await server.getMember(id);

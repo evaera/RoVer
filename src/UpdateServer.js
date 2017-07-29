@@ -13,17 +13,18 @@ function(shardingManager, config) {
             return res.status(403).end();
         }
 
-        if (req.query.id == null) {
+        if (req.query.id == null || req.query.guilds == null) {
             return res.status(400).end();
         }
 
         let id = req.query.id;
+        let guilds = req.query.guilds.split(',');
 
         res.end('ok');
 
         shardingManager.broadcast({
             action: 'globallyUpdateMember',
-            argument: id
+            argument: { id, guilds }
         });
     })
 

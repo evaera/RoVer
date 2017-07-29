@@ -51,6 +51,7 @@ class DiscordMember {
     async verify(options) {
         var options = options || {};
         let data = {};
+        let freshData = false;
 
         if (!this.member && !await this.prepareMember()) {
             return {
@@ -69,6 +70,7 @@ class DiscordMember {
                     json: true,
                     simple: false
                 });
+                freshData = true;
             }
         } catch (e) {
             if (config.loud) console.log(e);
@@ -80,6 +82,26 @@ class DiscordMember {
 
         // If the status is ok, the user is in the database.
         if (data.status === "ok") {
+
+            // We only want to update the username if this data isn't from the cache.
+            if (freshData) {
+                // Resolve the Roblox username from the user id.
+                let apiUserData = {}
+                try {
+                    apiUserData = await request({
+                        uri: `http://api.roblox.com/users/${data.robloxId}`,
+                        json: true,
+                        simple: false
+                    });
+                } catch (e) {
+                    return false;
+                }
+
+                if (apiUserData.Username) {
+                    data.robloxUsername = apiUserData.Username;
+                }
+            }
+
             // Cache the data for future use.
             Cache.set("users", this.id, data);
 

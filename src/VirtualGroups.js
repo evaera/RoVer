@@ -13,21 +13,7 @@ module.exports = {
     // userid: ROBLOX user id.
     async DevForum(user) {
         let userid = user.id;
-        // Resolve the Roblox username from the user id.
-        let userData = {}
-        try {
-            userData = await request({
-                uri: `http://api.roblox.com/users/${userid}`,
-                json: true,
-                simple: false
-            });
-        } catch (e) {
-            return false;
-        }
-
-        let username = userData.Username;
-
-        if (!username) return false;
+        let username = user.username;
 
         // Fetch the DevForum data for this user.
         let devForumData = {}

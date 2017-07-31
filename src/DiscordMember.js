@@ -36,7 +36,7 @@ class DiscordMember {
             this.member = await this.server.fetchMember(this.user, false);
             return true;
         } catch (e) {
-            if (config.loud) console.log(e);
+            if (config.loud) console.log(`prepareMember: ${e.message}; ${this.id}; ${this.user}`);
             return false;
         }
     }

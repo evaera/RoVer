@@ -36,6 +36,7 @@ class DiscordMember {
             this.member = await this.server.fetchMember(this.user, false);
             return true;
         } catch (e) {
+            if (config.loud) console.log(e);
             return false;
         }
     }

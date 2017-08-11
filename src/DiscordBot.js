@@ -79,7 +79,7 @@ class DiscordBot {
         // Don't want to do anything if this is a DM or message was sent by the bot itself.
         // Additionally, if the message is !verify, we don't want to run it twice (since it
         // will get picked up by the command anyway)
-        if (!message.guild || message.author.id === this.bot.user.id || message.cleanContent.toLowerCase() === "!verify") {
+        if (!message.guild || message.author.id === this.bot.user.id || message.cleanContent.toLowerCase() === "!verify" || message.author.bot) {
             return;
         }
 
@@ -96,6 +96,8 @@ class DiscordBot {
 
     // This is called when a user joins any Discord server.
     async guildMemberAdd(member) {
+        if (member.user.bot) return;
+        
         let server = await this.getServer(member.guild.id);
         let discordMember = await server.getMember(member.id);
         if (!member) return;

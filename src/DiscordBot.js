@@ -131,32 +131,36 @@ class DiscordBot {
         
         // Iterate through all of the guilds the bot is in.
         for (let guildId of guilds) {
-            if (!this.bot.guilds.has(guildId)) continue;
+            try {
+                if (!this.bot.guilds.has(guildId)) continue;
 
-            let guild = this.bot.guilds.get(guildId);
-            let server = await this.getServer(guild.id);
+                let guild = this.bot.guilds.get(guildId);
+                let server = await this.getServer(guild.id);
 
-            let member = await server.getMember(id);
-            if (!member) continue;
-            let action = await member.verify({
-                // We want to clear the group rank bindings cache because
-                // this is the first iteration.
-                clearBindingsCache: firstRun,
-                announce: false
-            });
+                let member = await server.getMember(id);
+                if (!member) continue;
+                let action = await member.verify({
+                    // We want to clear the group rank bindings cache because
+                    // this is the first iteration.
+                    clearBindingsCache: firstRun,
+                    announce: false
+                });
 
-            if (!action.status && !action.nonFatal) {
-                // If there's a fatal error, don't continue with the rest.
-                break;
-            } else if (action.status && server.hasCustomWelcomeMessage()) {
-                // It worked, checking if there's a custom welcome message.
-                await this.bot.fetchUser(id);
-                
-                let member = await this.bot.guilds.get(guild.id).fetchMember(id);
-                member.send(server.getWelcomeMessage(action));
+                if (!action.status && !action.nonFatal) {
+                    // If there's a fatal error, don't continue with the rest.
+                    break;
+                } else if (action.status && server.hasCustomWelcomeMessage()) {
+                    // It worked, checking if there's a custom welcome message.
+                    await this.bot.fetchUser(id);
+                    
+                    let member = await this.bot.guilds.get(guild.id).fetchMember(id);
+                    member.send(server.getWelcomeMessage(action));
+                }
+
+                firstRun = false;
+            } catch (e) {
+                continue;
             }
-
-            firstRun = false;
         }
     }
 }

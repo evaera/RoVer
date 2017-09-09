@@ -185,7 +185,7 @@ class DiscordMember {
 
                     return {
                         status: false,
-                        error: "Not verified. Go to https://verify.eryn.io to verify."
+                        error: "You don't seem to be verified! Please go to https://verify.eryn.io and follow the instructions on the page in order to get verified."
                     }
                 case 429: 
                     // This client has exceeded the amount of requests allowed in a 60 second period.

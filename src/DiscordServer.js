@@ -67,8 +67,8 @@ class DiscordServer {
     }
 
     // Static, clears the member cache for a specific Discord user.
-    static clearMemberCache(id) {
-        Cache.set("users", id, null);
+    static async clearMemberCache(id) {
+        await Cache.set("users", id, null);
     }
 
     // Returns a setting value. Tries the saved settings, then tries

@@ -20,7 +20,7 @@ module.exports = {
         
         try {
             devForumData = await request({
-                uri: `http://devforum.roblox.com/users/${username}.json`,
+                uri: `https://devforum.roblox.com/users/${username}.json`,
                 json: true,
                 simple: false
             });

@@ -206,16 +206,6 @@ discord.js-commando@Gawdl3y/discord.js-commando:
     escape-string-regexp "^1.0.0"
     require-all "^2.2.0"
 
-discord.js@hydrabolt/discord.js:
-  version "12.0.0-dev"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/fdb8f046b57aca685c71848d29b10bbec95e513a"
-  dependencies:
-    long "^3.2.0"
-    prism-media "^0.0.1"
-    snekfetch "^3.2.0"
-    tweetnacl "^1.0.0"
-    ws "^3.0.0"
-
 discord.js@hydrabolt/discord.js#master:
   version "12.0.0-dev"
   resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/57b69803132355b506f9919f37a55915ccdf86d3"
@@ -680,6 +670,12 @@ regenerator-runtime@^0.10.0:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
 
+request-debug@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/request-debug/-/request-debug-0.2.0.tgz#fc054ec817181b04ca41a052c136f61c48abaf78"
+  dependencies:
+    stringify-clone "^1.0.0"
+
 request-promise-core@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/request-promise-core/-/request-promise-core-1.1.1.tgz#3eee00b2c5aa83239cfb04c5700da36f81cd08b6"
@@ -823,6 +819,10 @@ string_decoder@~1.0.0:
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.0.1.tgz#62e200f039955a6810d8df0a33ffc0f013662d98"
   dependencies:
     safe-buffer "^5.0.1"
+
+stringify-clone@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/stringify-clone/-/stringify-clone-1.1.1.tgz#309a235fb4ecfccd7d388dbe18ba904facaf433b"
 
 stringstream@~0.0.4:
   version "0.0.5"

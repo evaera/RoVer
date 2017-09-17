@@ -112,15 +112,24 @@ class DiscordMember {
                 // if so, then put the member in the correct state.
 
                 if (this.discordServer.getSetting('nicknameUsers')) {
-                    await this.member.setNickname(this.getNickname(data));
+                    let nickname = this.getNickname(data);
+                    if (this.member.displayName !== nickname) {
+                        await this.member.setNickname(nickname);
+                    }
                 }
 
                 if (this.discordServer.getSetting('verifiedRole')) {
-                    await this.member.addRole(this.discordServer.getSetting('verifiedRole'));
+                    let role = this.discordServer.getSetting('verifiedRole');
+                    if (!this.member.roles.get(role)) {
+                        await this.member.addRole(role);
+                    }
                 }
                 
                 if (this.discordServer.getSetting('verifiedRemovedRole')){
-                    await this.member.removeRole(this.discordServer.getSetting('verifiedRemovedRole'));
+                    let role = this.discordServer.getSetting('verifiedRemovedRole');
+                    if (this.member.roles.get(role)) {
+                        await this.member.removeRole(role);
+                    }
                 }
 
                 if (this.discordServer.getSetting('announceChannel') && options.announce !== false) {
@@ -142,6 +151,9 @@ class DiscordMember {
                         // We use a Promise.then here so that they all execute asynchronously. 
                         DiscordServer.resolveGroupRankBinding(binding, data.robloxId, data.robloxUsername)
                             .then((state) => {
+                                let hasRole = this.member.roles.get(binding.role) != undefined;
+                                if (hasRole === state) return;
+
                                 if (state === true) {
                                     this.member.addRole(binding.role);
                                 } else {

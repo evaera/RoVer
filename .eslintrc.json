@@ -1,0 +1,40 @@
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "error",
+            "tab",
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "linebreak-style": [
+            "off",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-console": "off",
+        "brace-style": "error",
+        "space-before-blocks": "error",
+        "valid-jsdoc": [
+            "error",
+            {
+                "requireReturn": false
+            }
+        ]
+    },
+    "parserOptions": {
+        "ecmaVersion": 8
+    }
+}

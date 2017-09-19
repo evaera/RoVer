@@ -6,7 +6,6 @@ const request       = require('request-promise').defaults({pool: {maxSockets: In
 
 let DiscordServer;
 
-module.exports =
 /**
  * A representation of a Discord guild member.
  * @class DiscordMember
@@ -16,7 +15,7 @@ class DiscordMember {
 	 * Creates an instance of DiscordMember.
 	 * @param {DiscordServer} discordServer The DiscordServer to which this DiscordMember belongs
 	 * @param {Snowflake} id The user id
-	 * @memberof DiscordMember
+	 * @hideconstructor
 	 */
 	constructor(discordServer, id) {
 		this.discordServer = discordServer;
@@ -253,4 +252,6 @@ class DiscordMember {
 			}
 		}
 	}
-};
+}
+
+module.exports = DiscordMember;

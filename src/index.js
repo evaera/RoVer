@@ -58,3 +58,18 @@ if (config.mainLifeTime) {
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing.
 */
+
+/**
+ * @typedef Snowflake
+ * @see {@link https://discord.js.org/#/docs/main/master/typedef/Snowflake}
+ */
+
+/**
+ * @typedef GuildMember
+ * @see https://discord.js.org/#/docs/main/master/class/GuildMember
+ */
+
+/**
+ * @typedef Message
+ * @see https://discord.js.org/#/docs/main/master/class/Message
+ */

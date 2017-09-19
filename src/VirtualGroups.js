@@ -7,6 +7,9 @@ const request     = require('request-promise');
 // VirtualGroups object. It must be a function that
 // returns true or false. 
 
+/**
+ * @module VirtualGroups
+ */
 module.exports = {
 	/**
 	 * Check if the given user is in the Roblox Dev Forum.

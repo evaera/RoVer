@@ -19,7 +19,6 @@ const DefaultSettings = {
 	groupRankBindings: []
 };
 
-module.exports =
 /**
  * A DiscordServer class, it represents a guild that the bot is in.
  * @class DiscordServer
@@ -29,7 +28,6 @@ class DiscordServer {
 	 * Creates an instance of DiscordServer.
 	 * @param {DiscordBot} discordBot The discord bot that the server belongs to.
 	 * @param {Snowflake} id The guild id
-	 * @memberof DiscordServer
 	 */
 	constructor(discordBot, id) {
 		this.id = id;
@@ -238,4 +236,6 @@ class DiscordServer {
 
 		return false;
 	}
-};
+}
+
+module.exports = DiscordServer;

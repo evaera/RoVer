@@ -7,7 +7,6 @@ const {Cache}       = require('./GlobalCache');
 
 if (config.loud) require('request-debug')(request, (type, data) => console.log(`${type} ${data.debugId} : ${data.uri || data.statusCode}`));
 
-module.exports =
 /**
  * The main Discord bot class, only one per shard.
  * @class DiscordBot
@@ -196,4 +195,6 @@ class DiscordBot {
 			}
 		}
 	}
-};
+}
+
+module.exports = DiscordBot;

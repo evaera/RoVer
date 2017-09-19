@@ -1,3 +1,6 @@
+/**
+ * @module Util
+ */
 module.exports = {
 	/**
 	 * Performs string formatting for things like custom nicknames. 

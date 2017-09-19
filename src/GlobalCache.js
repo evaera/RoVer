@@ -10,7 +10,6 @@ class GlobalCache {
 	/**
 	 * Creates an instance of GlobalCache.
 	 * @param {Discord.ShardingManager} shardingManager The Discord.js sharding manager
-	 * @memberof GlobalCache
 	 */
 	constructor(shardingManager) {
 		this.shardingManager = shardingManager;
@@ -118,7 +117,6 @@ class Cache {
 	/**
 	 * Creates an instance of Cache.
 	 * @param {Discord.Client} client The client this cache belongs to
-	 * @memberof Cache
 	 */
 	constructor(client) {
 		this.client = client;

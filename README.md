@@ -19,7 +19,7 @@ RoVer is an open source, drop-in verification bot that will allow your members t
 
 # How does it work?
 
-RoVer uses the same verification system used by the [ROBLOX Discord](https://discord.gg/roblox) server, a web app that lives at [verify.eryn.io](https://verify.eryn.io). RoVer makes use of its [public API](https://verify.eryn.io/api).
+RoVer uses the same verification system used by the [Roblox Community Discord](http://rbx.community) server, a web app that lives at [verify.eryn.io](https://verify.eryn.io). RoVer makes use of its [public API](https://verify.eryn.io/api).
 
 ## Step 1
 

@@ -151,7 +151,7 @@ class DiscordMember {
 
 				if (this.discordServer.getSetting('nicknameUsers')) {
 					let nickname = this.getNickname(data);
-					if (this.member.displayName !== nickname) {
+					if (this.member.nickname !== nickname) {
 						await this.member.setNickname(nickname);
 					}
 				}

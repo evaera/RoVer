@@ -1,40 +1,97 @@
 {
-    "env": {
-        "es6": true,
-        "node": true
-    },
-    "extends": "eslint:recommended",
-    "rules": {
-        "indent": [
-            "error",
-            "tab",
-            {
-                "SwitchCase": 1
-            }
-        ],
-        "linebreak-style": [
-            "off",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "no-console": "off",
-        "brace-style": "error",
-        "space-before-blocks": "error",
-        "valid-jsdoc": [
-            "error",
-            {
-                "requireReturn": false
-            }
-        ]
-    },
-    "parserOptions": {
+	"env": {
+		"es6": true,
+		"node": true
+	},
+	"extends": "eslint:recommended",
+	"rules": {
+		"accessor-pairs": "error",
+		"block-spacing": ["error", "always"],
+		"brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+		"comma-spacing": "error",
+		"comma-style": ["error", "last"],
+		"curly": ["error", "multi-line"],
+		"dot-location": ["error", "property"],
+		"dot-notation": "error",
+		"eqeqeq": ["error", "smart"],
+		"for-direction": "error",
+		"func-call-spacing": ["error", "never"],
+		"getter-return": "error",
+		"global-require": "error",
+		"indent": ["error", "tab", {"SwitchCase": 1}],
+		"key-spacing": ["error", { "beforeColon": false, "afterColon": true }],
+		"keyword-spacing": "error",
+		"linebreak-style": ["off","unix"],
+		"new-cap": ["error", { "newIsCap": true, "capIsNew": false }],
+		"no-array-constructor": "error",
+		"no-console": "off",
+		"no-extend-native": "error",
+		"no-extra-bind": "error",
+		"no-extra-parens": ["error", "functions"],
+		"no-floating-decimal": "error",
+		"no-implied-eval": "error",
+		"no-iterator": "error",
+		"no-labels": ["error", { "allowLoop": false, "allowSwitch": false }],
+		"no-multi-spaces": "error",
+		"no-multi-str": "error",
+		"no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+		"no-new-object": "error",
+		"no-new-require": "error",
+		"no-new-wrappers": "error",
+		"no-path-concat": "error",
+		"no-proto": "error",
+		"no-return-assign": ["error", "except-parens"],
+		"no-shadow-restricted-names": "error",
+		"no-sync": "error",
+		"no-template-curly-in-string": "warn",
+		"no-throw-literal": "error",
+		"no-trailing-spaces": "error",
+		"no-undef-init": "error",
+		"no-unmodified-loop-condition": "error",
+		"no-unneeded-ternary": ["error", { "defaultAssignment": false }],
+		"no-useless-computed-key": "error",
+		"no-useless-concat": "error",
+		"no-useless-constructor": "error",
+		"no-whitespace-before-property": "error",
+		"no-with": "error",
+		"object-property-newline": ["error", { "allowMultiplePropertiesPerLine": true }],
+		"one-var": ["error", { "initialized": "never" }],
+		"operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
+		"padded-blocks": ["error", { "blocks": "never", "switches": "never", "classes": "never" }],
+		"quotes": ["error", "single", {"avoidEscape": true}],
+		"radix": "error",
+		"require-await": "error",
+		"rest-spread-spacing": ["error", "never"],
+		"semi-spacing": ["error", { "before": false, "after": true }],
+		"semi": ["error", "never"],
+		"space-before-blocks": "error",
+		"space-before-function-paren": ["error", "never"] ,
+		"space-in-parens": ["error", "never"],
+		"space-infix-ops": "error",
+		"space-unary-ops": ["error", { "words": true, "nonwords": false }],
+		"spaced-comment": ["error", "always", {"line": { "markers": ["*package", "!", "/", ",", "="] }, "block": { "balanced": true, "markers": ["*package", "!", ",", ":", "::", "flow-include"], "exceptions": ["*"] }}],
+		"template-curly-spacing": ["error", "never"],
+		"valid-jsdoc": ["error", { "requireReturn": false }],
+		"vars-on-top": "error",
+		"wrap-iife": ["error", "any", { "functionPrototypeMethods": true }],
+		"yield-star-spacing": ["error", "both"],
+		"yoda": "error",
+        "callback-return": "error",
+        "camelcase": "warn",
+        "capitalized-comments": ["error", "always", { "ignoreConsecutiveComments": true }],
+        "handle-callback-err": "error",
+        "new-parens": "error",
+        "no-caller": "error",
+        "no-lone-blocks": "error",
+        "no-lonely-if": "error",
+        "no-self-compare": "error",
+        "no-shadow": "error",
+        "no-useless-rename": "error",
+        "no-void": "error"
+        // "no-await-in-loop": "warn",
+        // "class-methods-use-this": "warn",
+	},
+	"parserOptions": {
         "ecmaVersion": 8
-    }
+	}
 }

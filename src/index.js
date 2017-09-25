@@ -1,43 +1,44 @@
 // This file is the entry point for the bot.
 
-const path          = require('path');
-const Discord       = require('discord.js');
-const {GlobalCache}   = require('./GlobalCache');
-const config        = require('./data/client.json');
+const path = require('path')
+const Discord = require('discord.js')
+const {GlobalCache} = require('./GlobalCache')
+const config = require('./data/client.json')
+const updateServer = require('./UpdateServer.js')
 
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards. 
 let shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
 	token: config.token,
 	totalShards: config.totalShards || 'auto'
-});
+})
 
 shardingManager.on('launch', shard => {
-	console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`);
-});
+	console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
+})
 
-shardingManager.spawn();
+shardingManager.spawn()
 
 // Instantiate a GlobalCache, which will cache information from the shards.
-new GlobalCache(shardingManager);
+new GlobalCache(shardingManager)
 
 // If updateServer is defined, start that up as well.
 if (config.updateServer) {
-	require('./UpdateServer.js')(shardingManager, config.updateServer);
+	updateServer(shardingManager, config.updateServer)
 }
 
 if (config.mainLifeTime) {
-	setTimeout( () => {
-		shardingManager.respawn = false;
-		shardingManager.broadcastEval('process.exit()');
-	}, config.mainLifeTime * 1000);
+	setTimeout(() => {
+		shardingManager.respawn = false
+		shardingManager.broadcastEval('process.exit()')
+	}, config.mainLifeTime * 1000)
 
-	setTimeout( () => {
-		process.exit();
-	}, (config.mainLifeTime + 5) * 1000);
+	setTimeout(() => {
+		process.exit()
+	}, (config.mainLifeTime + 5) * 1000)
 }
 
-// client.json documentation:
+// Client.json documentation:
 /*
     "token"             : String. The bot token that is used to log in to your bot.
     "lockNicknames"     : Boolean. Default false. If true, the bot will run DiscordServer.verifyMember every time

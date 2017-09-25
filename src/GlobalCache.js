@@ -1,4 +1,4 @@
-const Discord       = require('discord.js');
+const Discord = require('discord.js')
 
 /**
  * The GlobalCache is a singleton that holds an in-memory cache that will hold information
@@ -12,9 +12,9 @@ class GlobalCache {
 	 * @param {Discord.ShardingManager} shardingManager The Discord.js sharding manager
 	 */
 	constructor(shardingManager) {
-		this.shardingManager = shardingManager;
-		this.collections = {};
-		shardingManager.on('message', this.onMessage.bind(this));
+		this.shardingManager = shardingManager
+		this.collections = {}
+		shardingManager.on('message', this.onMessage.bind(this))
 	}
 
 	/**
@@ -27,14 +27,14 @@ class GlobalCache {
 	onMessage(shard, message) {
 		switch (message.action) {
 			case 'get':
-				this.get(shard, message);
-				break;
+				this.get(shard, message)
+				break
 			case 'set':
-				this.set(shard, message);
-				break;
+				this.set(shard, message)
+				break
 			case 'clear':
-				this.clear(shard, message);
-				break;
+				this.clear(shard, message)
+				break
 		}
 	}
 
@@ -46,10 +46,10 @@ class GlobalCache {
 	 */
 	getCollection(name) {
 		if (typeof this.collections[name] === 'undefined') {
-			this.collections[name] = {};
+			this.collections[name] = {}
 		}
 
-		return this.collections[name];
+		return this.collections[name]
 	}
 
 	/**
@@ -59,7 +59,7 @@ class GlobalCache {
 	 * @memberof GlobalCache
 	 */
 	get(shard, message) {
-		let collection = this.getCollection(message.collection);
+		let collection = this.getCollection(message.collection)
 
 		shard.send({
 			action: 'getReply',
@@ -68,7 +68,7 @@ class GlobalCache {
 			key: message.key,
 			// 'undefined' is not a valid json type (won't persist through serialization)
 			value: collection[message.key] || null
-		});
+		})
 	}
 
 	/**
@@ -78,14 +78,14 @@ class GlobalCache {
 	 * @memberof GlobalCache
 	 */
 	clear(shard, message) {
-		this.collections[message.collection] = {};
+		this.collections[message.collection] = {}
 
 		shard.send({
 			action: 'clearReply',
 			id: message.id,
 			collection: message.collection,
 			value: true
-		});
+		})
 	}
 
 	/**
@@ -95,8 +95,8 @@ class GlobalCache {
 	 * @memberof GlobalCache
 	 */
 	set(shard, message) {
-		let collection = this.getCollection(message.collection);
-		collection[message.key] = message.value;
+		let collection = this.getCollection(message.collection)
+		collection[message.key] = message.value
 
 		shard.send({
 			action: 'setReply',
@@ -104,8 +104,8 @@ class GlobalCache {
 			collection: message.collection,
 			key: message.key,
 			// 'undefined' is not a valid json type (won't persist through serialization)
-			value: collection[message.key] || null 
-		});
+			value: collection[message.key] || null
+		})
 	}
 }
 
@@ -119,12 +119,12 @@ class Cache {
 	 * @param {Discord.Client} client The client this cache belongs to
 	 */
 	constructor(client) {
-		this.client = client;
-		this.shardClientUtil = new Discord.ShardClientUtil(this.client);
-		this.index = -1;
-		this.promises = {};
+		this.client = client
+		this.shardClientUtil = new Discord.ShardClientUtil(this.client)
+		this.index = -1
+		this.promises = {}
 
-		process.on('message', this.onMessage.bind(this));
+		process.on('message', this.onMessage.bind(this))
 	}
 
 	/**
@@ -133,8 +133,8 @@ class Cache {
 	 * @memberof Cache
 	 */
 	getNextIndex() {
-		this.index++;
-		return this.index;
+		this.index++
+		return this.index
 	}
 
 	/**
@@ -146,11 +146,11 @@ class Cache {
 	 */
 	onMessage(msg) {
 		if (typeof msg.id === 'undefined' || typeof msg.value === 'undefined' || !this.promises[msg.id]) {
-			return;
+			return
 		}
 
 		// Resolve the promise with the value
-		this.promises[msg.id](msg.value);
+		this.promises[msg.id](msg.value)
 	}
 
 	/**
@@ -161,18 +161,18 @@ class Cache {
 	 * @memberof Cache
 	 */
 	get(collection, key) {
-		let id = this.getNextIndex();
+		let id = this.getNextIndex()
 
 		this.shardClientUtil.send({
 			action: 'get',
 			collection,
 			key,
 			id
-		});
+		})
 
 		return new Promise(resolve => {
-			this.promises[id] = resolve;
-		});
+			this.promises[id] = resolve
+		})
 	}
 
 	// Returns Promise<true>
@@ -183,17 +183,17 @@ class Cache {
 	 * @memberof Cache
 	 */
 	clear(collection) {
-		let id = this.getNextIndex();
+		let id = this.getNextIndex()
 
 		this.shardClientUtil.send({
 			action: 'clear',
 			collection,
 			id
-		});
+		})
 
 		return new Promise(resolve => {
-			this.promises[id] = resolve;
-		});
+			this.promises[id] = resolve
+		})
 	}
 
 	// Returns Promise<Value>
@@ -206,7 +206,7 @@ class Cache {
 	 * @memberof Cache
 	 */
 	set(collection, key, value) {
-		let id = this.getNextIndex();
+		let id = this.getNextIndex()
 
 		this.shardClientUtil.send({
 			action: 'set',
@@ -214,12 +214,12 @@ class Cache {
 			key,
 			value,
 			id
-		});
+		})
 
 		return new Promise(resolve => {
-			this.promises[id] = resolve;
-		});
+			this.promises[id] = resolve
+		})
 	}
 }
 
-module.exports = {GlobalCache, Cache};
+module.exports = {GlobalCache, Cache}

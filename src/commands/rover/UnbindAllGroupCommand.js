@@ -1,18 +1,17 @@
 const Command = require('../Command')
-const DiscordServer = require('../../DiscordServer')
 
 module.exports =
 class UnbindAllGroupCommand extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'unbindallranks',
-            aliases: ['roverunbindallgroupranks', 'unbindallgroupranks'],
-            description: "Unbind all group rank",
-        });
-    }
+	constructor(client) {
+		super(client, {
+			name: 'unbindallranks',
+			aliases: ['roverunbindallgroupranks', 'unbindallgroupranks'],
+			description: 'Unbind all group rank',
+		})
+	}
 
-    async fn(msg, args) {
-        this.server.deleteGroupRankBinding('all');
-        msg.reply("Deleted all group rank bindings.");
-    }
+	fn(msg) {
+		this.server.deleteGroupRankBinding('all')
+		msg.reply('Deleted all group rank bindings.')
+	}
 }

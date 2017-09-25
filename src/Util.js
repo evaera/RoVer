@@ -16,15 +16,15 @@ module.exports = {
 			'%USERID%': data.robloxId,
 			'%DISCORDNAME%': data.discordName || '',
 			'%DISCORDID%': data.discordId || '',
-		};
+		}
 
 		if (member != null) {
-			replacements['%DISCORDNAME%'] = member.user.username;
-			replacements['%DISCORDID%'] = member.id;
+			replacements['%DISCORDNAME%'] = member.user.username
+			replacements['%DISCORDID%'] = member.id
 		}
 
 		return formatString.replace(/%\w+%/g, (all) => {
-			return replacements[all] || all;
-		});
+			return replacements[all] || all
+		})
 	}
-};
+}

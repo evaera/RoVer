@@ -154,8 +154,3 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing. (Need a process manager if you want it to relaunch)
 ```
-
-# To-do list and plans
-
-- Add more commands for admins for things like fixing name, banning per server by roblox account, and a !whois command
-- More cowbell

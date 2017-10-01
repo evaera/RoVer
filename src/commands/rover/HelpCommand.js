@@ -2,27 +2,27 @@ const Command = require('../Command')
 
 module.exports =
 class HelpCommand extends Command {
-	constructor(client) {
-		super(client, {
-			name: 'roverhelp',
-			aliases: ['rover'],
-			description: 'Displays a list of commands',
-		})
-	}
+  constructor (client) {
+    super(client, {
+      name: 'roverhelp',
+      aliases: ['rover'],
+      description: 'Displays a list of commands'
+    })
+  }
 
-	fn(msg) {
-		let commandGroup = this.client.registry.groups.get('rover')
-		let lines = commandGroup.commands.map(cmd => `**!${cmd.name}:** ${cmd.description}`).join('\n\n').split('\n')
-		let output = ''
-		for (let line of lines) {
-			if (output.length + line.length > 1900) {
-				msg.reply(output)
-				output = ''
-			}
+  async fn (msg) {
+    let commandGroup = this.client.registry.groups.get('rover')
+    let lines = commandGroup.commands.map(cmd => `**!${cmd.name}:** ${cmd.description}`).join('\n\n').split('\n')
+    let output = ''
+    for (let line of lines) {
+      if (output.length + line.length > 1900) {
+        msg.reply(output)
+        output = ''
+      }
 
-			output += line + '\n'
-		}
+      output += line + '\n'
+    }
 
-		msg.reply(output)
-	}
+    msg.reply(output)
+  }
 }

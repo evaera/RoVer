@@ -3,39 +3,39 @@ const DiscordServer = require('../../DiscordServer')
 
 module.exports =
 class UpdateCommand extends Command {
-	constructor(client) {
-		super(client, {
-			name: 'update',
-			aliases: ['roverupdate'],
-			description: '`<Discord User>` Forcibly update verification status of a user, same as them running !verify. Make sure you @mention the user.',
+  constructor (client) {
+    super(client, {
+      name: 'update',
+      aliases: ['roverupdate'],
+      description: '`<Discord User>` Forcibly update verification status of a user, same as them running !verify. Make sure you @mention the user.',
 
-			args: [
-				{
-					key: 'user',
-					prompt: 'User to update',
-					type: 'user',
-				}
-			]
-		})
-	}
+      args: [
+        {
+          key: 'user',
+          prompt: 'User to update',
+          type: 'user'
+        }
+      ]
+    })
+  }
 
-	async fn(msg, args) {
-		let user = args.user
-		DiscordServer.clearMemberCache(user.id)
+  async fn (msg, args) {
+    let user = args.user
+    DiscordServer.clearMemberCache(user.id)
 
-		let server = await this.discordBot.getServer(msg.guild.id)
-		let member = await server.getMember(user.id)
+    let server = await this.discordBot.getServer(msg.guild.id)
+    let member = await server.getMember(user.id)
 
-		if (!member) {
-			return msg.reply('User not in guild.')
-		}
+    if (!member) {
+      return msg.reply('User not in guild.')
+    }
 
-		let action = await member.verify()
+    let action = await member.verify()
 
-		if (!action.status) {
-			msg.reply(action.error)
-		} else {
-			msg.reply(`${action.robloxUsername} verified.`)
-		}
-	}
+    if (!action.status) {
+      msg.reply(action.error)
+    } else {
+      msg.reply(`${action.robloxUsername} verified.`)
+    }
+  }
 }

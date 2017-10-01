@@ -6,7 +6,7 @@
     <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
 </p>
 
-[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn)
+[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-100K%2B-brightgreen.svg)](https://eryn.io/RoVer)
 
 # What is it?
 
@@ -49,7 +49,7 @@ The user is verified and can participate in your community.
 
 The quickest and easiest way to use RoVer is to [add the hosted version](https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264) to your server.
 
-You can also clone this repository and host it yourself and make any modifications you wish. 
+You can also clone this repository and host it yourself and make any modifications you wish.
 
 After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission in the Discord server in order to use these commands.
 
@@ -59,7 +59,7 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!Nickname <true|false>` - Set whether or not new users will be nicknamed to their Roblox name. Default `true`.
 - `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!NicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
-- `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`. 
+- `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`.
 - `!BindGroupRank <roblox group id> <Discord Role> <((>|<|)group rank|\"all\")>` - See section below.
 - `!UnbindGroupRank <role name>` - See section below.
 - `!UnbindAllGroupRanks` - See section below.
@@ -70,7 +70,7 @@ You can run these commands without arguments to set them back to their default s
 
 When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
 
-You should probably make a read-only channel in the server explaining these processes to your members. 
+You should probably make a read-only channel in the server explaining these processes to your members.
 
 ## Setting up roles for Roblox group members and group ranks
 
@@ -120,7 +120,7 @@ To create a role for all members who own a specific asset, use the following com
 
 # Self-hosting instructions
 
-1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on. 
+1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on.
 2. **Node.js version 8.0.0 or newer is required to run RoVer.**
 3. Install yarn if you don't already have it: `npm install -g yarn`
 4. Use yarn to install the dependencies: `yarn install`
@@ -130,7 +130,7 @@ To create a role for all members who own a specific asset, use the following com
 
 ### Update Server
 
-The *Update Server* is an optional part of RoVer that can be enabled in `client.json`. It is an HTTP server that can listen for requests and globally update a member in all guilds that the bot is in, similar to if they ran `!verify` in every guild. This is used internally on the hosted version for when the user verifies on verify.eryn.io, but you could use it for whatever purpose you wish. 
+The *Update Server* is an optional part of RoVer that can be enabled in `client.json`. It is an HTTP server that can listen for requests and globally update a member in all guilds that the bot is in, similar to if they ran `!verify` in every guild. This is used internally on the hosted version for when the user verifies on verify.eryn.io, but you could use it for whatever purpose you wish.
 
 ### client.json options
 
@@ -141,16 +141,16 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
                           used on the hosted version.
     "updateServer"      : {
                           If this object is present, the update server will be started.
-                      
+
         "port"          : Integer. The port the Update server runs on.
         "apiKey"        : String. The API key the server checks against before updating the user.
     }
     "loud"              : Boolean. Default false. Logs every request made to stdout.
     "totalShards"       : Integer. Default auto. The number of shards to launch.
-    "apiRequestMethod"  : String. Default 'sequential'. sequential' or 'burst'. Sequential executes all requests in the order 
+    "apiRequestMethod"  : String. Default 'sequential'. sequential' or 'burst'. Sequential executes all requests in the order
                           they are triggered, whereas burst runs multiple at a time, and doesn't guarantee a particular order.
     "owner"             : String. Default "0". The Discord ID of the bot's owner.
-    "commandPrefix"     : String. Default "!". The prefix for commands. 
+    "commandPrefix"     : String. Default "!". The prefix for commands.
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing. (Need a process manager if you want it to relaunch)
 ```

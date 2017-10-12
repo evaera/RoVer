@@ -148,7 +148,7 @@ class DiscordMember {
         // if so, then put the member in the correct state.
 
         if (this.discordServer.getSetting('nicknameUsers')) {
-          let nickname = this.getNickname(data)
+          let nickname = this.getNickname(data).substring(0, 32)
           if (this.member.displayName !== nickname) {
             await this.member.setNickname(nickname)
           }

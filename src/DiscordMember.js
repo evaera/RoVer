@@ -143,73 +143,91 @@ class DiscordMember {
       // Cache the data for future use.
       Cache.set('users', this.id, data)
 
-      try {
-        // Check if these settings are enabled for this specific server,
-        // if so, then put the member in the correct state.
+      // Check if these settings are enabled for this specific server,
+      // if so, then put the member in the correct state.
 
-        if (this.discordServer.getSetting('nicknameUsers')) {
-          let nickname = this.getNickname(data).substring(0, 32)
-          if (this.member.displayName !== nickname) {
-            await this.member.setNickname(nickname)
-          }
-        }
-
-        if (this.discordServer.getSetting('verifiedRole')) {
-          let role = this.discordServer.getSetting('verifiedRole')
-          if (!this.member.roles.get(role)) {
+      if (this.discordServer.getSetting('verifiedRole')) {
+        let role = this.discordServer.getSetting('verifiedRole')
+        if (!this.member.roles.get(role)) {
+          try {
             await this.member.addRole(role)
+          } catch (e) {
+            if (config.loud) console.log(e)
+            return {
+              status: false,
+              nonFatal: true,
+              error: "RoVer doesn't have permissions to add roles to that user."
+            }
           }
         }
+      }
 
-        if (this.discordServer.getSetting('verifiedRemovedRole')) {
-          let role = this.discordServer.getSetting('verifiedRemovedRole')
-          if (this.member.roles.get(role)) {
+      if (this.discordServer.getSetting('verifiedRemovedRole')) {
+        let role = this.discordServer.getSetting('verifiedRemovedRole')
+        if (this.member.roles.get(role)) {
+          try {
             await this.member.removeRole(role)
+          } catch (e) {
+            if (config.loud) console.log(e)
+            return {
+              status: false,
+              nonFatal: true,
+              error: "RoVer doesn't have permission to remove roles from that user."
+            }
           }
         }
+      }
 
-        if (this.discordServer.getSetting('announceChannel') && options.announce !== false) {
-          let channel = await this.server.channels.get(this.discordServer.getSetting('announceChannel'))
+      if (this.discordServer.getSetting('nicknameUsers')) {
+        let nickname = this.getNickname(data).substring(0, 32)
+        if (this.member.displayName !== nickname) {
+          try {
+            await this.member.setNickname(nickname)
+          } catch (e) {
+            if (config.loud) console.log(e)
+            return {
+              status: false,
+              nonFatal: true,
+              error: this.member.guild.ownerID === this.member.id ? "Sorry, RoVer can't change the server owner's nickname due to Discord permission restrictions. Please manually update your nickname. Or don't, I'm just an error message." : "RoVer doesn't have permission to change that user's nickname."
+            }
+          }
+        }
+      }
 
-          if (channel) {
+      if (this.discordServer.getSetting('announceChannel') && options.announce !== false) {
+        let channel = await this.server.channels.get(this.discordServer.getSetting('announceChannel'))
+
+        if (channel) {
+          try {
             channel.send(`**User verified:** <@${this.id}> as ${data.robloxUsername}`)
-          }
+          } catch (e) {}
         }
+      }
 
-        // Check if we want to resolve group rank bindings with cached or fresh data.
-        if (options.clearBindingsCache !== false) {
-          await Cache.clear(`bindings.${data.robloxId}`)
-        }
+      // Check if we want to resolve group rank bindings with cached or fresh data.
+      if (options.clearBindingsCache !== false) {
+        await Cache.clear(`bindings.${data.robloxId}`)
+      }
 
-        // Resolve group rank bindings for this member.
-        if (this.discordServer.getSetting('groupRankBindings').length > 0) {
-          for (let binding of this.discordServer.getSetting('groupRankBindings')) {
-            // We use a Promise.then here so that they all execute asynchronously.
-            DiscordServer.resolveGroupRankBinding(binding, data.robloxId, data.robloxUsername)
-              .then((state) => {
-                let hasRole = this.member.roles.get(binding.role) != null
-                if (hasRole === state) return
+      // Resolve group rank bindings for this member.
+      if (this.discordServer.getSetting('groupRankBindings').length > 0) {
+        for (let binding of this.discordServer.getSetting('groupRankBindings')) {
+          // We use a Promise.then here so that they all execute asynchronously.
+          DiscordServer.resolveGroupRankBinding(binding, data.robloxId, data.robloxUsername)
+            .then((state) => {
+              let hasRole = this.member.roles.get(binding.role) != null
+              if (hasRole === state) return
 
-                if (state === true) {
-                  this.member.addRole(binding.role)
-                } else {
-                  this.member.removeRole(binding.role)
-                }
-              })
-              .catch((e) => {
-                if (config.loud) console.log(e)
-                console.log('Resolution error for binding')
-              })
-          }
-        }
-      } catch (e) {
-        if (config.loud) console.log(e)
-        // If anything failed here, it's most likely because the bot
-        // couldn't modify the member due to a permission problem.
-        return {
-          status: false,
-          nonFatal: true,
-          error: 'RoVer couldn\'t modify the member in this server. Either the bot doesn\'t have permission or the target user cannot be modified by the bot (such as higher rank in the server).'
+              if (state === true) {
+                this.member.addRole(binding.role).catch(e => {})
+              } else {
+                this.member.removeRole(binding.role).catch(e => {})
+              }
+            })
+            .catch(e => {
+              if (config.loud) console.log(e)
+              console.log('Resolution error for binding')
+            })
         }
       }
 
@@ -228,7 +246,9 @@ class DiscordMember {
 
         // Add the "Not Verified" role to the user.
           if (this.discordServer.getSetting('verifiedRemovedRole')) {
-            await this.member.addRole(this.discordServer.getSetting('verifiedRemovedRole'))
+            try {
+              await this.member.addRole(this.discordServer.getSetting('verifiedRemovedRole'))
+            } catch (e) {}
           }
 
           return {

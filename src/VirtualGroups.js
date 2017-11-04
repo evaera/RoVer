@@ -34,8 +34,8 @@ module.exports = {
     }
 
     try {
-      // If the trust_level in the user data is above 0, then they are a member.
-      if (devForumData.user.trust_level > 0) {
+      // If the trust_level in the user data is above 1, then they are a member.
+      if (devForumData.user.trust_level > 1) {
         return true
       }
     } catch (e) {

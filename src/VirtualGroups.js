@@ -15,34 +15,48 @@ module.exports = {
    * Check if the given user is in the Roblox Dev Forum.
    *
    * @param {object} user The user data
+   * @param {int} trustLeve The trust level to check against
    * @returns {boolean} The resolution of the binding
    */
-  async DevForum (user) {
+  async DevForumAccess (user, trustLevel) {
     let username = user.username
+    let userTrustLevel = await Cache.get(`bindings.${user.id}`, 'DevForumAccess')
 
-    // Fetch the DevForum data for this user.
-    let devForumData = {}
+    if (!userTrustLevel) {
+      try {
+        let devForumData = await request({
+          uri: `https://devforum.roblox.com/users/${username}.json`,
+          json: true,
+          simple: false
+        })
 
-    try {
-      devForumData = await request({
-        uri: `https://devforum.roblox.com/users/${username}.json`,
-        json: true,
-        simple: false
-      })
-    } catch (e) {
-      return false
-    }
+        userTrustLevel = devForumData.user.trust_level
 
-    try {
-      // If the trust_level in the user data is above 1, then they are a member.
-      if (devForumData.user.trust_level > 1) {
-        return true
+        Cache.set(`bindings.${user.id}`, 'DevForumAccess', userTrustLevel)
+      } catch (e) {
+        return false
       }
-    } catch (e) {
+    }
+
+    console.log(trustLevel == null)
+
+    if (trustLevel == null && userTrustLevel > 0) {
+      return true
+    }
+
+    if (!userTrustLevel || userTrustLevel !== trustLevel) {
       return false
     }
 
-    return false
+    return true
+  },
+
+  async DevForum (user) {
+    return module.exports.DevForumAccess(user, 2)
+  },
+
+  async DevForumBasic (user) {
+    return module.exports.DevForumAccess(user, 1)
   },
 
   /**

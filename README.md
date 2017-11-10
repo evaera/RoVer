@@ -6,7 +6,7 @@
     <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
 </p>
 
-[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-100K%2B-brightgreen.svg)](https://eryn.io/RoVer)
+[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-130K%2B-brightgreen.svg)](https://eryn.io/RoVer)
 [![Discord](https://img.shields.io/discord/321647685629378561.svg)](https://discord.gg/UgrYcCS)
 
 # What is it?
@@ -103,7 +103,9 @@ You should probably make a read-only channel in the server explaining these proc
 
 Virtual groups are a way to bind ranks using the group rank binding system for external services that aren't actually Roblox groups, such as the dev forum. More could be easily added if you fork this project. Currently, these are in by default:
 
-- `DevForum` - Checks dev forum membership (devforum.roblox.com)
+- `DevForum` - DevForum full membership (devforum.roblox.com)
+- `DevForumBasic` - DevForum basic user
+- `DevForumAccess` - DevForum access (either full membership or basic user)
 - `HasAsset <asset id>` - Checks if user owns an asset, takes the id as an argument
 - `BC` - Builders club
 - `TBC`

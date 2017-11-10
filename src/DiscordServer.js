@@ -113,7 +113,7 @@ class DiscordServer {
   setSetting (key, value) {
     this.settings[key] = value
 
-    fs.writeFile(this.settingsPath, JSON.stringify(this.settings), () => {})
+    fs.writeFileSync(this.settingsPath, JSON.stringify(this.settings))
   }
 
   /**

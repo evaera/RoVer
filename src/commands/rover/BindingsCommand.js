@@ -53,21 +53,21 @@ class BindingsCommand extends Command {
         msg.reply({ embed: {
           color: 0xe67e22,
           fields: [
-            { name: 'Group', value: binding.group, inline: true },
-            { name: 'Argument', value: binding.rank, inline: true },
-            { name: 'Role name', value: this.getRoleName(id), inline: true },
-            { name: 'Role id', value: id, inline: true }
+            { name: 'Group', value: binding.group || '<none>', inline: true },
+            { name: 'Argument', value: binding.rank || '<none>', inline: true },
+            { name: 'Role name', value: this.getRoleName(id) || '<none>', inline: true },
+            { name: 'Role id', value: id || '<none>', inline: true }
           ]
         }})
       } else {
         msg.reply({ embed: {
           color: 0xe67e22,
           fields: [
-            { name: 'Group', value: binding.group, inline: true },
-            { name: 'Rank', value: binding.rank, inline: true },
-            { name: 'Comparison', value: binding.operator, inline: true },
-            { name: 'Role name', value: this.getRoleName(id), inline: true },
-            { name: 'Role id', value: id, inline: true }
+            { name: 'Group', value: binding.group || '<none>', inline: true },
+            { name: 'Rank', value: binding.rank || '<none>', inline: true },
+            { name: 'Comparison', value: binding.operator || '<none>', inline: true },
+            { name: 'Role name', value: this.getRoleName(id) || '<none>', inline: true },
+            { name: 'Role id', value: id || '<none>', inline: true }
           ]
         }})
       }

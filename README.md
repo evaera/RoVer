@@ -6,7 +6,7 @@
     <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
 </p>
 
-[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-100K%2B-brightgreen.svg)](https://eryn.io/RoVer)
+[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-130K%2B-brightgreen.svg)](https://eryn.io/RoVer)
 [![Discord](https://img.shields.io/discord/321647685629378561.svg)](https://discord.gg/UgrYcCS)
 
 # What is it?
@@ -61,7 +61,7 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!NicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
 - `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`.
-- `!BindGroupRank <roblox group id> <Discord Role> <((>|<|)group rank|\"all\")>` - See section below.
+- `!BindGroupRank <groupid> <"Discord Role Name"> [rank]` - See section below.
 - `!UnbindGroupRank <role name>` - See section below.
 - `!UnbindAllGroupRanks` - See section below.
 - `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.
@@ -74,22 +74,23 @@ When a user joins your server, the bot will automatically check if they are alre
 You should probably make a read-only channel in the server explaining these processes to your members.
 
 ## Setting up roles for Roblox group members and group ranks
+**Note**: You need to put the Discord role name in quotation marks if it has spaces. If you don't do this you will get unexpected results.
 
 - Use the following command to set up giving a role to all members of a group:
 
-  `!BindGroupRank 372 GroupMember` where `372` is your *group id* and `GroupMember` is the *Discord role name*
+  `!BindGroupRank 372 "Group Member"` where `372` is your *group id* and `GroupMember` is the *Discord role name*
 
 - Use the following command to set up giving a role to members of a certain rank in a group:
 
-  `!BindGroupRank 372 GroupOwner 255` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupOwner` is the *Discord role name*
+  `!BindGroupRank 372 "Group Owner" 255` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupOwner` is the *Discord role name*
 
 - Use the following command to set up giving a role to members of a **rank or higher** in a group: (*Note! This uses a "greater than or equal to" comparison*)
 
-  `!BindGroupRank 372 GroupAdmin >200` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupAdmin` is the *Discord role name*
+  `!BindGroupRank 372 "Group Admin" >200` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupAdmin` is the *Discord role name*
 
 - Use the following command to set up giving a role to members lower than a rank in a group: (*Note! This uses a "less than" comparison*)
 
-  `!BindGroupRank 372 GroupNormie <200` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupNormie` is the *Discord role name*
+  `!BindGroupRank 372 "Group Normie" <200` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupNormie` is the *Discord role name*
 
 - Use the following command to unbind a role from a group:
 
@@ -103,7 +104,9 @@ You should probably make a read-only channel in the server explaining these proc
 
 Virtual groups are a way to bind ranks using the group rank binding system for external services that aren't actually Roblox groups, such as the dev forum. More could be easily added if you fork this project. Currently, these are in by default:
 
-- `DevForum` - Checks dev forum membership (devforum.roblox.com)
+- `DevForum` - DevForum full membership (devforum.roblox.com)
+- `DevForumBasic` - DevForum basic user
+- `DevForumAccess` - DevForum access (either full membership or basic user)
 - `HasAsset <asset id>` - Checks if user owns an asset, takes the id as an argument
 - `BC` - Builders club
 - `TBC`

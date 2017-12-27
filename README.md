@@ -73,6 +73,8 @@ When a user joins your server, the bot will automatically check if they are alre
 
 You should probably make a read-only channel in the server explaining these processes to your members.
 
+RoVer will ignore users with a role called "RoVer Bypass", so you can give them custom names or give people a member role when they aren't actually verified or in a group.
+
 ## Setting up roles for Roblox group members and group ranks
 **Note**: You need to put the Discord role name in quotation marks if it has spaces. If you don't do this you will get unexpected results.
 

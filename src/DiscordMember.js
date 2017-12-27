@@ -107,6 +107,14 @@ class DiscordMember {
       }
     }
 
+    if (this.member.roles.find('name', 'RoVer Bypass')) {
+      return {
+        status: false,
+        error: 'RoVer cannot act on users with the "RoVer Bypass" role. :no_entry_sign:',
+        nonFatal: true
+      }
+    }
+
     try {
       // Read user data from memory, or request it if there isn't any cached.
       data = await Cache.get('users', this.id)

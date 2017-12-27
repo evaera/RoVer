@@ -136,32 +136,30 @@ class DiscordServer {
 
     let returnValue = false
 
-    try {
-      if (VirtualGroups[binding.group]) {
-        // If this group is a virtual group, then execute that function instead.
-        // 'all' is remapped to >1. Since this is the equivalent of no argument, we set it to null here.
-        returnValue = await VirtualGroups[binding.group]({id: userid, username}, (binding.operator === 'gt' && binding.rank === 1) ? null : binding.rank)
-      } else {
-        // Check the rank of the user in the Roblox group.
-        let rank = await request({
-          uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`,
-          simple: false
-        })
-        rank = parseInt(rank.replace(/[^\d]/g, ''), 10)
+    if (VirtualGroups[binding.group]) {
+      // If this group is a virtual group, then execute that function instead.
+      // 'all' is remapped to >1. Since this is the equivalent of no argument, we set it to null here.
+      returnValue = await VirtualGroups[binding.group]({id: userid, username}, (binding.operator === 'gt' && binding.rank === 1) ? null : binding.rank)
+    } else {
+      // Check the rank of the user in the Roblox group.
+      let rank = await request({
+        uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`
+      })
 
-        if (binding.rank) {
-          // We also need to check the rank. This conditional chooses the configured operator for the binding.
-          if ((!binding.operator && rank === binding.rank) || (binding.operator === 'gt' && rank >= binding.rank) || (binding.operator === 'lt' && rank < binding.rank)) {
-            returnValue = true
-          }
-        } else if (rank > 0) {
+      if (!rank.startsWith('<Value Type="integer">')) {
+        throw new Error('Group rank HTTP request is malformed or in unknown format')
+      }
+
+      rank = parseInt(rank.replace(/[^\d]/g, ''), 10)
+
+      if (binding.rank) {
+        // We also need to check the rank. This conditional chooses the configured operator for the binding.
+        if ((!binding.operator && rank === binding.rank) || (binding.operator === 'gt' && rank >= binding.rank) || (binding.operator === 'lt' && rank < binding.rank)) {
           returnValue = true
         }
+      } else if (rank > 0) {
+        returnValue = true
       }
-    } catch (e) {
-      if (config.loud) console.log('Encountered an error while trying to resolve a rank binding:')
-      if (config.loud) console.log(e)
-      if (config.loud) console.log(binding)
     }
 
     // Cache the return value in memory.

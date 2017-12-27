@@ -128,7 +128,7 @@ class DiscordBot {
     if (action.status) {
       member.send(server.getWelcomeMessage(action, member))
     } else {
-      member.send('Welcome! Visit the following link to verify your Roblox account: https://verify.eryn.io')
+      member.send(`Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Verifying your account is quick and safe and doesn't require any information other than your username. All you have to do is either join a game or put a code in your profile, and you're in!\n\nVisit the following link to verify your Roblox account: https://verify.eryn.io`)
     }
   }
 

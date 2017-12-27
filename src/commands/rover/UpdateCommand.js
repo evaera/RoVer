@@ -30,12 +30,6 @@ class UpdateCommand extends Command {
       return msg.reply('User not in guild.')
     }
 
-    let action = await member.verify()
-
-    if (!action.status) {
-      msg.reply(action.error)
-    } else {
-      msg.reply(`${action.robloxUsername} verified.`)
-    }
+    member.verify({ message: msg, skipWelcomeMessage: true })
   }
 }

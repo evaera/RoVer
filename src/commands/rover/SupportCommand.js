@@ -6,6 +6,7 @@ class AnnounceChannelCommand extends Command {
     super(client, {
       name: 'support',
       aliases: ['server'],
+      userPermissions: [],
       description: 'Posts an invite link to the Official RoVer Discord where you can easily get help.',
     })
   }

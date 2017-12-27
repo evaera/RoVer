@@ -27,5 +27,13 @@ module.exports = {
     return formatString.replace(/%\w+%/g, (all) => {
       return replacements[all] || all
     })
-  }
+  },
+
+  async sleep (sleepTime) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, sleepTime)
+    })
+  },
 }

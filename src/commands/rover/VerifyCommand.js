@@ -25,14 +25,6 @@ class VerifyCommand extends Command {
       return msg.reply('User not in guild.')
     }
 
-    let action = await member.verify()
-
-    // We reply with the status of the verification in the
-    // channel the command was sent.
-    if (!action.status) {
-      msg.reply(action.error)
-    } else {
-      msg.reply(server.getWelcomeMessage(action, member.member))
-    }
+    member.verify({ message: msg })
   }
 }

@@ -100,6 +100,13 @@ class DiscordMember {
       }
     }
 
+    if (this.user.bot) {
+      return {
+        status: false,
+        error: 'RoVer cannot verify bots. :no_entry_sign::robot:'
+      }
+    }
+
     try {
       // Read user data from memory, or request it if there isn't any cached.
       data = await Cache.get('users', this.id)

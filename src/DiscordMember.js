@@ -91,6 +91,7 @@ class DiscordMember {
     options = options || {}
     let data = {}
     let freshData = false
+    let errorAppend = ''
 
     if (!this.member && !await this.prepareMember()) {
       return {
@@ -113,6 +114,10 @@ class DiscordMember {
         error: 'RoVer cannot act on users with the "RoVer Bypass" role. :no_entry_sign:',
         nonFatal: true
       }
+    }
+
+    if ((await this.server.fetchMember(this.bot.user.id)).highestRole.comparePositionTo(this.member.highestRole) < 1) {
+      errorAppend = "\n\nRoVer's position in the role list is below that of this user. With certain setups, this will prevent RoVer from working correctly. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
     }
 
     try {
@@ -171,7 +176,7 @@ class DiscordMember {
             return {
               status: false,
               nonFatal: true,
-              error: "RoVer doesn't have permissions to add roles to that user."
+              error: "RoVer doesn't have permissions to add roles to that user." + errorAppend
             }
           }
         }
@@ -187,7 +192,7 @@ class DiscordMember {
             return {
               status: false,
               nonFatal: true,
-              error: "RoVer doesn't have permission to remove roles from that user."
+              error: "RoVer doesn't have permission to remove roles from that user." + errorAppend
             }
           }
         }
@@ -203,7 +208,7 @@ class DiscordMember {
             return {
               status: false,
               nonFatal: true,
-              error: this.member.guild.ownerID === this.member.id ? "Sorry, RoVer can't change the server owner's nickname due to Discord permission restrictions. Please manually update your nickname. Or don't, I'm just an error message." : "RoVer doesn't have permission to change that user's nickname."
+              error: this.member.guild.ownerID === this.member.id ? "Sorry, RoVer can't change the server owner's nickname due to Discord permission restrictions. Please manually update your nickname. Or don't, I'm just an error message." : "RoVer doesn't have permission to change that user's nickname." + errorAppend
             }
           }
         }

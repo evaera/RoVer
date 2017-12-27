@@ -75,6 +75,8 @@ class DiscordServer {
     } catch (e) {
       console.log(`${this.settingsPath} appears to be corrupted.`)
     }
+
+    this.cleanupRankBindings()
   }
 
   /**
@@ -185,6 +187,20 @@ class DiscordServer {
     }
 
     this.setSetting('groupRankBindings', rankBindings)
+  }
+
+  /**
+   * Deletes group bindings that are associated with Discord roles
+   * that have been deleted.
+   * @memberof DiscordServer
+   */
+  cleanupRankBindings () {
+    for (let binding of this.getSetting('groupRankBindings')) {
+      let id = binding.role
+      if (!this.server.roles.get(id)) {
+        this.deleteGroupRankBinding(id)
+      }
+    }
   }
 
   /**

@@ -47,6 +47,8 @@ class BindingsCommand extends Command {
       }})
     }
 
+    this.server.cleanupRankBindings()
+
     for (let binding of this.server.getSetting('groupRankBindings')) {
       let id = binding.role
       if (binding.group.match(/[a-z]/i)) {

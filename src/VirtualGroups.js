@@ -38,8 +38,6 @@ module.exports = {
       }
     }
 
-    console.log(trustLevel == null)
-
     if (trustLevel == null && userTrustLevel > 0) {
       return true
     }

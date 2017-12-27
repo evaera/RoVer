@@ -40,7 +40,6 @@ class WhoisCommand extends Command {
           })
         }
       } catch (e) {
-        console.log(e)
         return msg.reply("An error occured while fetching that user's data.")
       }
       if (data.status === 'ok') {

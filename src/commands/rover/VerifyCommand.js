@@ -32,7 +32,7 @@ class VerifyCommand extends Command {
     if (!action.status) {
       msg.reply(action.error)
     } else {
-      msg.reply(server.getWelcomeMessage(action))
+      msg.reply(server.getWelcomeMessage(action, member.member))
     }
   }
 }

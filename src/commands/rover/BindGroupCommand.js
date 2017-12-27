@@ -6,7 +6,7 @@ class BindGroupCommand extends Command {
     super(client, {
       name: 'bindrank',
       aliases: ['roverbindgrouprank', 'bindgroup', 'bindgrouprank', 'roverbind'],
-      description: '`<roblox group id> <Discord Role> <((>|<|)group rank|"all")>` Binds Roblox group membership or group rank to a Discord role. Last argument can be either the required rank number (from Roblox group admin page), or the word `all` to indicate all group members. If you choose to use rank number, you can also use operators: `>` will match all members who have a rank **greater than or equal to** the given rank, and `<` will match all members who have a rank **less than** the given rank. If you exclude the operator, an exact rank number match is used.',
+      description: '`!BindGroupRank <groupid> <"Discord Role Name"> [rank]` Binds Roblox group membership or group rank to a Discord role. Example: `!BindRank 372 "High Rank" >200` or `!BindRank 372 "Group Member"` or `!BindRank 372 "Group Owner" 255` or `!BindRank DevForum "DevForum Member"`. For help see https://github.com/evaera/RoVer#setting-up-roles-for-roblox-group-members-and-group-ranks',
 
       args: [
         {

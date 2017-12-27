@@ -15,7 +15,7 @@ const DefaultSettings = {
   nicknameUsers: true,
   announceChannel: null,
   nicknameFormat: '%USERNAME%',
-  welcomeMessage: 'Welcome to the server, %USERNAME%!',
+  welcomeMessage: 'Welcome to %SERVER%, %USERNAME%!',
   groupRankBindings: []
 }
 
@@ -210,8 +210,8 @@ class DiscordServer {
    * @returns {string} The processed string
    * @memberof DiscordServer
    */
-  getWelcomeMessage (data) {
-    return Util.formatDataString(this.getSetting('welcomeMessage'), data)
+  getWelcomeMessage (data, member) {
+    return Util.formatDataString(this.getSetting('welcomeMessage'), data, member)
   }
 
   /**

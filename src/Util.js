@@ -21,6 +21,7 @@ module.exports = {
     if (member != null) {
       replacements['%DISCORDNAME%'] = member.user.username
       replacements['%DISCORDID%'] = member.id
+      replacements['%SERVER%'] = member.guild.name
     }
 
     return formatString.replace(/%\w+%/g, (all) => {

@@ -126,7 +126,7 @@ class DiscordBot {
     let action = await discordMember.verify()
 
     if (action.status) {
-      member.send(server.getWelcomeMessage(action))
+      member.send(server.getWelcomeMessage(action, member))
     } else {
       member.send('Welcome! Visit the following link to verify your Roblox account: https://verify.eryn.io')
     }
@@ -187,7 +187,7 @@ class DiscordBot {
           await this.bot.fetchUser(id)
 
           let guildMember = await this.bot.guilds.get(guild.id).fetchMember(id)
-          guildMember.send(server.getWelcomeMessage(action))
+          guildMember.send(server.getWelcomeMessage(action, guildMember))
         }
 
         firstRun = false

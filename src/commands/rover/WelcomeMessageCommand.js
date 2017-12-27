@@ -6,7 +6,7 @@ class WelcomeMessageCommand extends Command {
     super(client, {
       name: 'welcomemessage',
       aliases: ['roverwelcomemessage'],
-      description: '`<Message>` Set the message the user gets when they verify. Will be sent in DMs unless they use !verify command. Available replacements are Available replacements are %USERNAME%, %USERID%, %DISCORDNAME%, and %DISCORDID%. Default: Welcome to the server, %USERNAME%!.',
+      description: '`<Message>` Set the message the user gets when they verify. Will be sent in DMs unless they use !verify command. Available replacements are Available replacements are %USERNAME%, %USERID%, %SERVER%, %DISCORDNAME%, and %DISCORDID%. Default: Welcome to the server, %USERNAME%!.',
 
       args: [
         {

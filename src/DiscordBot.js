@@ -39,6 +39,7 @@ class DiscordBot {
     // from this object into every instance (DiscordMember, DiscordServer). This seemed
     // like the best solution.
     global.Cache = new Cache(this.bot)
+    this.shardClientUtil = global.Cache.shardClientUtil
 
     // Set a reference to this instance inside of the client
     // for use in Commando modules. Is this bad? Probably.
@@ -81,6 +82,40 @@ class DiscordBot {
    */
   ready () {
     console.log(`Shard ${process.env.SHARD_ID} is ready, serving ${this.bot.guilds.array().length} guilds.`)
+
+    let currentActivity = 0
+    let totalUsers = null
+
+    request('https://verify.eryn.io/api/count')
+      .then(count => {
+        totalUsers = (parseInt(count, 10) / 1000).toFixed(1) + 'K'
+      })
+
+    setInterval(async () => {
+      currentActivity++
+      if (currentActivity === 2 && totalUsers == null) currentActivity++
+
+      if (currentActivity > 3) {
+        currentActivity = 0
+      }
+
+      switch (currentActivity) {
+        case 0:
+          this.bot.user.setActivity('http://eryn.io/RoVer')
+          break
+        case 1:
+          let totalGuilds = (await this.shardClientUtil.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
+          this.bot.user.setActivity(`${totalGuilds} servers`, { type: 'WATCHING' })
+          break
+        case 2:
+          this.bot.user.setActivity(`${totalUsers} users`, { type: 'LISTENING' })
+          break
+        case 3:
+          this.bot.user.setActivity('!rover', { type: 'LISTENING' })
+          break
+      }
+    }, 15000)
+
     this.bot.user.setActivity('http://eryn.io/RoVer')
   }
 

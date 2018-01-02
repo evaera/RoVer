@@ -1,3 +1,4 @@
+/* eslint-disable */
 // A file for testing requests through fiddler. Add `require('./proxy')()` to the top of index.js to enable this
 const url = require("url"),
     http = require("http"),

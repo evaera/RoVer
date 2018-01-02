@@ -14,7 +14,9 @@ class GlobalCache {
   constructor (shardingManager) {
     this.shardingManager = shardingManager
     this.collections = {}
-    shardingManager.on('message', this.onMessage.bind(this))
+
+    shardingManager.on('shardCreate', shard => shard.on('message', this.onMessage.bind(this, shard)))
+    shardingManager.shards.forEach(shard => shard.on('message', this.onMessage.bind(this, shard)))
   }
 
   /**

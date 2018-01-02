@@ -81,7 +81,7 @@ class DiscordBot {
    */
   ready () {
     console.log(`Shard ${process.env.SHARD_ID} is ready, serving ${this.bot.guilds.array().length} guilds.`)
-    this.bot.user.setGame('http://eryn.io/RoVer')
+    this.bot.user.setActivity('http://eryn.io/RoVer')
   }
 
   /**
@@ -184,9 +184,9 @@ class DiscordBot {
           break
         } else if (action.status && server.hasCustomWelcomeMessage()) {
           // It worked, checking if there's a custom welcome message.
-          await this.bot.fetchUser(id)
+          await this.bot.users.fetch(id)
 
-          let guildMember = await this.bot.guilds.get(guild.id).fetchMember(id)
+          let guildMember = await this.bot.guilds.get(guild.id).members.fetch(id)
           guildMember.send(server.getWelcomeMessage(action, guildMember))
         }
 

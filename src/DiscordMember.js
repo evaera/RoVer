@@ -55,8 +55,8 @@ class DiscordMember {
    */
   async prepareMember () {
     try {
-      this.user = await this.bot.fetchUser(this.id, false)
-      this.member = await this.server.fetchMember(this.user, false)
+      this.user = await this.bot.users.fetch(this.id, false)
+      this.member = await this.server.members.fetch(this.user, false)
       return true
     } catch (e) {
       if (config.loud) console.log(`prepareMember: ${e.message}; ${this.id}; ${this.user}`)
@@ -172,7 +172,7 @@ class DiscordMember {
     }
 
     // Create a warning to append to any errors. In some permission setups, RoVer is reliant on role positioning (specifically if it has administrator or not)
-    if ((await this.server.fetchMember(this.bot.user.id)).highestRole.comparePositionTo(this.member.highestRole) < 1) {
+    if ((await this.server.members.fetch(this.bot.user.id)).highestRole.comparePositionTo(this.member.highestRole) < 1) {
       errorAppend = "\n\nRoVer's position in the role list is below that of this user. With certain setups, this will prevent RoVer from working correctly. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
     }
 

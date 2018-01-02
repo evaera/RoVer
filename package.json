@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "bufferutil": "^3.0.1",
-    "discord.js": "hydrabolt/discord.js#master",
-    "discord.js-commando": "Gawdl3y/discord.js-commando",
+    "discord.js": "https://github.com/hydrabolt/discord.js.git#229eb2be2da11563c3c9978664e050044de720df",
+    "discord.js-commando": "https://github.com/Gawdl3y/discord.js-commando.git#5036567d6654a7c92528e68b22a591ad2c172db5",
     "erlpack": "hammerandchisel/erlpack",
     "express": "^4.15.2",
     "mz": "^2.6.0",

@@ -1,4 +1,6 @@
 const Command = require('../Command')
+const DiscordServer = require('../../DiscordServer')
+const Util = require('../../Util')
 
 module.exports =
 class BindingsCommand extends Command {
@@ -49,30 +51,34 @@ class BindingsCommand extends Command {
 
     this.server.cleanupRankBindings()
 
+    let groupBindingsText = ''
     for (let binding of this.server.getSetting('groupRankBindings')) {
-      let id = binding.role
-      if (binding.group.match(/[a-z]/i)) {
-        msg.reply({ embed: {
-          color: 0xe67e22,
-          fields: [
-            { name: 'Group', value: binding.group || '<none>', inline: true },
-            { name: 'Argument', value: binding.rank || '<none>', inline: true },
-            { name: 'Role name', value: this.getRoleName(id) || '<none>', inline: true },
-            { name: 'Role id', value: id || '<none>', inline: true }
-          ]
-        }})
-      } else {
-        msg.reply({ embed: {
-          color: 0xe67e22,
-          fields: [
-            { name: 'Group', value: binding.group || '<none>', inline: true },
-            { name: 'Rank', value: binding.rank || '<none>', inline: true },
-            { name: 'Comparison', value: binding.operator || '<none>', inline: true },
-            { name: 'Role name', value: this.getRoleName(id) || '<none>', inline: true },
-            { name: 'Role id', value: id || '<none>', inline: true }
-          ]
-        }})
+      if (binding.groups == null) {
+        binding = DiscordServer.convertOldBinding(binding)
       }
+
+      if (groupBindingsText === '') {
+        groupBindingsText = '**Group Bindings**\n\n'
+      }
+
+      let id = binding.role
+
+      groupBindingsText += `${this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
+
+      for (let group of binding.groups) {
+        if (group.id.match(/[a-z]/i)) {
+          groupBindingsText += `# Virtual Group ${group.id}\n`
+          groupBindingsText += `Argument ${group.ranks.length > 0 ? group.ranks[0] : 'none'}`
+        } else {
+          groupBindingsText += `# Group ${group.id}\n`
+          groupBindingsText += `Rank${group.ranks.length === 1 ? '' : 's'} ` + Util.simplifyNumbers(group.ranks)
+        }
+        groupBindingsText += '\n\n'
+      }
+
+      groupBindingsText += '```\n'
     }
+
+    msg.reply(groupBindingsText, { split: true })
   }
 }

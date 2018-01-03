@@ -4,8 +4,8 @@ module.exports =
 class UnbindAllGroupCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'unbindallranks',
-      aliases: ['roverunbindallgroupranks', 'unbindallgroupranks'],
+      name: 'unbindall',
+      aliases: ['roverunbindallgroupranks', 'unbindallgroupranks', 'unbindallranks'],
       description: 'Unbind all group rank'
     })
   }

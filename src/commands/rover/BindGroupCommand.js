@@ -1,4 +1,5 @@
 const Command = require('../Command')
+const Util = require('../../Util')
 
 module.exports =
 class BindGroupCommand extends Command {
@@ -6,24 +7,19 @@ class BindGroupCommand extends Command {
     super(client, {
       name: 'bindrank',
       aliases: ['roverbindgrouprank', 'bindgroup', 'bindgrouprank', 'roverbind'],
-      description: '`!BindGroupRank <groupid> <"Discord Role Name"> [rank]` Binds Roblox group membership or group rank to a Discord role. Example: `!BindRank 372 "High Rank" >200` or `!BindRank 372 "Group Member"` or `!BindRank 372 "Group Owner" 255` or `!BindRank DevForum "DevForum Member"`. For help see https://github.com/evaera/RoVer#setting-up-roles-for-roblox-group-members-and-group-ranks',
+      description: '`!BindRank <"Discord Role"> <group_id>:<rank_id>` Binds Roblox group membership or group rank to a Discord role. Example: `!BindRank "High Rank" 372372:150,200-255` or `!BindRank "Group Member" 372372` or `!BindRank "Faction Leader" 372372:255 3723293:255 584584:250-255` or `!BindRank "DevForum Member" DevForum`. For help see https://github.com/evaera/RoVer#setting-up-roles-for-roblox-group-members-and-group-ranks',
 
       args: [
         {
-          key: 'group',
-          prompt: 'Group',
-          type: 'string'
-        },
-        {
           key: 'role',
-          prompt: 'Role',
+          prompt: 'Discord Role to bind:',
           type: 'role'
         },
         {
-          key: 'rank',
-          prompt: 'Rank',
+          key: 'groups',
+          prompt: 'Group ranks to bind:',
           type: 'string',
-          default: 'all'
+          infinite: true
         }
       ]
     })
@@ -37,27 +33,45 @@ class BindGroupCommand extends Command {
       return
     }
 
-    // Support for operators, so we parse them out before
-    // saving the rank number.
-    let rankUnparsed = args.rank
-    let all = false
-
-    if (rankUnparsed === 'all') {
-      rankUnparsed = '>1'
-      all = true
-    }
-
-    if (rankUnparsed.startsWith('>')) {
-      binding.operator = 'gt'
-      rankUnparsed = rankUnparsed.substring(1)
-    } else if (rankUnparsed.startsWith('<')) {
-      binding.operator = 'lt'
-      rankUnparsed = rankUnparsed.substring(1)
-    }
-
-    binding.group = args.group
-    binding.rank = parseInt(rankUnparsed, 10)
     binding.role = args.role.id
+    binding.groups = []
+
+    for (let groupString of args.groups) {
+      let [groupId, ranksString] = groupString.split(':')
+      let group = { id: groupId }
+
+      if (ranksString != null) {
+        let ranks = []
+        let unparsedRanks = ranksString.split(',')
+        for (let rank of unparsedRanks) {
+          let rangeMatch = rank.match(/(\d+)-(\d+)/)
+          let rankNumber = parseInt(rank, 10)
+
+          if (rangeMatch) {
+            let start = parseInt(rangeMatch[1], 10)
+            let stop = parseInt(rangeMatch[2], 10)
+
+            if (start && stop) {
+              for (let i = start; i <= stop; i++) {
+                ranks.push(i)
+              }
+            }
+          } else if (rankNumber != null) {
+            ranks.push(rankNumber)
+          }
+        }
+        group.ranks = ranks
+      } else if (!groupId.match(/[a-z]/i)) {
+        group.ranks = []
+        for (let i = 1; i <= 255; i++) {
+          group.ranks.push(i)
+        }
+      } else {
+        group.ranks = []
+      }
+
+      binding.groups.push(group)
+    }
 
     // Delete any previous binding with that role.
     this.server.deleteGroupRankBinding(binding.role)
@@ -67,18 +81,35 @@ class BindGroupCommand extends Command {
     serverBindings.push(binding)
     this.server.setSetting('groupRankBindings', serverBindings)
 
-    if (!all) {
-      if (binding.group.match(/[a-z]/i)) {
-        // This is a virtual group, since the id has letters.
-        msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Argument: \`${binding.rank}\`, Role: \`${args.role.name}\``)
+    let bindingSuccessMessage = `Successfully bound role "${args.role.name}".\n\`\`\`markdown\n`
+
+    for (let group of binding.groups) {
+      if (group.id.match(/[a-z]/i)) {
+        bindingSuccessMessage += `# Virtual Group ${group.id}\n`
+        bindingSuccessMessage += `Argument ${group.ranks.length > 0 ? group.ranks[0] : 'none'}`
       } else {
-        msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${args.role.name}, Comparison: ${binding.operator || 'eq'}`)
+        bindingSuccessMessage += `# Group ${group.id}\n`
+        bindingSuccessMessage += `Rank${group.ranks.length === 1 ? '' : 's'} ` + Util.simplifyNumbers(group.ranks)
       }
-    } else if (binding.group.match(/[a-z]/i)) {
-      // This is a virtual group, since the id has letters.
-      msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Role: \`${args.role.name}\``)
-    } else {
-      msg.reply(`Added rank binding for all members in group: Group: ${binding.group}, Role: ${args.role.name}`)
+      bindingSuccessMessage += '\n\n'
     }
+
+    bindingSuccessMessage += '```\n'
+
+    msg.reply(bindingSuccessMessage)
+
+    // if (!all) {
+    //   if (binding.group.match(/[a-z]/i)) {
+    //     // This is a virtual group, since the id has letters.
+    //     msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Argument: \`${binding.rank}\`, Role: \`${args.role.name}\``)
+    //   } else {
+    //     msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${args.role.name}, Comparison: ${binding.operator || 'eq'}`)
+    //   }
+    // } else if (binding.group.match(/[a-z]/i)) {
+    //   // This is a virtual group, since the id has letters.
+    //   msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Role: \`${args.role.name}\``)
+    // } else {
+    //   msg.reply(`Added rank binding for all members in group: Group: ${binding.group}, Role: ${args.role.name}`)
+    // }
   }
 }

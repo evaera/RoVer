@@ -53,10 +53,6 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   async loadSettings () {
-    if (this.areSettingsLoaded) {
-      return
-    }
-
     // If there's no settings file for this server, create one.
     if (!await fs.exists(this.settingsPath)) {
       await fs.writeFile(this.settingsPath, JSON.stringify(DefaultSettings))
@@ -68,6 +64,8 @@ class DiscordServer {
 
     // Load the settings file.
     let fileData = await fs.readFile(this.settingsPath)
+
+    if (this.areSettingsLoaded) return
 
     try {
       this.settings = JSON.parse(fileData)
@@ -97,6 +95,10 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   getSetting (key) {
+    if (!this.areSettingsLoaded) {
+      throw new Error('Attempt to get a setting from a server whose settings are not loaded')
+    }
+
     if (typeof this.settings[key] !== 'undefined') {
       return this.settings[key]
     } else if (typeof DefaultSettings[key] !== 'undefined') {
@@ -113,9 +115,46 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   setSetting (key, value) {
+    if (!this.areSettingsLoaded) {
+      throw new Error('Attempt to change a setting from a server whose settings are not loaded')
+    }
+
     this.settings[key] = value
 
     fs.writeFileSync(this.settingsPath, JSON.stringify(this.settings))
+  }
+
+  /**
+   * Converts a group binding from the old format to the new format.
+   * @static
+   * @param {object} binding The binding to convert in the old format
+   * @returns {object} The binding in the new format
+   * @memberof DiscordServer
+   */
+  static convertOldBinding (binding) {
+    let newBinding = { role: binding.role }
+
+    let ranks = []
+    if (binding.operator === 'gt') {
+      for (let i = binding.rank; i <= 255; i++) {
+        ranks.push(i)
+      }
+    } else if (binding.operator === 'lt') {
+      for (let i = 1; i <= binding.rank; i++) {
+        ranks.push(i)
+      }
+    } else {
+      ranks.push(binding.rank)
+    }
+
+    newBinding.groups = [
+      {
+        id: binding.group,
+        ranks
+      }
+    ]
+
+    return newBinding
   }
 
   /**
@@ -129,41 +168,46 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   static async resolveGroupRankBinding (binding, userid, username) {
+    if (binding.group != null) {
+      binding = this.convertOldBinding(binding)
+    }
+
+    let bindingHash = Util.md5(JSON.stringify(binding))
+
     // Check if the return value of this method has already been
     // cached in memory. If so, return that.
-    let cachedBinding = await Cache.get(`bindings.${userid}`, JSON.stringify(binding))
-    if (cachedBinding !== null) return cachedBinding
+    let cachedBinding = await Cache.get(`bindings.${userid}`, bindingHash)
+    if (cachedBinding !== null) {
+      return cachedBinding
+    }
 
     let returnValue = false
 
-    if (VirtualGroups[binding.group]) {
-      // If this group is a virtual group, then execute that function instead.
-      // 'all' is remapped to >1. Since this is the equivalent of no argument, we set it to null here.
-      returnValue = await VirtualGroups[binding.group]({id: userid, username}, (binding.operator === 'gt' && binding.rank === 1) ? null : binding.rank)
-    } else {
-      // Check the rank of the user in the Roblox group.
-      let rank = await request({
-        uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${binding.group}`
-      })
+    for (let group of binding.groups) {
+      if (VirtualGroups[group.id]) {
+        // If this group is a virtual group, then execute that function instead.
+        // 'all' is remapped to >1. Since this is the equivalent of no argument, we set it to null here.
+        returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0])
+      } else {
+        // Check the rank of the user in the Roblox group.
+        let rank = await request({
+          uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${group.id}`
+        })
 
-      if (!rank.startsWith('<Value Type="integer">')) {
-        throw new Error('Group rank HTTP request is malformed or in unknown format')
-      }
-
-      rank = parseInt(rank.replace(/[^\d]/g, ''), 10)
-
-      if (binding.rank) {
-        // We also need to check the rank. This conditional chooses the configured operator for the binding.
-        if ((!binding.operator && rank === binding.rank) || (binding.operator === 'gt' && rank >= binding.rank) || (binding.operator === 'lt' && rank < binding.rank)) {
-          returnValue = true
+        if (!rank.startsWith('<Value Type="integer">')) {
+          throw new Error('Group rank HTTP request is malformed or in unknown format')
         }
-      } else if (rank > 0) {
-        returnValue = true
+
+        rank = parseInt(rank.replace(/[^\d]/g, ''), 10)
+
+        returnValue = group.ranks.includes(rank)
+
+        if (returnValue) break
       }
     }
 
     // Cache the return value in memory.
-    Cache.set(`bindings.${userid}`, JSON.stringify(binding), returnValue)
+    Cache.set(`bindings.${userid}`, bindingHash, returnValue)
 
     return returnValue
   }

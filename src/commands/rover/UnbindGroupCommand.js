@@ -4,8 +4,8 @@ module.exports =
 class UnbindGroupCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'unbindrank',
-      aliases: ['roverunbindgrouprank', 'unbindgrouprank'],
+      name: 'unbind',
+      aliases: ['roverunbindgrouprank', 'unbindgrouprank', 'unbindrank'],
       description: '`<Discord Role>` Unbind a group rank',
 
       args: [

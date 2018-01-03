@@ -69,7 +69,7 @@ class GlobalCache {
       collection: message.collection,
       key: message.key,
       // 'undefined' is not a valid json type (won't persist through serialization)
-      value: collection[message.key] || null
+      value: typeof collection[message.key] === 'undefined' ? null : collection[message.key]
     })
   }
 
@@ -106,7 +106,7 @@ class GlobalCache {
       collection: message.collection,
       key: message.key,
       // 'undefined' is not a valid json type (won't persist through serialization)
-      value: collection[message.key] || null
+      value: typeof collection[message.key] === 'undefined' ? null : collection[message.key]
     })
   }
 }

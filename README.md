@@ -61,9 +61,9 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!NicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
 - `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`.
-- `!BindGroupRank <groupid> <"Discord Role Name"> [rank]` - See section below.
-- `!UnbindGroupRank <role name>` - See section below.
-- `!UnbindAllGroupRanks` - See section below.
+- `!BindRank <"Discord Role"> <group_id>:<rank_id>` Binds Roblox group membership or group rank to a Discord role. Put the Discord role name in quotes. See section below for details.
+- `!Unbind <role name>` - Unbinds this role from any group ranks.
+- `!UnbindAll` - Removes all group bindings configured for this server.
 - `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.
 - `!Whois <@user>` - Get a link to a verified user's profile.
 
@@ -76,27 +76,37 @@ You should probably make a read-only channel in the server explaining these proc
 RoVer will ignore users with a role called "RoVer Bypass", so you can give them custom names or give people a member role when they aren't actually verified or in a group.
 
 ## Setting up roles for Roblox group members and group ranks
+Group bindings can be created to keep Discord roles up to date with Roblox group ranks. You can find the Roblox group ranks for each role in a Roblox group on the Roblox group admin > roles page; it is a number between 1 and 255.
+
+The first argument is the Discord role name (which needs to be in quotation marks if it has spaces). After that, you can pass an unlimited amount of groups with a list of ranks for each group. If the user meets the requirements for *any* of these groups, they will be considered to have the role. The groups are in the format `<groupid>:<rank>` (e.g. `372372:135`). You can also provide a list of ranks, like `<groupid>:<rank>,<rank>,<rank>` (e.g. `372372:135,150,250`). You can also provide a range of ranks instead of listing them out, like `1-130`, e.g. (`372372:1-130,255`, which will count for anyone who has a rank between 1 and 130 [inclusive] or the rank 255).
+
+See more examples below:
+
 **Note**: You need to put the Discord role name in quotation marks if it has spaces. If you don't do this you will get unexpected results.
 
 - Use the following command to set up giving a role to all members of a group:
 
-  `!BindGroupRank 372 "Group Member"` where `372` is your *group id* and `GroupMember` is the *Discord role name*
+  `!BindRank "Group Member" 372372` where `372372` is your *group id* and `GroupMember` is the *Discord role name*
 
 - Use the following command to set up giving a role to members of a certain rank in a group:
 
-  `!BindGroupRank 372 "Group Owner" 255` where `372` is your *group id*, `255` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupOwner` is the *Discord role name*
+  `!BindRank "Group Owner" 372372:255` where `372372` is your *group id*, `255` is the *group roleset rank* (the number on the Roblox group configure page, not the role name) and `Group Owner` is the *Discord role name*
 
-- Use the following command to set up giving a role to members of a **rank or higher** in a group: (*Note! This uses a "greater than or equal to" comparison*)
+- Use the following command to set up giving a role to members of a **certain range** of rank in a group:
 
-  `!BindGroupRank 372 "Group Admin" >200` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupAdmin` is the *Discord role name*
+  `!BindRank "High Rank" 372372:200-254` where `372372` is your *group id*, `200-254` is a range of numbers corresponding to the *group roleset rank* (the number on the Roblox group configure page, not the role name) and `High Rank` is the *Discord role name*
 
-- Use the following command to set up giving a role to members lower than a rank in a group: (*Note! This uses a "less than" comparison*)
+- Use the following command to set up giving a role to a specific set of ranks in a group:
 
-  `!BindGroupRank 372 "Group Normie" <200` where `372` is your *group id*, `200` is the *group roleset rank* (the number on the configure page, not the role name) and `GroupNormie` is the *Discord role name*
+  `!BindRank "Group Normie" 372372:50,100-150,200` - This will bind a rank for users with a rank 50, anywhere from 100 to 150 (including 111, 122, etc), and the rank 200
+
+- Use the following command to set up giving a role to a user who meets the requirements in any of a list of groups
+
+  `!BindRank "Faction Leader" 372372:250 372838:255 29393:250-255` - This will give the user the `Faction Leader` Discord role when they are rank 250 in the first group, *or* rank 255 in the second group, *or* ranks 250 through 255 in the last group.
 
 - Use the following command to unbind a role from a group:
 
-  `!UnbindGroupRank GroupMember` where `GroupMember` is the *Discord role name*
+  `!Unbind Group Member` where `Group Member` is the *Discord role name*
 
 - Use the following command to unbind all roles from groups in your server:
 
@@ -118,20 +128,24 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 
 To create a role for all members of the dev forum in your server, use the following command:
 
-`!BindRank DevForum DevForumMember`, where `DevForum` is the *Virtual Group* and `DevForum Member` is the *Discord role name*
+`!BindRank DevForumMember DevForum`, where `DevForum` is the *Virtual Group* and `DevForum Member` is the *Discord role name*
 
 To create a role for all members who own a specific asset, use the following command:
 
-`!BindRank HasAsset Winner 424242`, where `HasAsset` is the *Virtual Group*, `Winner` is the *Discord role name*, and `424242` is the *asset id*
+`!BindRank Winner HasAsset:424242`, where `HasAsset` is the *Virtual Group*, `Winner` is the *Discord role name*, and `424242` is the *asset id*
+
+To create a role for all members who are either in the DevForum, have OBC, or is in group 372372 as an owner:
+
+`!BindRank DevForumOrOBC DevForum OBC 372372:255`
 
 # Self-hosting instructions
 
 1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on.
-2. **Node.js version 8.0.0 or newer is required to run RoVer.**
-3. Install yarn if you don't already have it: `npm install -g yarn`
-4. Use yarn to install the dependencies: `yarn install`
+2. **Node.js version 8.9.4 LTS or newer is recommended to run RoVer.**
+3. [Install yarn](https://yarnpkg.com/lang/en/docs/install/) if you don't already have it
+4. Use yarn to install the dependencies from the project folder: `yarn install`
 5. Edit the file `src/data/client.json` and insert your [bot token](https://discordapp.com/developers/applications/me).
-6. Start the bot: `node ./src/index.js`
+6. Start the bot from the project folder: `node ./src/index.js`
 7. You should set up a process manager like [PM2](http://pm2.keymetrics.io/) or forever.js to ensure that the bot remains online.
 
 ### Update Server

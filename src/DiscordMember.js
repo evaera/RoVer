@@ -95,6 +95,10 @@ class DiscordMember {
     let freshData = false
     let errorAppend = ''
 
+    if (!this.discordServer.areSettingsLoaded) {
+      await this.discordServer.loadSettings()
+    }
+
     // If options.message is provided, we reply to that message with a status update
     // and edit it with new info throughout the verification. It's also called upon
     // this function returning output, so we need a default state for it to be a

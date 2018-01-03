@@ -178,6 +178,8 @@ class DiscordBot {
     if (!this.servers[id]) {
       this.servers[id] = new DiscordServer(this, id)
       await this.servers[id].loadSettings()
+    } else if (!this.servers[id].areSettingsLoaded) {
+      await this.servers[id].loadSettings()
     }
     return this.servers[id]
   }

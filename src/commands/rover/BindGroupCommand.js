@@ -41,8 +41,8 @@ class BindGroupCommand extends Command {
       let [groupId, ranksString] = groupString.split(':')
       let group = { id: groupId }
 
-      if (groupId.match(/[a-z]/i) && !VirtualGroups[groupId]) {
-        return msg.reply(`:no_entry_sign: You have attempted to bind a virtual group that does not exist (\`${groupId}\`). Did you forget to put the Discord role name in quotation marks?`)
+      if (groupId.match(/[^\d]/) && !VirtualGroups[groupId]) {
+        return msg.reply(`:no_entry_sign: You have attempted to bind an invalid group (\`${groupId}\`). Possible causes:\n\n- You forgot to put the Discord role name in quotation marks when it has spaces\n- You have attempted to bind an invalid group id. Group IDs must be a whole number or be a valid VirtualGroup name.`)
       }
 
       if (ranksString != null) {

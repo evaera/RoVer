@@ -38,9 +38,7 @@ module.exports = {
    */
   async sleep (sleepTime) {
     return new Promise(resolve => {
-      setTimeout(() => {
-        resolve()
-      }, sleepTime)
+      setTimeout(resolve, sleepTime)
     })
   },
 

@@ -111,7 +111,7 @@ class DiscordMember {
 
       // We don't want to edit the message too quickly, otherwise Discord will throttle us. T
       // This limits edits to one per second but keeps it up to date after at least 1 second passes.
-      let lastEdit = (new Date).getTime()
+      let lastEdit = (new Date()).getTime()
       let editIndex = 0
       status = action => {
         editIndex++
@@ -129,7 +129,7 @@ class DiscordMember {
             }
           }
 
-          lastEdit = (new Date).getTime()
+          lastEdit = (new Date()).getTime()
 
           if (typeof action === 'string') {
             statusMessage.edit(`${this.member}, ${action}`)

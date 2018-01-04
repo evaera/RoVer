@@ -3,7 +3,6 @@
 const path = require('path')
 const fs = require('mz/fs')
 const request = require('request-promise')
-const config = require('./data/client.json')
 const VirtualGroups = require('./VirtualGroups.js')
 const DiscordMember = require('./DiscordMember')
 const Util = require('./Util')

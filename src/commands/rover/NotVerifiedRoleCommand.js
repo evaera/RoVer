@@ -5,7 +5,7 @@ class NotVerifiedRoleCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'notverifiedrole',
-      aliases: ['roververifiedremovedrole', 'verifiedremovedrole', 'rovernotverifiedrole'],
+      aliases: ['roververifiedremovedrole', 'verifiedremovedrole', 'rovernotverifiedrole', 'unverifiedrole'],
       description: '`<Discord Role>` Set the role that members will lose when verified successfully. Default none',
 
       args: [

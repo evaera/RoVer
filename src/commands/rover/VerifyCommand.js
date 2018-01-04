@@ -6,7 +6,7 @@ class VerifyCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'verify',
-      aliases: ['getroles'],
+      aliases: ['getroles', 'getrole'],
       userPermissions: [],
       description: "RoVer will check the sender's verification status."
     })

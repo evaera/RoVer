@@ -29,12 +29,12 @@ class BindingsCommand extends Command {
 
     if (this.server.getSetting('verifiedRole')) {
       let id = this.server.getSetting('verifiedRole')
-      bindingText += `${this.getRoleName(id)} <${id}>\n\`\`\`fix\nVerified\n\`\`\`\n`
+      bindingText += `**Verified Role**\n${this.getRoleName(id)} <${id}>\n\n`
     }
 
     if (this.server.getSetting('verifiedRemovedRole')) {
       let id = this.server.getSetting('verifiedRemovedRole')
-      bindingText += `**Unverified Role**\n${this.getRoleName(id)} <${id}>\n\`\`\`css\nNot verified\n\`\`\`\n`
+      bindingText += `**Unverified Role**\n${this.getRoleName(id)} <${id}>\n\n`
     }
 
     if (bindingText.length > 0) {
@@ -53,6 +53,8 @@ class BindingsCommand extends Command {
 
       if (groupBindingsText === '') {
         groupBindingsText = '**__Group Bindings__**\n\n'
+      } else if (groupBindingsText === ' ') {
+        groupBindingsText = '**__Group Bindings (cont.)__**\n\n'
       }
 
       let id = binding.role
@@ -76,7 +78,7 @@ class BindingsCommand extends Command {
 
       if (groupBindingsText.length > 1500) {
         msg.reply(groupBindingsText)
-        groupBindingsText = ''
+        groupBindingsText = ' '
       }
     }
 

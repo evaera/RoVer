@@ -25,28 +25,22 @@ class BindingsCommand extends Command {
   }
 
   async fn (msg) {
+    let bindingText = ''
+
     if (this.server.getSetting('verifiedRole')) {
       let id = this.server.getSetting('verifiedRole')
-      msg.reply({ embed: {
-        color: 0x2ecc71,
-        title: 'Verified role',
-        fields: [
-          { name: 'Role name', value: this.getRoleName(id), inline: true },
-          { name: 'Role id', value: id, inline: true }
-        ]
-      }})
+      bindingText += `${this.getRoleName(id)} <${id}>\n\`\`\`fix\nVerified\n\`\`\`\n`
     }
 
     if (this.server.getSetting('verifiedRemovedRole')) {
       let id = this.server.getSetting('verifiedRemovedRole')
-      msg.reply({ embed: {
-        color: 0xe74c3c,
-        title: 'Not Verified role',
-        fields: [
-          { name: 'Role name', value: this.getRoleName(id), inline: true },
-          { name: 'Role id', value: id, inline: true }
-        ]
-      }})
+      bindingText += `**Unverified Role**\n${this.getRoleName(id)} <${id}>\n\`\`\`css\nNot verified\n\`\`\`\n`
+    }
+
+    if (bindingText.length > 0) {
+      msg.reply('**__Role Bindings__**\n\n' + bindingText)
+    } else {
+      msg.reply('No verified or unverified roles are configured. Run `!verifiedrole <role>` or `unverifiedrole <role>` to set them.')
     }
 
     this.server.cleanupRankBindings()
@@ -58,14 +52,16 @@ class BindingsCommand extends Command {
       }
 
       if (groupBindingsText === '') {
-        groupBindingsText = '**Group Bindings**\n\n'
+        groupBindingsText = '**__Group Bindings__**\n\n'
       }
 
       let id = binding.role
 
       groupBindingsText += `${this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
 
-      for (let group of binding.groups) {
+      for (let [index, group] of binding.groups.entries()) {
+        if (index > 0) groupBindingsText += '...or\n'
+
         if (group.id.match(/[a-z]/i)) {
           groupBindingsText += `# VirtualGroup ${group.id}\n`
           groupBindingsText += `Argument ${group.ranks.length > 0 ? group.ranks[0] : 'none'}`
@@ -77,8 +73,13 @@ class BindingsCommand extends Command {
       }
 
       groupBindingsText += '```\n'
+
+      if (groupBindingsText.length > 1500) {
+        msg.reply(groupBindingsText)
+        groupBindingsText = ''
+      }
     }
 
-    if (groupBindingsText.length > 0) msg.reply(groupBindingsText, { split: true })
+    if (groupBindingsText.length > 0) msg.reply(groupBindingsText)
   }
 }

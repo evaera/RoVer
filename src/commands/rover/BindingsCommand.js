@@ -67,7 +67,7 @@ class BindingsCommand extends Command {
 
       for (let group of binding.groups) {
         if (group.id.match(/[a-z]/i)) {
-          groupBindingsText += `# Virtual Group ${group.id}\n`
+          groupBindingsText += `# VirtualGroup ${group.id}\n`
           groupBindingsText += `Argument ${group.ranks.length > 0 ? group.ranks[0] : 'none'}`
         } else {
           groupBindingsText += `# Group ${group.id}\n`
@@ -79,6 +79,6 @@ class BindingsCommand extends Command {
       groupBindingsText += '```\n'
     }
 
-    msg.reply(groupBindingsText, { split: true })
+    if (groupBindingsText.length > 0) msg.reply(groupBindingsText, { split: true })
   }
 }

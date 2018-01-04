@@ -1,12 +1,13 @@
 const Command = require('../Command')
 const Util = require('../../Util')
+const VirtualGroups = require('../../VirtualGroups.js')
 
 module.exports =
 class BindGroupCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'bindrank',
-      aliases: ['roverbindgrouprank', 'bindgroup', 'bindgrouprank', 'roverbind'],
+      aliases: ['roverbindgrouprank', 'bindgroup', 'bindgrouprank', 'roverbind', 'bind'],
       description: '`!BindRank <"Discord Role"> <group_id>:<rank_id>` Binds Roblox group membership or group rank to a Discord role. Example: `!BindRank "High Rank" 372372:150,200-255` or `!BindRank "Group Member" 372372` or `!BindRank "Faction Leader" 372372:255 3723293:255 584584:250-255` or `!BindRank "DevForum Member" DevForum`. For help see https://github.com/evaera/RoVer#setting-up-roles-for-roblox-group-members-and-group-ranks',
 
       args: [
@@ -29,7 +30,7 @@ class BindGroupCommand extends Command {
     let binding = {}
 
     if (this.server.isRoleInUse(args.role.id)) {
-      msg.reply('That role is already in use. (verified role, not verified role, or from a group binding). Run `!bindings` to see all role bindings.')
+      msg.reply(':no_entry_sign: That role is already in use. (verified role, not verified role, or from a group binding). Run `!bindings` to see all role bindings.')
       return
     }
 
@@ -39,6 +40,10 @@ class BindGroupCommand extends Command {
     for (let groupString of args.groups) {
       let [groupId, ranksString] = groupString.split(':')
       let group = { id: groupId }
+
+      if (groupId.match(/[a-z]/i) && !VirtualGroups[groupId]) {
+        return msg.reply(`:no_entry_sign: You have attempted to bind a virtual group that does not exist (\`${groupId}\`). Did you forget to put the Discord role name in quotation marks?`)
+      }
 
       if (ranksString != null) {
         let ranks = []
@@ -81,7 +86,7 @@ class BindGroupCommand extends Command {
     serverBindings.push(binding)
     this.server.setSetting('groupRankBindings', serverBindings)
 
-    let bindingSuccessMessage = `Successfully bound role "${args.role.name}".\n\`\`\`markdown\n`
+    let bindingSuccessMessage = `:white_check_mark: Successfully bound role "${args.role.name}".\n\`\`\`markdown\n`
 
     for (let group of binding.groups) {
       if (group.id.match(/[a-z]/i)) {

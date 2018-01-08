@@ -162,6 +162,8 @@ class DiscordBot {
 
     if (action.status) {
       member.send(server.getWelcomeMessage(action, member))
+    } else if (!action.status && action.nonFatal) {
+      member.send(`Welcome to ${member.guild.name}! You are already verified, but something went wrong when updating your roles. Try running \`!verify\` in the server for more information.`)
     } else {
       member.send(`Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Verifying your account is quick and safe and doesn't require any information other than your username. All you have to do is either join a game or put a code in your profile, and you're in!\n\nVisit the following link to verify your Roblox account: https://verify.eryn.io`)
     }

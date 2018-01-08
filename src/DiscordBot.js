@@ -215,7 +215,6 @@ class DiscordBot {
           // We want to clear the group rank bindings cache because
           // this is the first iteration.
           clearBindingsCache: firstRun
-          // announce: false
         })
 
         if (!action.status && !action.nonFatal) {

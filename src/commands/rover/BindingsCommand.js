@@ -43,7 +43,7 @@ class BindingsCommand extends Command {
       msg.reply('No verified or unverified roles are configured. Run `!verifiedrole <role>` or `unverifiedrole <role>` to set them.')
     }
 
-    this.server.cleanupRankBindings()
+    await this.server.cleanupRankBindings(msg.channel)
 
     let groupBindingsText = ''
     for (let binding of this.server.getSetting('groupRankBindings')) {
@@ -61,18 +61,7 @@ class BindingsCommand extends Command {
 
       groupBindingsText += `${this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
 
-      for (let [index, group] of binding.groups.entries()) {
-        if (index > 0) groupBindingsText += '...or\n'
-
-        if (group.id.match(/[a-z]/i)) {
-          groupBindingsText += `# VirtualGroup ${group.id}\n`
-          groupBindingsText += `Argument ${group.ranks.length > 0 ? group.ranks[0] : 'none'}`
-        } else {
-          groupBindingsText += `# Group ${group.id}\n`
-          groupBindingsText += `Rank${group.ranks.length === 1 ? '' : 's'} ` + Util.simplifyNumbers(group.ranks)
-        }
-        groupBindingsText += '\n\n'
-      }
+      groupBindingsText = Util.getBindingText(binding)
 
       groupBindingsText += '```\n'
 

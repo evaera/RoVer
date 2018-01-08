@@ -233,13 +233,77 @@ class DiscordServer {
   /**
    * Deletes group bindings that are associated with Discord roles
    * that have been deleted.
+   * @param {Channel} [noticeChannel] The channel to post the deletion notice to in a last resort if the owner is unreachable
    * @memberof DiscordServer
    */
-  cleanupRankBindings () {
+  cleanupRankBindings (lastResortChannel) {
+    let verifiedRole = this.getSetting('verifiedRole')
+    let unverifiedRole = this.getSetting('verifiedRemovedRole')
+
+    if (verifiedRole && !this.server.roles.get(verifiedRole)) {
+      this.setSetting('verifiedRole', null)
+      this.announce('Verified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the verified role, so users will no longer get that when they verify.', { important: true, lastResortChannel })
+    }
+
+    if (unverifiedRole && !this.server.roles.get(unverifiedRole)) {
+      this.setSetting('verifiedRemovedRole', null)
+      this.announce('Unverified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the unverified role, so unverified users will no longer receive that role.', { important: true, lastResortChannel })
+    }
+
     for (let binding of this.getSetting('groupRankBindings')) {
       let id = binding.role
       if (!this.server.roles.get(id)) {
         this.deleteGroupRankBinding(id)
+
+        this.announce('Bound Role Deleted', 'Heads up! Looks like you (or someone) has deleted a Discord role that was bound to ' + Util.getBindingText(binding, true), { important: true, lastResortChannel })
+      }
+    }
+  }
+
+  /**
+   * Posts an announcement in the server's configured announcement channel.
+   * If it's important, the server owner will be notified.
+   * @param {string} title The title of the embed message
+   * @param {string} text The body of the embed message
+   * @param {object} [options={}] Options for the announcement
+   * @param {boolean} options.important If this is an important announcement, the server owner will be mentioned or DM'd if no announce channel is set.
+   * @memberof DiscordServer
+   */
+  async announce (title, text, options = {}) {
+    let embed = {
+      color: options.important ? 0xe74c3c : 0x0064ba,
+      title,
+      description: text
+    }
+
+    if (this.getSetting('announceChannel')) {
+      let channel = await this.server.channels.get(this.getSetting('announceChannel'))
+
+      if (channel) {
+        try {
+          await channel.send(options.important ? `${this.server.owner}` : '', { embed })
+          return
+        } catch (e) {}
+      }
+    }
+
+    if (options.important) {
+      try {
+        await this.server.owner.send(`An important notice was triggered in your server "${this.server.name}" and there is no announcement channel configured, so it has been sent to you here:`, { embed })
+        return
+      } catch (e) {}
+
+      if (this.server.systemChannel) {
+        try {
+          await this.server.systemChannel.send(`${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here:`, { embed })
+          return
+        } catch (e) {}
+      }
+
+      if (options.lastResortChannel) {
+        try {
+          await options.lastResortChannel.send(`${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here as a last resort:`, { embed })
+        } catch (e) {}
       }
     }
   }

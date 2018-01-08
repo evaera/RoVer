@@ -88,16 +88,7 @@ class BindGroupCommand extends Command {
 
     let bindingSuccessMessage = `:white_check_mark: Successfully bound role "${args.role.name}".\n\`\`\`markdown\n`
 
-    for (let group of binding.groups) {
-      if (group.id.match(/[a-z]/i)) {
-        bindingSuccessMessage += `# Virtual Group ${group.id}\n`
-        bindingSuccessMessage += `Argument ${group.ranks.length > 0 ? group.ranks[0] : 'none'}`
-      } else {
-        bindingSuccessMessage += `# Group ${group.id}\n`
-        bindingSuccessMessage += `Rank${group.ranks.length === 1 ? '' : 's'} ` + Util.simplifyNumbers(group.ranks)
-      }
-      bindingSuccessMessage += '\n\n'
-    }
+    bindingSuccessMessage += Util.getBindingText(binding)
 
     bindingSuccessMessage += '```\n'
 

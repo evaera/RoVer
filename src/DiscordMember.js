@@ -99,6 +99,11 @@ class DiscordMember {
       await this.discordServer.loadSettings()
     }
 
+    // We only want to cleanup rank bindings if this is a manually-invoked verification.
+    if (options.clearBindingsCache !== false) {
+      this.discordServer.cleanupRankBindings(options.message ? options.message.channel : undefined)
+    }
+
     // If options.message is provided, we reply to that message with a status update
     // and edit it with new info throughout the verification. It's also called upon
     // this function returning output, so we need a default state for it to be a
@@ -232,7 +237,7 @@ class DiscordMember {
 
       if (this.discordServer.getSetting('verifiedRole')) {
         let role = this.discordServer.getSetting('verifiedRole')
-        if (!this.member.roles.get(role)) {
+        if (!this.member.roles.has(role) && this.server.roles.has(role)) {
           try {
             await this.member.addRole(role)
           } catch (e) {
@@ -248,7 +253,7 @@ class DiscordMember {
 
       if (this.discordServer.getSetting('verifiedRemovedRole')) {
         let role = this.discordServer.getSetting('verifiedRemovedRole')
-        if (this.member.roles.get(role)) {
+        if (this.member.roles.has(role) && this.server.roles.has(role)) {
           try {
             await this.member.removeRole(role)
           } catch (e) {
@@ -278,14 +283,8 @@ class DiscordMember {
         }
       }
 
-      if (this.discordServer.getSetting('announceChannel') && options.announce !== false) {
-        let channel = await this.server.channels.get(this.discordServer.getSetting('announceChannel'))
-
-        if (channel) {
-          try {
-            channel.send(`**User verified:** <@${this.id}> as ${data.robloxUsername}`)
-          } catch (e) {}
-        }
+      if (options.announce !== false) {
+        this.discordServer.announce('User Verified', `<@${this.id}> verified as [${data.robloxUsername}](https://www.roblox.com/users/${data.robloxId}/profile)`)
       }
 
       // Check if we want to resolve group rank bindings with cached or fresh data.
@@ -304,6 +303,8 @@ class DiscordMember {
             .then((state) => {
               let hasRole = this.member.roles.get(binding.role) != null
               if (hasRole === state) return
+
+              if (!this.server.roles.has(binding.role)) return
 
               if (state === true) {
                 this.member.addRole(binding.role).catch(e => {})

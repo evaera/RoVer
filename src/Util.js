@@ -70,5 +70,23 @@ module.exports = {
 
   md5 (string) {
     return crypto.createHash('md5').update(string).digest('hex')
+  },
+
+  getBindingText (binding, addCodeBlock = false) {
+    let bindingMessage = addCodeBlock ? '```markdown\n' : ''
+    for (let [index, group] of binding.groups.entries()) {
+      if (index > 0) bindingMessage += '...or\n'
+
+      if (group.id.match(/[a-z]/i)) {
+        bindingMessage += `# Virtual Group ${group.id}\n`
+        bindingMessage += `Argument ${group.ranks.length > 0 ? group.ranks[0] : 'none'}`
+      } else {
+        bindingMessage += `# Group ${group.id}\n`
+        bindingMessage += `Rank${group.ranks.length === 1 ? '' : 's'} ` + module.exports.simplifyNumbers(group.ranks)
+      }
+      bindingMessage += '\n\n'
+    }
+
+    return addCodeBlock ? bindingMessage + '\n```' : bindingMessage
   }
 }

@@ -14,8 +14,8 @@ class WelcomeMessageCommand extends Command {
           label: 'message',
           prompt: 'Welcome message',
           type: 'string',
-          infinite: true,
-          default: false
+          default: false,
+          optional: true
         }
       ]
     })
@@ -23,7 +23,6 @@ class WelcomeMessageCommand extends Command {
 
   async fn (msg, args) {
     if (args.message) {
-      args.message = args.message.join(' ')
       this.server.setSetting('welcomeMessage', args.message)
       msg.reply(`Set welcome message to \`${args.message}\``)
     } else {

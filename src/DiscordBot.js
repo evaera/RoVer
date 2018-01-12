@@ -5,6 +5,7 @@ const config = require('./data/client.json')
 const DiscordServer = require('./DiscordServer')
 const {Cache} = require('./GlobalCache')
 const requestDebug = require('request-debug')
+const SettingProvider = require('./commands/SettingProvider')
 
 if (config.loud) requestDebug(request, (type, data) => console.log(`${type} ${data.debugId} : ${data.uri || data.statusCode}`))
 
@@ -32,6 +33,8 @@ class DiscordBot {
       commandPrefix: config.commandPrefix || '!',
       unknownCommandResponse: false
     })
+
+    this.bot.setProvider(new SettingProvider())
 
     // Instantiate the shard's Cache singleton to interface with the main process.
     // A global variable is used here because the cache is dependent on the client
@@ -66,7 +69,7 @@ class DiscordBot {
       .registerDefaultCommands({
         ping: false,
         commandState: false,
-        prefix: false,
+        prefix: true,
         help: false
       })
       .registerCommandsIn(path.join(__dirname, 'commands'))

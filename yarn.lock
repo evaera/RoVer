@@ -382,14 +382,6 @@ destroy@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
 
-"discord.js-commando@https://github.com/Gawdl3y/discord.js-commando.git#5036567d6654a7c92528e68b22a591ad2c172db5":
-  version "0.9.0"
-  resolved "https://github.com/Gawdl3y/discord.js-commando.git#5036567d6654a7c92528e68b22a591ad2c172db5"
-  dependencies:
-    common-tags "^1.0.0"
-    escape-string-regexp "^1.0.0"
-    require-all "^2.0.0"
-
 "discord.js-commando@https://github.com/Gawdl3y/discord.js-commando.git#bade5966ef8e5e5a81c60850c66afb158a4881dc":
   version "0.9.0"
   resolved "https://github.com/Gawdl3y/discord.js-commando.git#bade5966ef8e5e5a81c60850c66afb158a4881dc"
@@ -398,9 +390,9 @@ destroy@~1.0.4:
     escape-string-regexp "^1.0.0"
     require-all "^2.0.0"
 
-"discord.js@https://github.com/hydrabolt/discord.js.git#229eb2be2da11563c3c9978664e050044de720df":
+"discord.js@https://github.com/hydrabolt/discord.js.git#352bd13e6f590e12d5e2e3be0cf836e929cef74b":
   version "12.0.0-dev"
-  resolved "https://github.com/hydrabolt/discord.js.git#229eb2be2da11563c3c9978664e050044de720df"
+  resolved "https://github.com/hydrabolt/discord.js.git#352bd13e6f590e12d5e2e3be0cf836e929cef74b"
   dependencies:
     pako "^1.0.0"
     prism-media "^0.0.2"

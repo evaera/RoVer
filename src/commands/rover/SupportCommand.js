@@ -7,11 +7,11 @@ class AnnounceChannelCommand extends Command {
       name: 'support',
       aliases: ['server'],
       userPermissions: [],
-      description: 'Posts an invite link to the Official RoVer Discord where you can easily get help.',
+      description: 'Posts an invite link to the Official RoVer Discord where you can easily get help.'
     })
   }
 
   async fn (msg) {
-    msg.reply('The invite URL to the Official RoVer Discord is: discord.gg/UgrYcCS');
+    msg.reply('The invite URL to the Official RoVer Discord is: discord.gg/UgrYcCS')
   }
 }

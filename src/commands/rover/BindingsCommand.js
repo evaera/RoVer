@@ -61,7 +61,7 @@ class BindingsCommand extends Command {
 
       groupBindingsText += `${this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
 
-      groupBindingsText = Util.getBindingText(binding)
+      groupBindingsText += Util.getBindingText(binding)
 
       groupBindingsText += '```\n'
 

@@ -159,6 +159,11 @@ class DiscordBot {
     if (member.user.bot) return
 
     let server = await this.getServer(member.guild.id)
+
+    if (server.getSetting('joinDM') === false) {
+      return
+    }
+
     let discordMember = await server.getMember(member.id)
     if (!member) return
     let action = await discordMember.verify()

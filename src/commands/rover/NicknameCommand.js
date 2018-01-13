@@ -6,13 +6,13 @@ class NicknameCommand extends Command {
     super(client, {
       name: 'nickname',
       aliases: ['rovernickname'],
-      description: '`<true|false>` Set whether or not new users will be nicknamed to their Roblox name. Default true',
+      description: '`<on|off>` Set whether or not new users will be nicknamed to their Roblox name. Default on',
 
       args: [
         {
           key: 'state',
           label: 'state',
-          prompt: 'Should verified members get nicknamed? (true|false)',
+          prompt: 'Should verified members get nicknamed? (on|off)',
           type: 'boolean'
         }
       ]

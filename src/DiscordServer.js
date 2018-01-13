@@ -12,6 +12,7 @@ const DefaultSettings = {
   verifiedRole: null,
   verifiedRemovedRole: null,
   nicknameUsers: true,
+  joinDM: true,
   announceChannel: null,
   nicknameFormat: '%USERNAME%',
   welcomeMessage: 'Welcome to %SERVER%, %USERNAME%!',

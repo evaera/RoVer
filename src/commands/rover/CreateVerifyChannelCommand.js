@@ -6,7 +6,7 @@ class CreateVerifyChannelCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'createverifychannel',
-      aliases: ['rovercreateverifychannel', 'createverify'],
+      aliases: ['rovercreateverifychannel', 'createverify', 'createverificationchannel', 'createverification'],
       description: 'Creates a channel category with instructions and a channel for users to verify themselves'
     })
   }

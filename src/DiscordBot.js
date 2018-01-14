@@ -175,13 +175,15 @@ class DiscordBot {
     if (!member) return
     let action = await discordMember.verify()
 
-    if (action.status) {
-      member.send(server.getWelcomeMessage(action, member))
-    } else if (!action.status && action.nonFatal) {
-      member.send(`Welcome to ${member.guild.name}! You are already verified, but something went wrong when updating your roles. Try running \`${member.guild.commandPrefix}verify\` in the server for more information.`)
-    } else {
-      member.send(`Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Verifying your account is quick and safe and doesn't require any information other than your username. All you have to do is either join a game or put a code in your profile, and you're in!\n\nVisit the following link to verify your Roblox account: ${Util.getVerifyLink(member.guild)}`)
-    }
+    try {
+      if (action.status) {
+        member.send(server.getWelcomeMessage(action, member))
+      } else if (!action.status && action.nonFatal) {
+        member.send(`Welcome to ${member.guild.name}! You are already verified, but something went wrong when updating your roles. Try running \`${member.guild.commandPrefix}verify\` in the server for more information.`)
+      } else {
+        member.send(`Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Verifying your account is quick and safe and doesn't require any information other than your username. All you have to do is either join a game or put a code in your profile, and you're in!\n\nVisit the following link to verify your Roblox account: ${Util.getVerifyLink(member.guild)}`)
+      }
+    } catch (e) {}
   }
 
   /**

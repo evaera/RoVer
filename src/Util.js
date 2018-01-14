@@ -68,10 +68,23 @@ module.exports = {
     return output.join(', ')
   },
 
+  /**
+   * Returns an md5 hash of the input string.
+   * This is used for a key for a group binding. The key is the hash of the json of the rank binding.
+   * @param {string} string The input string.
+   * @returns {string} The md5 hash of the string.
+   */
   md5 (string) {
     return crypto.createHash('md5').update(string).digest('hex')
   },
 
+  /**
+   * Gets group rank binding text for a binding.
+   * Turns a rank binding object into a human-readable format.
+   * @param {object} binding The binding object.
+   * @param {boolean} [addCodeBlock=false] Whether or not to wrap the binding in markdown code block.
+   * @returns {string} The binding in human-readable format.
+   */
   getBindingText (binding, addCodeBlock = false) {
     let bindingMessage = addCodeBlock ? '```markdown\n' : ''
     for (let [index, group] of binding.groups.entries()) {
@@ -88,5 +101,17 @@ module.exports = {
     }
 
     return addCodeBlock ? bindingMessage + '\n```' : bindingMessage
+  },
+
+  /**
+   * Gets the user-facing link for the verification registry.
+   * This is not used for actually checking against the registry.
+   * This is for functionality in the future where we want to know where the user came from to help make sure that
+   * they are on the right account on the website by making sure the user is in the guild they came from.
+   * @param {Guild} guild The guild this link is being generated for.
+   * @returns {string} The link to the verification site
+   */
+  getVerifyLink (guild) {
+    return `https://verify.eryn.io` // /?from=${guild.id}`
   }
 }

@@ -1,4 +1,5 @@
 const Command = require('../Command')
+const Util = require('../../Util')
 
 module.exports =
 class CreateVerifyChannelCommand extends Command {
@@ -49,7 +50,7 @@ class CreateVerifyChannelCommand extends Command {
 
     this.server.setSetting('verifyChannel', verifyChannel.id)
 
-    instructionsChannel.send(`This server uses a Roblox verification system. In order to unlock all the features of this server, you'll need to verify your Roblox account with your Discord account!\n\nVisit https://verify.eryn.io and follow the instructions. Then, say \`${msg.guild.commandPrefix}verify\` in ${verifyChannel} and it will update you accordingly.`)
+    instructionsChannel.send(`This server uses a Roblox verification system. In order to unlock all the features of this server, you'll need to verify your Roblox account with your Discord account!\n\nVisit ${Util.getVerifyLink(msg.guild)} and follow the instructions. Then, say \`${msg.guild.commandPrefix}verify\` in ${verifyChannel} and it will update you accordingly.`)
 
     msg.reply(`Created channels ${verifyChannel} and ${instructionsChannel}. You can delete the default message in the instructions channel and replace it with your own if you wish.`)
   }

@@ -21,7 +21,7 @@ class BindingsCommand extends Command {
   getRoleName (id) {
     let role = this.server.server.roles.get(id)
     if (role) return role.name
-    return '<Deleted role, delete this binding.>'
+    return '<Deleted role>'
   }
 
   async fn (msg) {

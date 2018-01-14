@@ -352,7 +352,7 @@ class DiscordMember {
 
           return status({
             status: false,
-            error: ':wave: You must be new! Please go to https://verify.eryn.io and follow the instructions on the page in order to get verified.'
+            error: `:wave: You must be new! Please go to ${Util.getVerifyLink(this.discordServer.server)} and follow the instructions on the page in order to get verified.`
           })
         case 429:
         // This client has exceeded the amount of requests allowed in a 60 second period.

@@ -6,6 +6,7 @@ class UpdateCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'update',
+      properName: 'Update',
       aliases: ['roverupdate'],
       description: '`<Discord User>` Forcibly update verification status of a user, same as them running !verify. Make sure you @mention the user.',
 

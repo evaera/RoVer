@@ -7,6 +7,7 @@ class BindingsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'bindings',
+      properName: 'Bindings',
       aliases: ['listbindings', 'roverbindings'],
       description: 'Displays a list of bound roles'
     })

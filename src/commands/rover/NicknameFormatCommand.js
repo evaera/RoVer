@@ -5,8 +5,9 @@ class NicknameFormatCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'nicknameformat',
+      properName: 'NicknameFormat',
       aliases: ['rovernicknameformat'],
-      description: '`<format>` Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are %USERNAME%, %USERID%, %SERVER%, %DISCORDNAME%, and %DISCORDID%. Example: %USERNAME% - (%USERID%). Default `%USERNAME%`.',
+      description: "`<format>` Set the format RoVer will use when setting users' nicknames. Available replacements are %USERNAME%, %USERID%, %SERVER%, %DISCORDNAME%, and %DISCORDID%. Example:` %USERNAME% - (%USERID%)`. Default `%USERNAME%`.",
 
       args: [
         {

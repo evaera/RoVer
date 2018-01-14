@@ -4,9 +4,10 @@ module.exports =
 class NotVerifiedRoleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'notverifiedrole',
-      aliases: ['roververifiedremovedrole', 'verifiedremovedrole', 'rovernotverifiedrole', 'unverifiedrole'],
-      description: '`<Discord Role>` Set the role that members will lose when verified successfully. Default none',
+      name: 'unverifiedrole',
+      properName: 'UnverifiedRole',
+      aliases: ['roververifiedremovedrole', 'verifiedremovedrole', 'rovernotverifiedrole', 'notverifiedrole'],
+      description: '`<Discord Role>` Set the role that unverified users will get, and then lose when they verify. Default none',
 
       args: [
         {

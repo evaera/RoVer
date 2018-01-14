@@ -5,6 +5,7 @@ class JoinMessageCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'joindm',
+      properName: 'JoinDM',
       aliases: ['roverjoindm'],
       description: '`<on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default on',
 

@@ -5,6 +5,7 @@ class NicknameCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'nickname',
+      properName: 'Nickname',
       aliases: ['rovernickname'],
       description: '`<on|off>` Set whether or not new users will be nicknamed to their Roblox name. Default on',
 

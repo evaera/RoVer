@@ -5,6 +5,7 @@ class UnbindGroupCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'unbind',
+      properName: 'Unbind',
       aliases: ['roverunbindgrouprank', 'unbindgrouprank', 'unbindrank'],
       description: '`<Discord Role>` Unbind a group rank',
 

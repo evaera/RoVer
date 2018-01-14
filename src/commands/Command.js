@@ -9,6 +9,7 @@ class Command extends Commando.Command {
 
     super(client, info)
 
+    this.properName = info.properName
     this.userPermissions = info.userPermissions || ['MANAGE_GUILD']
     this.discordBot = this.client.discordBot
   }

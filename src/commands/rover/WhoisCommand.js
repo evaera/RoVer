@@ -7,9 +7,10 @@ class WhoisCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'whois',
+      properName: 'Whois',
       aliases: ['roblox'],
       userPermissions: [],
-      description: "`<person>` Get a verified person's ROBLOX & profile link.",
+      description: "`<user>` Get a user's Roblox profile link.",
 
       args: [
         {

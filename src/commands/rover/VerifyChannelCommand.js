@@ -5,6 +5,7 @@ class VerifyChannelCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'verifychannel',
+      properName: 'VerifyChannel',
       aliases: ['roververifychannel', 'verificationchannel'],
       description: '`<Discord Channel>` Set a channel that the bot will delete all messages in except for verification messages. Default none.',
 

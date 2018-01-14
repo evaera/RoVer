@@ -24,7 +24,7 @@ class VerifiedRoleCommand extends Command {
     let role = args.role
     if (role) {
       if (this.server.isRoleInUse(role.id)) {
-        msg.reply('That role is already in use. (verified role, not verified role, or from a group binding). Run `!bindings` to see all role bindings.')
+        msg.reply(`That role is already in use. (verified role, not verified role, or from a group binding). Run \`${msg.guild.commandPrefix}bindings\` to see all role bindings.`)
       } else {
         this.server.setSetting('verifiedRole', role.id)
         msg.reply(`Set verified role to ${role.name}`)

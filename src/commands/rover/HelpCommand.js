@@ -12,7 +12,7 @@ class HelpCommand extends Command {
 
   async fn (msg) {
     let commandGroup = this.client.registry.groups.get('rover')
-    let lines = commandGroup.commands.map(cmd => `**!${cmd.name}:** ${cmd.description}`).join('\n\n').split('\n')
+    let lines = commandGroup.commands.map(cmd => `**${msg.guild.commandPrefix}${cmd.name}:** ${cmd.description}`).join('\n\n').split('\n')
     let output = ''
     for (let line of lines) {
       if (output.length + line.length > 1900) {

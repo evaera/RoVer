@@ -56,12 +56,16 @@ After you add the bot to your server, you can customize RoVer with the following
 
 - `!RoVer` - Displays a list of commands
 - `!VerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`.
-- `!NotVerifiedRole <exact role name>` - Set the role that non-verified members will get. Default `null`.
-- `!Nickname <true|false>` - Set whether or not new users will be nicknamed to their Roblox name. Default `true`.
+- `!UnverifiedRole <exact role name>` - Set the role that non-verified members will get. Default `null`.
+- `!CreateVerifyChannel` Creates a channel category with verification instructions for new members and a channel for users to verify themselves.
+- `!Nickname <true|false>` - Set whether or not new users will be nicknamed to their Roblox name. Default `on`.
+- `!JoinDM <on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default `on`.
 - `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!NicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
 - `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`.
 - `!BindRank <"Discord Role"> <group_id>:<rank_id>` Binds Roblox group membership or group rank to a Discord role. Put the Discord role name in quotes. See section below for details.
+- `!Support` - Posts a link to the official RoVer Discord server
+- `!VerifyChannel <channel>` - Set a channel that the bot will delete all messages in except for verification messages. Default `null`.
 - `!Unbind <role name>` - Unbinds this role from any group ranks.
 - `!UnbindAll` - Removes all group bindings configured for this server.
 - `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.

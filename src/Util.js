@@ -87,6 +87,11 @@ module.exports = {
    */
   getBindingText (binding, addCodeBlock = false) {
     let bindingMessage = addCodeBlock ? '```markdown\n' : ''
+
+    if (binding.groups == null) {
+      return `\nInvalid Group Format - Unbind role ${binding.role} to fix this problem.\n`
+    }
+
     for (let [index, group] of binding.groups.entries()) {
       if (index > 0) bindingMessage += '...or\n'
 

@@ -219,6 +219,10 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   deleteGroupRankBinding (roleid) {
+    if (roleid === 'all') {
+      return this.setSetting('groupRankBindings', [])
+    }
+
     let rankBindings = this.getSetting('groupRankBindings')
 
     for (let i = 0; i < rankBindings.length; i++) {

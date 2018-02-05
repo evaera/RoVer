@@ -71,7 +71,7 @@ class DiscordBot {
         ping: false,
         commandState: false,
         prefix: true,
-        help: false
+        help: true
       })
       .registerCommandsIn(path.join(__dirname, 'commands'))
 

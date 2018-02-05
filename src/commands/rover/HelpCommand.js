@@ -7,22 +7,12 @@ class HelpCommand extends Command {
       name: 'roverhelp',
       properName: 'RoVer',
       aliases: ['rover'],
-      description: 'Displays a list of commands'
+      description: 'Displays a description of RoVer'
     })
   }
 
   async fn (msg) {
-    let commandGroup = this.client.registry.groups.get('rover')
-    let lines = commandGroup.commands.map(cmd => `**${msg.guild.commandPrefix}${cmd.properName}** ${cmd.description}`).join('\n\n').split('\n')
-    let output = `Welcome to RoVer, a bot that makes integrating your server with Roblox easy. If you need help, you can join our support server by using the ${msg.guild.commandPrefix}support command.\n\n`
-    for (let line of lines) {
-      if (output.length + line.length > 1900) {
-        msg.reply(output)
-        output = ''
-      }
-
-      output += line + '\n'
-    }
+    let output = `Welcome to RoVer, a bot that makes integrating your server with Roblox easy. If you need help, you can join our support server by using the \`${msg.guild.commandPrefix}support\` command. You can run \`${msg.guild.commandPrefix}help\` to see a list of commands. For instructions, please see the README at https://github.com/evaera/RoVer/blob/master/README.md.`
 
     msg.reply(output)
   }

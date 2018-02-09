@@ -195,7 +195,7 @@ class DiscordServer {
         returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0])
       } else {
         // Check the rank of the user in the Roblox group.
-        let groups = await Cache.get('playergroups', userid)
+        let groups = await Cache.get(`bindings.${userid}`, "__groups")
         let rank = 0
         if (!groups){
 
@@ -208,7 +208,7 @@ class DiscordServer {
             throw new Error('Group rank HTTP request is malformed or in unknown format')
           }
 
-          Cache.set('playergroups', userid, groups)
+          Cache.set(`bindings.${userid}`, "__groups", groups)
         }
 
         for (let groupObj of groups) {

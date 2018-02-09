@@ -158,18 +158,6 @@ class DiscordServer {
     return newBinding
   }
 
-  getRankInGroup (groupid, model) {
-    console.log("Lets get it poppin'")
-    let localGroups = JSON.parse(model)
-    for (let groupObj of localGroups) {
-      if (groupObj.Id == groupid) {
-        console.log("Group Id Confirmed!")
-        return groupObj.Rank
-      }
-    }
-    return 0
-  }
-
   /**
    * Checks if a group rank binding passes or fails for
    * a specific Roblox user.

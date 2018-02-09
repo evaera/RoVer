@@ -222,12 +222,15 @@ class DiscordServer {
         // Check the rank of the user in the Roblox group.
         const groups = await DiscordServer.getRobloxMemberGroups(userid)
 
+        let rank = 0
         for (let groupObj of groups) {
           if (groupObj.Id.toString() === group.id) {
-            returnValue = group.ranks.includes(groupObj.Rank)
+            rank = groupObj.Rank
             break
           }
         }
+
+        returnValue = group.ranks.includes(rank)
 
         if (returnValue) break
       }

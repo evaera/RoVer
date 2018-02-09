@@ -6,7 +6,7 @@
     <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
 </p>
 
-[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-130K%2B-brightgreen.svg)](https://eryn.io/RoVer)
+[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-230K%2B-brightgreen.svg)](https://eryn.io/RoVer) [![Discord Servers](https://img.shields.io/badge/total%20servers-17K%2B-brightgreen.svg)](https://eryn.io/RoVer)
 [![Discord](https://img.shields.io/discord/321647685629378561.svg)](https://discord.gg/UgrYcCS)
 
 # What is it?
@@ -14,13 +14,13 @@
 RoVer is an open source, drop-in verification bot that will allow your members to safely authenticate their Roblox account on your Discord server. This empowers your Roblox community with the following advantages:
 
 - Speak with confidence, because everyone is who their name says they are.
-- Adding an extra step between trolls & spammers and your server will reduce unwanted activity drastically.
-- The verification database is already populated with thousands of Discord-Roblox account links, so it's possible users will already be verified when they join your server.
+- Adding an extra step between trolls & spammers and your server will drastically reduce unwanted activity.
+- The verification database is already populated with hundreds of thousands of Discord-Roblox account links, so it's possible users will already be verified when they join your server.
 - The hosted version of RoVer does not have any API rate limiting and will automatically be able to update roles the second the user verifies. (If you host RoVer yourself, the user will have to run a command in order for the verification to take place.)
 
 # How does it work?
 
-RoVer uses the same verification system used by the [Roblox Community Discord](http://rbx.community) server, a web app that lives at [verify.eryn.io](https://verify.eryn.io). RoVer makes use of its [public API](https://verify.eryn.io/api).
+RoVer is the official Discord bot for the [verify.eryn.io](https://verify.eryn.io) verification registry. RoVer uses its [public API](https://verify.eryn.io/api), so this API is available to you in your own projects as well.
 
 ## Step 1
 
@@ -54,7 +54,8 @@ You can also clone this repository and host it yourself and make any modificatio
 
 After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission in the Discord server in order to use these commands.
 
-- `!RoVer` - Displays a list of commands
+- `!RoVer` - Displays a description of RoVer.
+- `!Help` - Displays a list of commands.
 - `!VerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`.
 - `!UnverifiedRole <exact role name>` - Set the role that non-verified members will get. Default `null`.
 - `!CreateVerifyChannel` Creates a channel category with verification instructions for new members and a channel for users to verify themselves.
@@ -70,19 +71,28 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!UnbindAll` - Removes all group bindings configured for this server.
 - `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.
 - `!Whois <@user>` - Get a link to a verified user's profile.
+- `!Prefix <prefix>` - Change the command prefix. (Default: `!`)
 
 You can run these commands without arguments to set them back to their default state.
 
 When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
 
-You should probably make a read-only channel in the server explaining these processes to your members.
+You should probably make a read-only channel in the server explaining these processes to your members. (You can do this automatically with the !CreateVerifyChannel command)
 
 RoVer will ignore users with a role called "RoVer Bypass", so you can give them custom names or give people a member role when they aren't actually verified or in a group.
 
-## Setting up roles for Roblox group members and group ranks
-Group bindings can be created to keep Discord roles up to date with Roblox group ranks. You can find the Roblox group ranks for each role in a Roblox group on the Roblox group admin > roles page; it is a number between 1 and 255.
+## Integrating with Roblox Groups
+Group bindings can be created to keep Discord roles up to date with Roblox group ranks. RoVer does not support or plan to support changing group ranks or shouts on Roblox.com, and you should be wary of any bots that offer this functionality, as this introduces a major security risk.
 
-The first argument is the Discord role name (which needs to be in quotation marks if it has spaces). After that, you can pass an unlimited amount of groups with a list of ranks for each group. If the user meets the requirements for *any* of these groups, they will be considered to have the role. The groups are in the format `<groupid>:<rank>` (e.g. `372372:135`). You can also provide a list of ranks, like `<groupid>:<rank>,<rank>,<rank>` (e.g. `372372:135,150,250`). You can also provide a range of ranks instead of listing them out, like `1-130`, e.g. (`372372:1-130,255`, which will count for anyone who has a rank between 1 and 130 [inclusive] or the rank 255). You can also bind the rank `0` to bind rank for people who are *not* in the group.
+- You can find the Roblox group ranks for each role in a Roblox group on the Roblox group admin > roles page; it is a number between 1 and 255. 
+- The first argument in the BindRank command is the Discord role name.
+  - This needs to be in quotation marks if it has spaces
+- After that, you can pass an unlimited amount of groups with a list of ranks for each group.
+  - The groups are in the format `<groupid>:<rank>` (e.g. `372372:135`).
+    - You can provide a list of ranks, like `<groupid>:<rank>,<rank>,<rank>` (e.g. `372372:135,150,250`).
+    - You can provide a range of ranks instead of listing them out, like `1-130`, e.g. (`372372:1-130,255`, which will count for anyone who has a rank between 1 and 130 [inclusive] or the rank 255).
+     - You can also bind the rank `0` to bind rank for people who are *not* in the group.
+  - If the user meets the requirements for *any* of the groups, they will be considered to have the role.
 
 See more examples below:
 

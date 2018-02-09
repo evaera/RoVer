@@ -75,6 +75,10 @@ class DiscordServer {
       console.log(`${this.settingsPath} appears to be corrupted.`)
     }
 
+    if (this.settings.commando != null && this.settings.commando.prefix != null) {
+      this.server._commandPrefix = this.settings.commando.prefix
+    }
+
     this.cleanupRankBindings()
   }
 

@@ -5,13 +5,6 @@ class SettingProvider {
     client.on('commandPrefixChange', (guild, prefix) => {
       this.set(guild, 'prefix', prefix)
     })
-
-    for (let guild of client.guilds.values()) {
-      let prefix = await this.get(guild, 'prefix')
-      if (prefix) {
-        guild._commandPrefix = prefix
-      }
-    }
   }
 
   async getSettings (guild) {

@@ -163,6 +163,31 @@ class DiscordServer {
   }
 
   /**
+   * Fetches and caches a Roblox user's group information.
+   * @static
+   * @param {int} userid The roblox user id
+   * @returns {object} The group information
+   * @memberof DiscordServer
+   */
+  static async getRobloxMemberGroups (userid) {
+    let groups = await Cache.get(`bindings.${userid}`, '__groups')
+    if (!groups) {
+      groups = await request({
+        uri: `http://api.roblox.com/users/${userid}/groups`,
+        json: true
+      })
+
+      if (!groups) {
+        throw new Error('Group rank HTTP request is malformed or in unknown format')
+      }
+
+      Cache.set(`bindings.${userid}`, '__groups', groups)
+    }
+
+    return groups
+  }
+
+  /**
    * Checks if a group rank binding passes or fails for
    * a specific Roblox user.
    * @static
@@ -195,19 +220,7 @@ class DiscordServer {
         returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0])
       } else {
         // Check the rank of the user in the Roblox group.
-        let groups = await Cache.get(`bindings.${userid}`, '__groups')
-        if (!groups) {
-          groups = await request({
-            uri: `http://api.roblox.com/users/${userid}/groups`,
-            json: true
-          })
-
-          if (!groups) {
-            throw new Error('Group rank HTTP request is malformed or in unknown format')
-          }
-
-          Cache.set(`bindings.${userid}`, '__groups', groups)
-        }
+        const groups = await DiscordServer.getRobloxMemberGroups(userid)
 
         for (let groupObj of groups) {
           if (groupObj.Id.toString() === group.id) {

@@ -35,7 +35,7 @@ class DiscordBot {
       unknownCommandResponse: false
     })
 
-    this.bot.setProvider(new SettingProvider())
+    // this.bot.setProvider(new SettingProvider())
 
     // Instantiate the shard's Cache singleton to interface with the main process.
     // A global variable is used here because the cache is dependent on the client

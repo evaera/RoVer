@@ -296,6 +296,8 @@ class DiscordMember {
       if (this.discordServer.getSetting('groupRankBindings').length > 0) {
         status(':mag_right: Checking group ranks...')
 
+        await DiscordServer.getRobloxMemberGroups(data.robloxId)
+
         let promises = []
         for (let binding of this.discordServer.getSetting('groupRankBindings')) {
           // We use a Promise.then here so that they all execute asynchronously.

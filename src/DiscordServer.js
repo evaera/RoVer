@@ -195,17 +195,26 @@ class DiscordServer {
         returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0])
       } else {
         // Check the rank of the user in the Roblox group.
-        let rank = await request({
-          uri: `https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=${userid}&groupid=${group.id}`
-        })
+        let groups = await Cache.get(`bindings.${userid}`, '__groups')
+        if (!groups) {
+          groups = await request({
+            uri: `http://api.roblox.com/users/${userid}/groups`,
+            json: true
+          })
 
-        if (!rank.startsWith('<Value Type="integer">')) {
-          throw new Error('Group rank HTTP request is malformed or in unknown format')
+          if (!groups) {
+            throw new Error('Group rank HTTP request is malformed or in unknown format')
+          }
+
+          Cache.set(`bindings.${userid}`, '__groups', groups)
         }
 
-        rank = parseInt(rank.replace(/[^\d]/g, ''), 10)
-
-        returnValue = group.ranks.includes(rank)
+        for (let groupObj of groups) {
+          if (groupObj.Id.toString() === group.id) {
+            returnValue = group.ranks.includes(groupObj.Rank)
+            break
+          }
+        }
 
         if (returnValue) break
       }

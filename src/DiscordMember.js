@@ -227,6 +227,21 @@ class DiscordMember {
         }
       }
 
+      // See if the server currently uses nicknames.
+      if (this.discordServer.getSetting('nicknameUsers')) {
+        let apiRank = await DiscordServer.getRobloxMemberGroups(data.robloxId)
+
+        for (let groups of apiRank) 
+        { // Parse the groupId as an Int.
+          if (parseInt(groups.Id) == parseInt(this.discordServer.getSetting('nicknameGroup'))) {
+            data.groupRank = groups.Role
+            break;
+          } else {
+            data.groupRank = "Guest" // If player is not in a group, return Guest.
+          }
+        }   
+      }
+
       // Cache the data for future use.
       Cache.set('users', this.id, data)
 
@@ -336,6 +351,7 @@ class DiscordMember {
         status: true,
         robloxUsername: data.robloxUsername,
         robloxId: data.robloxId,
+        groupRank: data.groupRank,
         discordId: this.member.id,
         discordName: this.member.user.username
       })

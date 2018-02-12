@@ -12,6 +12,7 @@ const DefaultSettings = {
   verifiedRole: null,
   verifiedRemovedRole: null,
   nicknameUsers: true,
+  nicknameGroup: null,
   joinDM: true,
   verifyChannel: null,
   announceChannel: null,

@@ -103,7 +103,11 @@ class WhoisCommand extends Command {
             Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
           }
         } catch (e) {}
-
+        
+        let roverContributor = "";
+        
+        if (member.user.id == "113691352327389188" || member.user.id == "242727621518032896" || member.user.id == "152144229936660482" || member.user.id == "88410718314971136" || member.user.id == "196716483567419403") roverContributor = "[CONTRIBUTOR]"; 
+        
         // Make sure the data is cached so we don't have to use the API in the future
         Cache.set('users', id, data)
 
@@ -111,7 +115,7 @@ class WhoisCommand extends Command {
           title: 'View Profile',
           url: profileLink,
           author: {
-            name: data.robloxUsername,
+            name: data.robloxUsername + roverContributor,
             url: profileLink,
             icon_url: avatarURL
           },

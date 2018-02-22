@@ -2,6 +2,8 @@
 const Command = require('../Command')
 const request = require('request-promise')
 
+const Contributors = require('../../Contributors.json')
+
 module.exports =
 class WhoisCommand extends Command {
   constructor (client) {
@@ -110,8 +112,7 @@ class WhoisCommand extends Command {
         
         // Make sure the data is cached so we don't have to use the API in the future
         Cache.set('users', id, data)
-
-        editMessage.edit({embed: {
+        var embed = {
           title: 'View Profile',
           url: profileLink,
           author: {
@@ -129,7 +130,11 @@ class WhoisCommand extends Command {
             { name: 'Builders Club', value: bc, inline: true },
             { name: 'Past Usernames', value: pastNames, inline: true }
           ]
-        }})
+        };
+
+        if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: "RoVer Contributor", inline: true });
+
+        editMessage.edit({embed}).catch(console.error);
       } else {
         editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
       }

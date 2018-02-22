@@ -16,5 +16,8 @@
   "main": "src/index.js",
   "repository": "https://github.com/evaera/RoVer",
   "author": "evaera",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "standard"
+  }
 }

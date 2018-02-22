@@ -106,10 +106,6 @@ class WhoisCommand extends Command {
           }
         } catch (e) {}
         
-        let roverContributor = "";
-        
-        if (member.user.id == "113691352327389188" || member.user.id == "242727621518032896" || member.user.id == "152144229936660482" || member.user.id == "88410718314971136" || member.user.id == "196716483567419403") roverContributor = "[CONTRIBUTOR]"; 
-        
         // Make sure the data is cached so we don't have to use the API in the future
         Cache.set('users', id, data)
         

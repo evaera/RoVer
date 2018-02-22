@@ -62,11 +62,11 @@ class WhoisCommand extends Command {
         }
 
         if (apiUserData.Username) {
-          data.robloxUsername = encodeURIComponent(apiUserData.Username)
+          data.robloxUsername = apiUserData.Username
         }
         
         let profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
-        let avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${data.robloxUsername}`
+        let avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${encodeURIComponent(data.robloxUsername)}`
 
         let bio = 'Bio failed to load'
         let joinDate = 'Unknown'
@@ -86,7 +86,7 @@ class WhoisCommand extends Command {
           bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
           if (!bc) {
             let response = await request({
-              uri: `https://www.roblox.com/Thumbs/BCOverlay.ashx?username=${data.robloxUsername}`,
+              uri: `https://www.roblox.com/Thumbs/BCOverlay.ashx?username=${encodeURIComponent(data.robloxUsername)}`,
               simple: false,
               resolveWithFullResponse: true
             })

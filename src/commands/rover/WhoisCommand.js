@@ -105,15 +105,15 @@ class WhoisCommand extends Command {
             Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
           }
         } catch (e) {}
-        
+
         // Make sure the data is cached so we don't have to use the API in the future
         Cache.set('users', id, data)
-        
+
         let embed = {
           title: 'View Profile',
           url: profileLink,
           author: {
-            name: data.robloxUsername + roverContributor,
+            name: data.robloxUsername,
             url: profileLink,
             icon_url: avatarURL
           },
@@ -127,11 +127,11 @@ class WhoisCommand extends Command {
             { name: 'Builders Club', value: bc, inline: true },
             { name: 'Past Usernames', value: pastNames, inline: true }
           ]
-        };
+        }
 
-        if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: "RoVer Contributor", inline: true });
+        if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'RoVer Contributor', inline: true })
 
-        editMessage.edit({embed}).catch(console.error);
+        editMessage.edit({embed}).catch(console.error)
       } else {
         editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
       }

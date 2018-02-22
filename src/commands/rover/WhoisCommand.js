@@ -112,7 +112,8 @@ class WhoisCommand extends Command {
         
         // Make sure the data is cached so we don't have to use the API in the future
         Cache.set('users', id, data)
-        var embed = {
+        
+        let embed = {
           title: 'View Profile',
           url: profileLink,
           author: {

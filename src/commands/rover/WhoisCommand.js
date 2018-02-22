@@ -62,9 +62,9 @@ class WhoisCommand extends Command {
         }
 
         if (apiUserData.Username) {
-          data.robloxUsername = apiUserData.Username
+          data.robloxUsername = encodeURIComponent(apiUserData.Username)
         }
-
+        
         let profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
         let avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${data.robloxUsername}`
 

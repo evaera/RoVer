@@ -89,7 +89,7 @@ class DiscordMember {
           break
         }
       }
-      nicknameData.groupRank = nicknameData.groupRank || 'Guest'
+      nicknameData.groupRank = nicknameData.groupRank || '[Guest]'
     }
     return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), nicknameData, this.member)
   }

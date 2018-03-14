@@ -59,7 +59,7 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!VerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`.
 - `!UnverifiedRole <exact role name>` - Set the role that non-verified members will get. Default `null`.
 - `!CreateVerifyChannel` Creates a channel category with verification instructions for new members and a channel for users to verify themselves.
-- `!Nickname <true|false>` - Set whether or not new users will be nicknamed to their Roblox name. Default `on`.
+- `!Nickname <on|off>` - Set whether or not new users will be nicknamed to their Roblox name. Default `on`.
 - `!JoinDM <on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default `on`.
 - `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!NicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
@@ -72,7 +72,7 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!UnbindAll` - Removes all group bindings configured for this server.
 - `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.
 - `!Whois <@user>` - Get a link to a verified user's profile.
-- `!Prefix <prefix>` - Change the command prefix. (Default: `!`)
+- `@RoVer prefix <prefix>` - Change the command prefix. (Default: `!`)
 
 You can run these commands without arguments to set them back to their default state.
 

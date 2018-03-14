@@ -84,7 +84,8 @@ class DiscordMember {
 
       for (let groups of apiRank) {
         if (parseInt(groups.Id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
-          nicknameData.groupRank = groups.Role
+          let rankMatch = groups.Role.match(/(.+(?:\]|\)|\}|\|))/)
+          nicknameData.groupRank = rankMatch ? rankMatch[1] : groups.Role
           break
         }
       }

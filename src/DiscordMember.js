@@ -84,7 +84,7 @@ class DiscordMember {
       let apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
 
       for (let groups of apiRank) {
-        if (groups.Id == this.discordServer.getSetting('nicknameGroup')) {
+        if (groups.Id === this.discordServer.getSetting('nicknameGroup')) {
           nicknameData.groupRank = groups.Role
           break
         } else {

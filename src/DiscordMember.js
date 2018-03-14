@@ -75,7 +75,7 @@ class DiscordMember {
     let nicknameData = {
       robloxUsername: data.robloxUsername,
       robloxId: data.robloxId,
-      groupRank: null,
+      groupRank: ' ',
       discordId: data.discordId,
       discordName: data.discordName
     }

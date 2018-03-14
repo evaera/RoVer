@@ -62,7 +62,7 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!Nickname <true|false>` - Set whether or not new users will be nicknamed to their Roblox name. Default `on`.
 - `!JoinDM <on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default `on`.
 - `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
-- `!NicknameGroup <groupid>` - Set the group that is used for nicknames.
+- `!NicknameGroup <groupid>` - Set the group that is used for the %RANK% replacement in nickname formats, allowing you to have group ranks in your users' nicknames. Note that nicknames are limited to 32 characters, and names that are too long will be truncated.
 - `!NicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%RANK%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
 - `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`.
 - `!BindRank <"Discord Role"> <group_id>:<rank_id>` Binds Roblox group membership or group rank to a Discord role. Put the Discord role name in quotes. See section below for details.

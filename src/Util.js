@@ -16,7 +16,7 @@ module.exports = {
     let replacements = {
       '%USERNAME%': data.robloxUsername,
       '%USERID%': data.robloxId,
-      '%RANK%': data.groupRank || "",
+      '%RANK%': data.groupRank || '​',
       '%DISCORDNAME%': data.discordName || '',
       '%DISCORDID%': data.discordId || ''
     }

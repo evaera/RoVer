@@ -71,8 +71,28 @@ class DiscordMember {
    * @returns {string} The formatted nickname
    * @memberof DiscordMember
    */
-  getNickname (data) {
-    return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), data, this.member)
+  async getNickname (data) {
+    let nicknameData = {
+      robloxUsername: data.robloxUsername,
+      robloxId: data.robloxId,
+      groupRank: null,
+      discordId: data.discordId,
+      discordName: data.discordName
+    }
+
+    if (this.discordServer.getSetting('nicknameGroup')) {
+      let apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
+
+      for (let groups of apiRank) {
+        if (groups.Id == this.discordServer.getSetting('nicknameGroup')) {
+          nicknameData.groupRank = groups.Role
+          break
+        } else {
+          nicknameData.groupRank = ' '
+        }
+      }
+    }
+    return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), nicknameData, this.member)
   }
 
   /**
@@ -268,7 +288,7 @@ class DiscordMember {
       }
 
       if (this.discordServer.getSetting('nicknameUsers')) {
-        let nickname = this.getNickname(data).substring(0, 32)
+        let nickname = (await this.getNickname(data)).substring(0, 32)
         if (this.member.displayName !== nickname) {
           try {
             await this.member.setNickname(nickname)

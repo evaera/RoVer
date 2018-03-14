@@ -2,7 +2,7 @@
 const config = require('./data/client.json')
 const Util = require('./Util')
 
-const request = require('request-promise').defaults({pool: {maxSockets: Infinity}})
+const request = require('request-promise').defaults({ pool: { maxSockets: Infinity } })
 
 let DiscordServer
 
@@ -71,8 +71,29 @@ class DiscordMember {
    * @returns {string} The formatted nickname
    * @memberof DiscordMember
    */
-  getNickname (data) {
-    return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), data, this.member)
+
+  async getNickname (data) {
+    let nicknameData = {
+      robloxUsername: data.robloxUsername,
+      robloxId: data.robloxId,
+      groupRank: null,
+      discordId: data.discordId,
+      discordName: data.discordName
+    }
+
+    if (this.discordServer.getSetting('nicknameGroup')) {
+      let apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
+
+      for (let groups of apiRank) {
+        if (groups.Id == this.discordServer.getSetting('nicknameGroup')) {
+          nicknameData.groupRank = groups.Role
+          break
+        } else {
+          nicknameData.groupRank = ' '
+        }
+      }
+    }
+    return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), nicknameData, this.member)
   }
 
   /**
@@ -122,9 +143,9 @@ class DiscordMember {
         editIndex++
         let thisIndex = editIndex
 
-        // A self-invoking async function so that we can delay the message sending if necessary,
-        // but we don't delay the return value.
-        ;(async () => {
+          // A self-invoking async function so that we can delay the message sending if necessary,
+          // but we don't delay the return value.
+          ; (async () => {
           if ((new Date()).getTime() - lastEdit < 1000) {
             await Util.sleep(1000 - ((new Date()).getTime() - lastEdit))
 
@@ -268,7 +289,7 @@ class DiscordMember {
       }
 
       if (this.discordServer.getSetting('nicknameUsers')) {
-        let nickname = this.getNickname(data).substring(0, 32)
+        let nickname = await this.getNickname(data)// .substring(0, 32)
         if (this.member.displayName !== nickname) {
           try {
             await this.member.setNickname(nickname)
@@ -309,9 +330,9 @@ class DiscordMember {
               if (!this.server.roles.has(binding.role)) return
 
               if (state === true) {
-                this.member.addRole(binding.role).catch(e => {})
+                this.member.addRole(binding.role).catch(e => { })
               } else {
-                this.member.removeRole(binding.role).catch(e => {})
+                this.member.removeRole(binding.role).catch(e => { })
               }
             })
             // .catch(e => {
@@ -343,13 +364,13 @@ class DiscordMember {
       // Status was not "ok".
       switch (data.errorCode) {
         case 404:
-        // User isn't in the database.
+          // User isn't in the database.
 
-        // Add the "Not Verified" role to the user.
+          // Add the "Not Verified" role to the user.
           if (this.discordServer.getSetting('verifiedRemovedRole')) {
             try {
               await this.member.addRole(this.discordServer.getSetting('verifiedRemovedRole'))
-            } catch (e) {}
+            } catch (e) { }
           }
 
           return status({
@@ -357,13 +378,13 @@ class DiscordMember {
             error: `:wave: You must be new! Please go to ${Util.getVerifyLink(this.discordServer.server)} and follow the instructions on the page in order to get verified.`
           })
         case 429:
-        // This client has exceeded the amount of requests allowed in a 60 second period.
+          // This client has exceeded the amount of requests allowed in a 60 second period.
           return status({
             status: false,
             error: 'Server is busy. Please try again later.'
           })
         default:
-        // Something else is wrong.
+          // Something else is wrong.
           return status({
             status: false,
             error: "Sorry, it looks like there's something wrong with the verification registry. Please try again later."

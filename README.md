@@ -148,7 +148,7 @@ To create a role for all members who are either in the DevForum, have OBC, or is
 
 `!BindRank DevForumOrOBC DevForum OBC 372372:255`
 
-## Ranks in nicknames
+### Ranks in nicknames
 
 If you want users' group ranks to appear in their nickname, like "[PVT] evaera", follow these steps:
 

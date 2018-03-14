@@ -14,7 +14,7 @@ class NicknameGroupCommand extends Command {
           key: 'groupid',
           label: 'groupid',
           prompt: 'Nickname group',
-          type: 'int',
+          type: 'string',
           infinite: false
         }
       ]

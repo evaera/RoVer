@@ -76,7 +76,7 @@ class DiscordMember {
       robloxUsername: data.robloxUsername,
       robloxId: data.robloxId,
       discordId: data.discordId,
-      discordName: data.discordName
+      discordName: data.discordName 
     }
 
     if (this.discordServer.getSetting('nicknameGroup')) {
@@ -85,7 +85,7 @@ class DiscordMember {
       for (let groups of apiRank) {
         if (parseInt(groups.Id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
           let rankMatch = groups.Role.match(/(.+(?:\]|\)|\}|\|))/)
-          nicknameData.groupRank = rankMatch ? rankMatch[1] : groups.Role
+          nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.Role}]`
           break
         }
       }

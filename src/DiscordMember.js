@@ -66,7 +66,7 @@ class DiscordMember {
 
   /**
    * Gets a member's nickname, formatted with this server's specific settings.
-   *
+   *  
    * @param {object} data String replacement data
    * @returns {string} The formatted nickname
    * @memberof DiscordMember
@@ -75,7 +75,6 @@ class DiscordMember {
     let nicknameData = {
       robloxUsername: data.robloxUsername,
       robloxId: data.robloxId,
-      groupRank: null,
       discordId: data.discordId,
       discordName: data.discordName
     }
@@ -91,8 +90,6 @@ class DiscordMember {
           nicknameData.groupRank = 'Guest'
         }
       }
-    } else {
-      nicknameData.groupRank = ' '
     }
     return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), nicknameData, this.member)
   }

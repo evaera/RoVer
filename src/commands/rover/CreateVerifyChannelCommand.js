@@ -56,7 +56,7 @@ class CreateVerifyChannelCommand extends Command {
 
       msg.reply(`Created channels ${verifyChannel} and ${instructionsChannel}. You can delete the default message in the instructions channel and replace it with your own if you wish.`)
     } catch (err) {
-      msg.reply(`You do not have permission to run that command.`)
+      msg.reply(`:no_entry_sign: RoVer does not have permission to create channels in this server.`)
     }
   }
 }

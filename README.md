@@ -6,7 +6,7 @@
     <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
 </p>
 
-[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-230K%2B-brightgreen.svg)](https://eryn.io/RoVer) [![Discord Servers](https://img.shields.io/badge/total%20servers-17K%2B-brightgreen.svg)](https://eryn.io/RoVer)
+[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-275K%2B-brightgreen.svg)](https://eryn.io/RoVer) [![Discord Servers](https://img.shields.io/badge/total%20servers-17K%2B-brightgreen.svg)](https://eryn.io/RoVer)
 [![Discord](https://img.shields.io/discord/321647685629378561.svg)](https://discord.gg/UgrYcCS)
 
 # What is it?
@@ -22,29 +22,10 @@ RoVer is an open source, drop-in verification bot that will allow your members t
 
 RoVer is the official Discord bot for the [verify.eryn.io](https://verify.eryn.io) verification registry. RoVer uses its [public API](https://verify.eryn.io/api), so this API is available to you in your own projects as well.
 
-## Step 1
-
-The user signs in with their Discord account.
-
-<p align="center">
-    <img src="http://i.imgur.com/oojqyop.png" alt="Step 1" />
-</p>
-
-## Step 2
-
-The user chooses how they want to verify: by joining a ROBLOX game, or by adding a code to their profile.
-
-<p align="center">
-    <img src="http://i.imgur.com/t2ZTWtm.png" alt="Step 1" />
-</p>
-
-## Step 3
-
-The user is verified and can participate in your community.
-
-<p align="center">
-    <img src="http://i.imgur.com/D0gnqf1.png" alt="Step 1" />
-</p>
+With nearly 300,000 accounts linked already, it's likely many of your users will already be verified and will have to take no new steps. For brand new users, the process looks something like this:
+1. The user signs in with their Discord account.
+2. The user chooses how they want to verify: by joining a ROBLOX game, or by adding a code to their profile.
+3. The user is verified and can participate in your community.
 
 # Getting Started with RoVer
 
@@ -54,27 +35,41 @@ You can also clone this repository and host it yourself and make any modificatio
 
 After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission in the Discord server in order to use these commands.
 
-- `!RoVer` - Displays a description of RoVer.
-- `!Help` - Displays a list of commands.
-- `!VerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`.
-- `!UnverifiedRole <exact role name>` - Set the role that non-verified members will get. Default `null`.
-- `!CreateVerifyChannel` Creates a channel category with verification instructions for new members and a channel for users to verify themselves.
+## Commands
+### Server Configuration
+#### Nickname configuration
 - `!Nickname <on|off>` - Set whether or not new users will be nicknamed to their Roblox name. Default `on`.
-- `!JoinDM <on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default `on`.
-- `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!NicknameFormat <format>` - Set the nickname format, so you could have the nickname include their roblox id or discord name, for example. Available replacements are Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Example: `%USERNAME% - (%USERID%)`. Default `%USERNAME%`.
 - `!NicknameGroup <integer>` - The group ID to use for the %RANK% replacement in nicknames. This allows you to make your usernames look like [this](https://i.imgur.com/4VA1vq9.png). Note that if your group rank name on Roblox.com starts with something in brackets like "[PVT] Private", only the "[PVT]" will be used for the nickname. Otherwise, the entire rank name is used.
-- `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`.
-- `!BindRank <"Discord Role"> <group_id>:<rank_id>` Binds Roblox group membership or group rank to a Discord role. Put the Discord role name in quotes. See section below for details.
-- `!Support` - Posts a link to the official RoVer Discord server
+#### Channel configuration
+- `!AnnounceChannel <exact channel name>` - Set a channel that the bot will post a message to every time someone verifies. Default `null`.
 - `!VerifyChannel <channel>` - Set a channel that the bot will delete all messages in except for verification messages. Default `null`.
-- `!Unbind <role name>` - Unbinds this role from any group ranks.
-- `!UnbindAll` - Removes all group bindings configured for this server.
-- `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.
-- `!Whois <@user>` - Get a link to a verified user's profile.
+- `!CreateVerifyChannel` Creates a channel category with verification instructions for new members and a channel for users to verify themselves.
+#### Other
+- `!JoinDM <on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default `on`.
+- `!WelcomeMessage <welcome message>` - Set the message the user gets when they verify. Will be sent in DMs unless they use `!verify` command. Available replacements are `%USERNAME%`, `%USERID%`, `%SERVER`, `%DISCORDNAME%`, and `%DISCORDID%`. Default: `Welcome to the server, %USERNAME%!`.
 - `@RoVer prefix <prefix>` - Change the command prefix. (Default: `!`)
 
-You can run these commands without arguments to set them back to their default state.
+### Ranks
+- `!VerifiedRole <exact role name>` - Set the role that verified members will get. Default `null`.
+- `!UnverifiedRole <exact role name>` - Set the role that non-verified members will get. Default `null`.
+- `!BindRank <"Discord Role"> <group_id>:<rank_id>` Binds Roblox group membership or group rank to a Discord role. Put the Discord role name in quotes. See section below for details.
+- `!Unbind <role name>` - Unbinds this role from any group ranks.
+- `!UnbindAll` - Removes all group bindings configured for this server.
+
+### Help and Support
+- `!RoVer` - Displays a description of RoVer.
+- `!Help` - Displays a list of commands.
+- `!Support` - Posts a link to the official RoVer Discord server
+
+### User administration
+- `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Make sure you @mention the user.
+
+### User commands
+- `!Whois <@user>` - Get a link to a verified user's profile.
+- `!Verify` - Verifies the user who runs this command.
+
+You can run any of these commands by themselves with no arguments to set them back to their default state.
 
 When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
 
@@ -85,11 +80,11 @@ RoVer will ignore users with a role called "RoVer Bypass", so you can give them 
 ## Integrating with Roblox Groups
 Group bindings can be created to keep Discord roles up to date with Roblox group ranks. RoVer does not support or plan to support changing group ranks or shouts on Roblox.com, and you should be wary of any bots that offer this functionality, as this introduces a major security risk.
 
-- You can find the Roblox group ranks for each role in a Roblox group on the Roblox group admin > roles page; it is a number between 1 and 255. 
 - The first argument in the BindRank command is the Discord role name.
   - This needs to be in quotation marks if it has spaces
 - After that, you can pass an unlimited amount of groups with a list of ranks for each group.
   - The groups are in the format `<groupid>:<rank>` (e.g. `372372:135`).
+    - You can find the Roblox group ranks for each role in a Roblox group on the Roblox group admin > roles page; it is a number between 1 and 255.
     - You can provide a list of ranks, like `<groupid>:<rank>,<rank>,<rank>` (e.g. `372372:135,150,250`).
     - You can provide a range of ranks instead of listing them out, like `1-130`, e.g. (`372372:1-130,255`, which will count for anyone who has a rank between 1 and 130 [inclusive] or the rank 255).
      - You can also bind the rank `0` to bind rank for people who are *not* in the group.
@@ -134,7 +129,7 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 - `DevForum` - DevForum full membership (devforum.roblox.com)
 - `DevForumBasic` - DevForum basic user
 - `DevForumAccess` - DevForum access (either full membership or basic user)
-- `HasAsset <asset id>` - Checks if user owns an asset, takes the id as an argument
+- `HasAsset:<asset id>` - Checks if user owns an asset, takes the id as an argument
 - `BC` - Builders club
 - `TBC`
 - `OBC`
@@ -152,6 +147,15 @@ To create a role for all members who own a specific asset, use the following com
 To create a role for all members who are either in the DevForum, have OBC, or is in group 372372 as an owner:
 
 `!BindRank DevForumOrOBC DevForum OBC 372372:255`
+
+## Ranks in nicknames
+
+If you want users' group ranks to appear in their nickname, like "[PVT] evaera", follow these steps:
+
+- Ensure the RANK is present somewhere in the nickname format: `!NickanmeFormat %RANK% %USERNAME%`
+- Configure the group id to be used for the ranks: `!NicknameGroup 372372`
+- RoVer will automatically pick up on rank labels, so if the group rank is named "[PVT] Private", RoVer will only use the "[PVT]" for the nickname. If there is no label in the rank name, then RoVer will use the entire rank name instead.
+
 
 # Self-hosting instructions
 

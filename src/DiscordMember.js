@@ -75,7 +75,7 @@ class DiscordMember {
     let nicknameData = {
       robloxUsername: data.robloxUsername,
       robloxId: data.robloxId,
-      groupRank: ' ',
+      groupRank: null,
       discordId: data.discordId,
       discordName: data.discordName
     }
@@ -88,7 +88,7 @@ class DiscordMember {
           nicknameData.groupRank = groups.Role
           break
         } else {
-          nicknameData.groupRank = ' '
+          nicknameData.groupRank = 'Guest'
         }
       }
     } else {

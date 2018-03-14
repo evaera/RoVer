@@ -86,10 +86,9 @@ class DiscordMember {
         if (parseInt(groups.Id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
           nicknameData.groupRank = groups.Role
           break
-        } else {
-          nicknameData.groupRank = 'Guest'
         }
       }
+      nicknameData.groupRank = nicknameData.groupRank || 'Guest'
     }
     return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), nicknameData, this.member)
   }

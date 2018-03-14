@@ -16,6 +16,7 @@ module.exports = {
     let replacements = {
       '%USERNAME%': data.robloxUsername,
       '%USERID%': data.robloxId,
+      '%RANK%': data.groupRank || '',
       '%DISCORDNAME%': data.discordName || '',
       '%DISCORDID%': data.discordId || ''
     }
@@ -27,7 +28,7 @@ module.exports = {
     }
 
     return formatString.replace(/%\w+%/g, (all) => {
-      return replacements[all] || all
+      return typeof replacements[all] !== 'undefined' ? replacements[all] : all
     })
   },
 

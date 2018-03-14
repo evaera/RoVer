@@ -13,7 +13,7 @@ class CreateVerifyChannelCommand extends Command {
   }
 
   async fn (msg) {
-    try { 
+    try {
       let category = await msg.guild.channels.create('Verification', {
         type: 'category',
         reason: `${msg.member.displayName} ran CreateVerifyChannel command`
@@ -27,7 +27,7 @@ class CreateVerifyChannelCommand extends Command {
           id: role,
           allow: ['READ_MESSAGE_HISTORY', 'VIEW_CHANNEL'],
           deny: ['SEND_MESSAGES', 'ADD_REACTIONS']
-       })
+        })
 
         overwritesVerify.push({
           id: role,

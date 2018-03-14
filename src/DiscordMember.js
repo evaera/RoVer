@@ -91,6 +91,8 @@ class DiscordMember {
           nicknameData.groupRank = ' '
         }
       }
+    } else {
+      nicknameData.groupRank = ' '
     }
     return Util.formatDataString(this.discordServer.getSetting('nicknameFormat'), nicknameData, this.member)
   }

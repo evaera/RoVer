@@ -25,8 +25,8 @@ class NicknameGroupCommand extends Command {
   async fn (msg, args) {
     let groupId = args.groupid
     if (groupId) {
-        this.server.setSetting('nicknameGroup', args.groupid)
-        msg.reply(`Set nickname group to \`${args.groupid}\``)
+      this.server.setSetting('nicknameGroup', args.groupid)
+      msg.reply(`Set nickname group to \`${args.groupid}\``)
     } else {
       this.server.setSetting('nicknameGroup', undefined)
       msg.reply('Nickname group has been removed.')

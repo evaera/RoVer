@@ -23,7 +23,6 @@ class NicknameGroupCommand extends Command {
   }
 
   async fn (msg, args) {
-    let groupId = args.groupid
     if (groupId) {
       this.server.setSetting('nicknameGroup', args.groupid)
       msg.reply(`Set nickname group to \`${args.groupid}\``)

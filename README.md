@@ -33,9 +33,12 @@ The quickest and easiest way to use RoVer is to [add the hosted version](https:/
 
 You can also clone this repository and host it yourself and make any modifications you wish.
 
-After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission or a role named "RoVer Admin" in the Discord server in order to use these commands.
+When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
+
+You should probably make a read-only channel in the server explaining these processes to your members. (You can do this automatically with the !CreateVerifyChannel command). After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission or a role named "RoVer Admin" in the Discord server in order to use these commands.
 
 ## Commands
+You can run any of these commands by themselves with no arguments to set them back to their default state.
 ### Server Configuration
 #### Nickname configuration
 - `!Nickname <on|off>` - Set whether or not new users will be nicknamed to their Roblox name. Default `on`.
@@ -69,15 +72,12 @@ After you add the bot to your server, you can customize RoVer with the following
 - `!Whois <@user>` - Get a link to a verified user's profile.
 - `!Verify` - Verifies the user who runs this command.
 
-You can run any of these commands by themselves with no arguments to set them back to their default state.
+## Magic Roles
+Magic roles are special role names that can give specific users in your server special power. There are no commands needed to use these, all you need to do is create a role in your server matching these exact names and assign them to users. These roles are checked for by name exactly, so if you create these roles on your server, ensure that they are spelled and capitalized exactly the same as they appear below.
 
-When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
-
-You should probably make a read-only channel in the server explaining these processes to your members. (You can do this automatically with the !CreateVerifyChannel command)
-
-- RoVer will ignore users with a role called "RoVer Bypass", so you can give them custom names or give people a member role when they aren't actually verified or in a group.
-- RoVer will allow anyone with a role called "RoVer Admin" to run any of the server commands, even if they don't have Manage Server.
-- You can also give users a role called "RoVer Updater", which will let the holder of that role run !update on others, but no other admin commands.
+- `RoVer Bypass` - RoVer will ignore users with a role called "RoVer Bypass", so you can give them custom names or give people a member role when they aren't actually verified or in a group.
+- `RoVer Admin` - RoVer will allow anyone with a role called "RoVer Admin" to run any of the server commands, even if they don't have Manage Server.
+- `RoVer Updater` - You can also give users a role called "RoVer Updater", which will let the holder of that role run !update on others, but no other admin commands.
 
 ## Integrating with Roblox Groups
 Group bindings can be created to keep Discord roles up to date with Roblox group ranks. RoVer does not support or plan to support changing group ranks or shouts on Roblox.com, and you should be wary of any bots that offer this functionality, as this introduces a major security risk.

@@ -33,7 +33,7 @@ The quickest and easiest way to use RoVer is to [add the hosted version](https:/
 
 You can also clone this repository and host it yourself and make any modifications you wish.
 
-After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission in the Discord server in order to use these commands.
+After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission or a role named "RoVer Admin" in the Discord server in order to use these commands.
 
 ## Commands
 ### Server Configuration
@@ -75,7 +75,9 @@ When a user joins your server, the bot will automatically check if they are alre
 
 You should probably make a read-only channel in the server explaining these processes to your members. (You can do this automatically with the !CreateVerifyChannel command)
 
-RoVer will ignore users with a role called "RoVer Bypass", so you can give them custom names or give people a member role when they aren't actually verified or in a group.
+- RoVer will ignore users with a role called "RoVer Bypass", so you can give them custom names or give people a member role when they aren't actually verified or in a group.
+- RoVer will allow anyone with a role called "RoVer Admin" to run any of the server commands, even if they don't have Manage Server.
+- You can also give users a role called "RoVer Updater", which will let the holder of that role run !update on others, but no other admin commands.
 
 ## Integrating with Roblox Groups
 Group bindings can be created to keep Discord roles up to date with Roblox group ranks. RoVer does not support or plan to support changing group ranks or shouts on Roblox.com, and you should be wary of any bots that offer this functionality, as this introduces a major security risk.

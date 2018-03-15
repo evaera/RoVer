@@ -14,7 +14,7 @@
             <a target="_blank" href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264" class="button">Add to your server</a>
             <a target="_blank" href="https://github.com/evaera/RoVer" class="button">View Source on GitHub</a>
             <br><br>
-            <h2><span id="count">50,000+</span> Robloxians verified</h2> 
+            <h2><span id="count">250,000+</span> Robloxians verified</h2> 
             <br>
             <small>Like RoVer? Please <a href="https://www.patreon.com/erynlynn" target="_blank">support me on Patreon</a> if you can spare some dollars! :)</small>
         </header>
@@ -29,9 +29,9 @@
                         <p>Completely open source and self-hostable.</p>
                     </div>
                     <div>
-                        <p><strong>Group integration</strong> &mdash; Full support for giving roles to group members at, above, or below a certain rank.</p>
+                        <p><strong>Group integration</strong> &mdash; Full support for giving roles to group members meeting an array of customizable parameters.</p>
                         <p>Support for other role integrations, such as user owning an asset (like a gamepass or badge) or DevForum membership.</p>
-                        <p>With tens of thousands of users verified already, Roblox Discord veterans won't have to verify again to join your community.</p>
+                        <p>With hundreds of thousands of users verified already, Roblox Discord veterans won't have to verify again to join your community.</p>
                         <p>Actively maintained and updated.</p>
                     </div>
                     <div class="clear"></div>
@@ -41,11 +41,8 @@
         <section>
             <div class="inner">
                 <h1>Getting Set Up</h1>
-                <p>After you've <a target="_blank" href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264">added the bot to your server</a>, the default behavior will be to nickname anyone who verifies to their Roblox username. Users can verify themselves manually by running <code>!verify</code>, but most times the process will be automatic if you use the official hosted version.</p>
-                <p>To enable the "Verified" role, run the command <code>!VerifiedRole "Role Name Here"</code>. Note that if the role has spaces, you must encapsulate the name with double quoation marks.</p>
-                <p>A full list of commands can be found <a href="https://github.com/evaera/RoVer#getting-started-with-rover" target="_blank">here</a>, or by running <code>!RoVer</code> in your server. Anyone with the "Manage Server" permission in your server will be able to change RoVer settings.</p>
-                <p>Finally, you should probably make a read-only informational channel telling your users to visit <code>https://verify.eryn.io</code> in order to verify themselves. You can then deny "Read Messages" from users with the verified role on this channel. Note that if you intend to allow users to run <code>!verify</code>, you will need to allow them a place to do so.</p>
-                <p>To learn how to use the group integration feature, please see <a href="https://github.com/evaera/RoVer#setting-up-roles-for-roblox-group-members-and-group-ranks" target="_blank">this section</a>. Remember to encapsulate role names with spaces in double quotations, otherwise you will configure the integrations incorrectly.</p>
+                
+                <p>For the most up-to-date guide, please see the project's <a href="https://github.com/evaera/RoVer/blob/master/README.md#getting-started-with-rover">README file</a>. There, you will find detailed explanations of how the bot works, list of commands, and more. If you still have trouble, feel free to join our community <a href="https://discord.gg/UgrYcCS">support server</a>.</p>
             </div>
         </section>
         <section>
@@ -60,7 +57,6 @@
 
                 <h2>Verification</h2>
                 <ul>
-                    <li>There is not currently a way to un-verify a Discord account.</li>
                     <li>You can change your verified account (or update your username) at any time, just follow the verification process again.</li>
                 </ul>
 
@@ -69,7 +65,6 @@
                     <li><strong>The bot is constantly adding and taking away roles from users!</strong> &mdash; Most likely cause is that you've bound the verification role to a group as well. Bind the group rank to a different Discord role.</li>
                     <li><strong>How do I turn off the announcement channel?</strong> &mdash; Run the AnnounceChannel command without any arguments.</li>
                     <li><strong>Can I change role names after they are set up in Rover?</strong> &mdash; Yes, roles are saved by id, not name.</li>
-                    <li><strong>Is it possible to get a specific Roblox user's Discord name?</strong> &mdash; No, you can only get Roblox name from Discord user, not the other way around.</li>
                     <li><strong>Can I be verified as different users in different servers?</strong> &mdash; No, verifications are global across all servers, even if they are self-hosted.</li>
                 </ul>
             </div>

@@ -135,5 +135,17 @@ module.exports = {
 
   async NBC (user) {
     return module.exports.BuildersClub(user, 'NBC')
+  },
+
+  async Clan (user, groupid, DiscordServer) {
+    const userGroups = await DiscordServer.getRobloxMemberGroups(user.id)
+
+    for (let group of userGroups) {
+      if (group.Id === groupid) {
+        return group.IsInClan
+      }
+    }
+
+    return false
   }
 }

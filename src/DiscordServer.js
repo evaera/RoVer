@@ -216,7 +216,7 @@ class DiscordServer {
 
     for (let group of binding.groups) {
       if (VirtualGroups[group.id]) {
-        returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0])
+        returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0], DiscordServer)
 
         if (returnValue) break
       } else {

@@ -216,9 +216,9 @@ class DiscordServer {
 
     for (let group of binding.groups) {
       if (VirtualGroups[group.id]) {
-        // If this group is a virtual group, then execute that function instead.
-        // 'all' is remapped to >1. Since this is the equivalent of no argument, we set it to null here.
         returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0])
+
+        if (returnValue) break
       } else {
         // Check the rank of the user in the Roblox group.
         const groups = await DiscordServer.getRobloxMemberGroups(userid)

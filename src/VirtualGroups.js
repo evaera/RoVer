@@ -137,6 +137,13 @@ module.exports = {
     return module.exports.BuildersClub(user, 'NBC')
   },
 
+  /**
+   * Returns true if a given user is in a given group's clan
+   * @param {object} user The user to check
+   * @param {number} groupid The group id
+   * @param {DiscordServer} DiscordServer DiscordServer static reference
+   * @returns {boolean} True if user is in the clan
+   */
   async Clan (user, groupid, DiscordServer) {
     const userGroups = await DiscordServer.getRobloxMemberGroups(user.id)
 
@@ -147,5 +154,60 @@ module.exports = {
     }
 
     return false
+  },
+
+  /**
+   * Returns true if a given user is an ally or enemy of a given group.
+   * @param {object} user The user to check
+   * @param {number} groupid The group id
+   * @param {DiscordServer} DiscordServer DiscordServer static reference
+   * @param {"allies" | "enemies"} [relation] The relationship type to check.
+   * @returns {boolean} True if user is in the clan
+   */
+  async _Relationship (user, groupid, DiscordServer, relation = 'allies') {
+    if (relation !== 'allies' && relation !== 'enemies') {
+      throw new Error('Invalid relationship type!')
+    }
+
+    const userGroups = await DiscordServer.getRobloxMemberGroups(user.id)
+
+    // Important to cache group relationships, as this is an expensive operation
+    let allies = await Cache.get(`groups.${groupid}`, relation)
+    if (allies == null) {
+      allies = []
+      // Roblox ally/enemy APIs are paginated, only get a max of 10 pages
+      let page = 1
+      while (page < 10) {
+        const content = await request(`https://api.roblox.com/groups/${groupid}/${relation}?page=${page}`, {
+          json: true
+        })
+
+        for (let group of content.Groups) {
+          allies.push(group.Id)
+        }
+
+        if (content.FinalPage) {
+          break
+        } else {
+          page++
+        }
+      }
+
+      Cache.set(`groups.${groupid}`, relation, allies)
+    }
+
+    for (let group of userGroups) {
+      if (allies.includes(group.Id)) {
+        return true
+      }
+    }
+  },
+
+  async Ally (user, groupid, DiscordServer) {
+    return module.exports._Relationship(user, groupid, DiscordServer, 'allies')
+  },
+
+  async Enemy (user, groupid, DiscordServer) {
+    return module.exports._Relationship(user, groupid, DiscordServer, 'enemies')
   }
 }

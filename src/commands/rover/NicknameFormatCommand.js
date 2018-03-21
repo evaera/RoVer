@@ -15,7 +15,7 @@ class NicknameFormatCommand extends Command {
           label: 'format',
           prompt: 'Nickname format',
           type: 'string',
-          infinite: true,
+          infinite: false,
           default: false
         }
       ]
@@ -24,7 +24,6 @@ class NicknameFormatCommand extends Command {
 
   async fn (msg, args) {
     if (args.format) {
-      args.format = args.format.join(' ')
       this.server.setSetting('nicknameFormat', args.format)
       msg.reply(`Set nickname format to \`${args.format}\``)
     } else {

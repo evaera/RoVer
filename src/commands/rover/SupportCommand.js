@@ -13,6 +13,6 @@ class AnnounceChannelCommand extends Command {
   }
 
   async fn (msg) {
-    msg.reply('The invite URL to the Official RoVer Discord is: discord.gg/mrFqgex')
+    msg.reply('The invite URL to the Official RoVer Discord is: discord.gg/7yfwrat')
   }
 }

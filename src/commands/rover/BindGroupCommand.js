@@ -99,10 +99,7 @@ class BindGroupCommand extends Command {
     serverBindings.push(binding)
     this.server.setSetting('groupRankBindings', serverBindings)
 
-    let bindingSuccessMessage =
-      stripIndents`:white_check_mark: Successfully bound role "${args.role.name}".
-      \`\`\`markdown
-      `
+    let bindingSuccessMessage = `:white_check_mark: Successfully bound role "${args.role.name}".\`\`\`markdown\n`
 
     bindingSuccessMessage += Util.getBindingText(binding)
 

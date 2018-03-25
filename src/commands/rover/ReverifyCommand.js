@@ -8,7 +8,8 @@ class ReverifyCommand extends Command {
       name: 'reverify',
       properName: 'Reverify',
       aliases: ['roverreverify'],
-      description: 'Displays instructions on how to reverify'
+      description: 'Displays instructions on how to reverify',
+      userPermissions: []
     })
   }
 

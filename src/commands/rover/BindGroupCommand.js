@@ -43,7 +43,13 @@ class BindGroupCommand extends Command {
       let group = { id: groupId }
 
       if (groupId.match(/[^\d]/) && !VirtualGroups[groupId]) {
-        return msg.reply(`:no_entry_sign: You have attempted to bind an invalid group (\`${groupId}\`). Possible causes:\n\n- You forgot to put the Discord role name in quotation marks when it has spaces\n- You have attempted to bind an invalid group id. Group IDs must be a whole number or be a valid VirtualGroup name.`)
+        return msg.reply(
+          `:no_entry_sign: You have attempted to bind an invalid group (\`${groupId}\`). Possible causes:
+
+          - You forgot to put the Discord role name in quotation marks when it has spaces
+          - You may have used invalid syntax: must match pattern "group_id:rank", "group_id:rank,rank,rank", or "group_id:rank-rank". (Pattern uses colons \`:\`, not semicolons \`;\`.)
+          - You have attempted to bind an invalid group id. Group IDs must be a whole number or be a valid VirtualGroup name.`
+        )
       }
 
       if (ranksString != null) {

@@ -1,3 +1,4 @@
+const { stripIndents, oneLine } = require('common-tags')
 const Command = require('../Command')
 const Util = require('../../Util')
 const VirtualGroups = require('../../VirtualGroups.js')
@@ -31,7 +32,10 @@ class BindGroupCommand extends Command {
     let binding = {}
 
     if (this.server.isRoleInUse(args.role.id)) {
-      msg.reply(`:no_entry_sign: That role is already in use. (verified role, not verified role, or from a group binding). Run \`${msg.guild.commandPrefix}bindings\` to see all role bindings.`)
+      msg.reply(
+        oneLine`:no_entry_sign: That role is already in use. (verified role, not verified role, or from a group binding).
+        Run \`${msg.guild.commandPrefix}bindings\` to see all role bindings.`
+      )
       return
     }
 
@@ -44,11 +48,13 @@ class BindGroupCommand extends Command {
 
       if (groupId.match(/[^\d]/) && !VirtualGroups[groupId]) {
         return msg.reply(
-          `:no_entry_sign: You have attempted to bind an invalid group (\`${groupId}\`). Possible causes:
+          stripIndents`:no_entry_sign: You have attempted to bind an invalid group (\`${groupId}\`). Possible causes:
 
-          - You forgot to put the Discord role name in quotation marks when it has spaces
+          - You may have forgotten to put the Discord role name in quotation marks when it has spaces
+
           - You may have used invalid syntax: must match pattern "group_id:rank", "group_id:rank,rank,rank", or "group_id:rank-rank". (Pattern uses colons \`:\`, not semicolons \`;\`.)
-          - You have attempted to bind an invalid group id. Group IDs must be a whole number or be a valid VirtualGroup name.`
+
+          - You may have attempted to bind an invalid group id. Group IDs must be a whole number or be a valid VirtualGroup name.`
         )
       }
 
@@ -93,26 +99,15 @@ class BindGroupCommand extends Command {
     serverBindings.push(binding)
     this.server.setSetting('groupRankBindings', serverBindings)
 
-    let bindingSuccessMessage = `:white_check_mark: Successfully bound role "${args.role.name}".\n\`\`\`markdown\n`
+    let bindingSuccessMessage =
+      stripIndents`:white_check_mark: Successfully bound role "${args.role.name}".
+      \`\`\`markdown
+      `
 
     bindingSuccessMessage += Util.getBindingText(binding)
 
     bindingSuccessMessage += '```\n'
 
     msg.reply(bindingSuccessMessage)
-
-    // if (!all) {
-    //   if (binding.group.match(/[a-z]/i)) {
-    //     // This is a virtual group, since the id has letters.
-    //     msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Argument: \`${binding.rank}\`, Role: \`${args.role.name}\``)
-    //   } else {
-    //     msg.reply(`Added rank binding: Group: ${binding.group}, Rank: ${binding.rank || 'none'}, Role: ${args.role.name}, Comparison: ${binding.operator || 'eq'}`)
-    //   }
-    // } else if (binding.group.match(/[a-z]/i)) {
-    //   // This is a virtual group, since the id has letters.
-    //   msg.reply(`Added virtual group binding: Name: \`${binding.group}\`, Role: \`${args.role.name}\``)
-    // } else {
-    //   msg.reply(`Added rank binding for all members in group: Group: ${binding.group}, Role: ${args.role.name}`)
-    // }
   }
 }

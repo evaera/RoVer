@@ -206,6 +206,12 @@ class DiscordMember {
       errorAppend = "\n\nRoVer's position in the role list is below that of this user. With certain setups, this will prevent RoVer from working correctly. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
     }
 
+    if (options.message) {
+      // Clear the request cache so we get fresh information.
+      // We only want to clear on manually-invoked verifications.
+      await DiscordServer.clearMemberCache(this.id)
+    }
+
     status(':scroll: Checking the verification registry...')
     try {
       // Read user data from memory, or request it if there isn't any cached.
@@ -217,6 +223,9 @@ class DiscordMember {
           simple: false
         })
         freshData = true
+
+        // Cache the data for future use.
+        Cache.set('users', this.id, data)
       }
     } catch (e) {
       if (config.loud) console.log(e)
@@ -247,9 +256,6 @@ class DiscordMember {
           data.robloxUsername = apiUserData.Username
         }
       }
-
-      // Cache the data for future use.
-      Cache.set('users', this.id, data)
 
       // Check if these settings are enabled for this specific server,
       // if so, then put the member in the correct state.

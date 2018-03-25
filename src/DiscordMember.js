@@ -1,10 +1,12 @@
 /* global Cache */
+const { stripIndents } = require('common-tags')
 const config = require('./data/client.json')
 const Util = require('./Util')
 
 const request = require('request-promise').defaults({pool: {maxSockets: Infinity}})
 
 let DiscordServer
+const VerificationAttempts = new Map()
 
 /**
  * A representation of a Discord guild member.
@@ -333,10 +335,6 @@ class DiscordMember {
                 this.member.removeRole(binding.role).catch(e => {})
               }
             })
-            // .catch(e => {
-            //   if (config.loud) console.log(e.name)
-            //   channel.send('')
-            // })
           )
         }
 
@@ -351,6 +349,9 @@ class DiscordMember {
         }
       }
 
+      // Clear verification attempt history
+      VerificationAttempts.delete(this.id)
+
       return status({
         status: true,
         robloxUsername: data.robloxUsername,
@@ -362,27 +363,49 @@ class DiscordMember {
       // Status was not "ok".
       switch (data.errorCode) {
         case 404:
-        // User isn't in the database.
+          // User isn't in the database.
+          // Add the "Not Verified" role to the user.
 
-        // Add the "Not Verified" role to the user.
           if (this.discordServer.getSetting('verifiedRemovedRole')) {
             try {
               await this.member.addRole(this.discordServer.getSetting('verifiedRemovedRole'))
             } catch (e) {}
           }
 
+          let error = `:wave: You must be new! Please go to ${Util.getVerifyLink(this.discordServer.server)} and follow the instructions on the page in order to get verified.`
+
+          // Only trigger verification help message if this is a manually-invoked verification
+          if (options.message) {
+            if (VerificationAttempts.has(this.id) === false) {
+              VerificationAttempts.set(this.id, 0)
+            }
+
+            VerificationAttempts.set(this.id, VerificationAttempts.get(this.id) + 1)
+
+            if (VerificationAttempts.get(this.id) > 1) {
+              error =
+                stripIndents`:question: Looks like you are having trouble verifying your account! Here are some things you can try:
+
+                - Try visiting https://verify.eryn.io/ in an incognito / private browser window. (It's possible you are signed into the wrong Discord account in your browser)
+                - If you are using the profile code verification method, make sure that the code isn't getting filtered after you save it. If it is, try using the in-game method or generating a new code.
+                - Make sure you typed in the right Roblox username when trying to verify.`
+
+              VerificationAttempts.set(this.id, -5)
+            }
+          }
+
           return status({
             status: false,
-            error: `:wave: You must be new! Please go to ${Util.getVerifyLink(this.discordServer.server)} and follow the instructions on the page in order to get verified.`
+            error
           })
         case 429:
-        // This client has exceeded the amount of requests allowed in a 60 second period.
+          // This client has exceeded the amount of requests allowed in a 60 second period.
           return status({
             status: false,
             error: 'Server is busy. Please try again later.'
           })
         default:
-        // Something else is wrong.
+          // Something else is wrong.
           return status({
             status: false,
             error: "Sorry, it looks like there's something wrong with the verification registry. Please try again later."

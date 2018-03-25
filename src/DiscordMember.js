@@ -125,6 +125,23 @@ class DiscordMember {
       this.discordServer.cleanupRankBindings(options.message ? options.message.channel : undefined)
     }
 
+    if (options.message) {
+      // Verification cooldown
+      if (this.discordServer.verifyCooldowns.has(this.id) && Date.now() - this.discordServer.verifyCooldowns.get(this.id) < 5000) {
+        return {
+          status: false,
+          nonFatal: true,
+          error: ':alarm_clock: Please wait at least five seconds before trying to verify again.'
+        }
+      }
+
+      this.discordServer.verifyCooldowns.set(this.id, Date.now())
+
+      // Clear the request cache so we get fresh information.
+      // We only want to clear on manually-invoked verifications.
+      await DiscordServer.clearMemberCache(this.id)
+    }
+
     // If options.message is provided, we reply to that message with a status update
     // and edit it with new info throughout the verification. It's also called upon
     // this function returning output, so we need a default state for it to be a
@@ -204,12 +221,6 @@ class DiscordMember {
     // Create a warning to append to any errors. In some permission setups, RoVer is reliant on role positioning (specifically if it has administrator or not)
     if ((await this.server.members.fetch(this.bot.user.id)).highestRole.comparePositionTo(this.member.highestRole) < 1) {
       errorAppend = "\n\nRoVer's position in the role list is below that of this user. With certain setups, this will prevent RoVer from working correctly. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
-    }
-
-    if (options.message) {
-      // Clear the request cache so we get fresh information.
-      // We only want to clear on manually-invoked verifications.
-      await DiscordServer.clearMemberCache(this.id)
     }
 
     status(':scroll: Checking the verification registry...')

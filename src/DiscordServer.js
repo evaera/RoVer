@@ -38,6 +38,8 @@ class DiscordServer {
 
     this.server = this.bot.guilds.get(id)
 
+    this.verifyCooldowns = new Map()
+
     // Load this server's settings.
     this.settings = {}
     this.areSettingsLoaded = false

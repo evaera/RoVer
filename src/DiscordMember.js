@@ -236,7 +236,7 @@ class DiscordMember {
         freshData = true
 
         // Cache the data for future use.
-        Cache.set('users', this.id, data)
+        await Cache.set('users', this.id, data)
       }
     } catch (e) {
       if (config.loud) console.log(e)
@@ -266,6 +266,9 @@ class DiscordMember {
         if (apiUserData.Username) {
           data.robloxUsername = apiUserData.Username
         }
+
+        // Cache data again
+        Cache.set('users', this.id, data)
       }
 
       // Check if these settings are enabled for this specific server,

@@ -214,7 +214,7 @@ class DiscordBot {
     let {id, guilds} = args
 
     // Start off by clearing their global cache.
-    DiscordServer.clearMemberCache(id)
+    await DiscordServer.clearMemberCache(id)
 
     let firstRun = true
 

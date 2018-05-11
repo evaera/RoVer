@@ -76,8 +76,8 @@ class WhoisCommand extends Command {
           })
 
           joinDate = profileSource.match(/Join Date<p class=text-lead>(.*?)<li/)[1]
-          bio = profileSource.match(/<meta name=description content=".*? is one of millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ((?:.|\n)*?)"/m)[1]
-          pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1]
+          bio = profileSource.match(/<meta name=description content=".*? is one of the millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ?((?:.|\n)*?)"/m)[1].substr(0, 1024)
+          pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1].substr(0, 1024)
         } catch (e) {}
 
         let bc = 'Unknown'

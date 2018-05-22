@@ -61,7 +61,7 @@ You can run any of the commands that have all optional arguments by themselves t
 - `!Unbind <exact role name>` - Unbinds this role from any group ranks.
 - `!UnbindAll` - Removes all group bindings configured for this server.
 - `!Bindings` - Shows a list of all bound roles.
-- `!CreateGroupRanks <group_id>` - Creates Discord roles from all of the roles in a given group, and then binds them to the group.
+- `!CreateGroupRanks <group_id>` - Creates Discord roles from all of the roles in a given group, and then binds them to the group. (If a role already exists with a name matching a group rank, that role will be used instead of creating a new one.)
 
 ### Help and Support
 - `!RoVer` - Displays a description of RoVer.

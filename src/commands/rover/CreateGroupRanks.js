@@ -6,7 +6,7 @@ class CreateGroupRanksCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'creategroupranks',
-      properName: 'CreateVerifyChannel',
+      properName: 'CreateGroupRanks',
       aliases: ['rovercreategroupranks'],
       description: 'Creates Discord roles from all of the roles in a given group, and then binds them to the group.',
 
@@ -27,11 +27,13 @@ class CreateGroupRanksCommand extends Command {
 
       let serverBindings = this.server.getSetting('groupRankBindings')
       for (let role of Roles) {
-        const newRole = await msg.guild.roles.create({
+        const newRole = (await msg.guild.roles.find('name', role.Name)) || (await msg.guild.roles.create({
           name: role.Name,
           permissions: [],
           reason: `${msg.member.displayName} ran CreateGroupRanks command`
-        })
+        }))
+
+        this.server.deleteGroupRankBinding(newRole.id)
 
         serverBindings.push({
           role: newRole.id,
@@ -43,7 +45,7 @@ class CreateGroupRanksCommand extends Command {
       }
       this.server.setSetting('groupRankBindings', serverBindings)
 
-      msg.reply(`Created ${Roles.length} roles and bound them successfully.`)
+      msg.reply(`Created ${Roles.length} role bindings successfully (and created the roles if necessary).`)
     } catch (e) {
       msg.reply(`:no_entry_sign: RoVer does not have permission to create roles in this server.`)
     }

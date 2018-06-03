@@ -210,7 +210,7 @@ class DiscordMember {
     }
 
     // Ignore users with this specific role (to give server owners more power)
-    if (this.member.roles.find('name', 'RoVer Bypass')) {
+    if (this.member.roles.find(role => role.name === 'RoVer Bypass')) {
       return status({
         status: false,
         error: ':octagonal_sign: RoVer cannot act on users with the "RoVer Bypass" role.',
@@ -219,7 +219,7 @@ class DiscordMember {
     }
 
     // Create a warning to append to any errors. In some permission setups, RoVer is reliant on role positioning (specifically if it has administrator or not)
-    if ((await this.server.members.fetch(this.bot.user.id)).highestRole.comparePositionTo(this.member.highestRole) < 1) {
+    if ((await this.server.members.fetch(this.bot.user.id)).manageable) {
       errorAppend = "\n\nRoVer's position in the role list is below that of this user. With certain setups, this will prevent RoVer from working correctly. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
     }
 

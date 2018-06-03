@@ -27,7 +27,7 @@ class CreateGroupRanksCommand extends Command {
 
       let serverBindings = this.server.getSetting('groupRankBindings')
       for (let role of Roles) {
-        const newRole = (await msg.guild.roles.find('name', role.Name)) || (await msg.guild.roles.create({
+        const newRole = (await msg.guild.roles.find(guildRole => guildRole.name === role.Name)) || (await msg.guild.roles.create({
           name: role.Name,
           permissions: [],
           reason: `${msg.member.displayName} ran CreateGroupRanks command`

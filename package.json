@@ -1,16 +1,17 @@
 {
   "dependencies": {
-    "bufferutil": "^3.0.1",
     "common-tags": "^1.7.2",
-    "discord.js": "https://github.com/discordjs/discord.js.git#07c48a68450b79e7319d1034546846441565624b",
-    "discord.js-commando": "https://github.com/Gawdl3y/discord.js-commando.git#bade5966ef8e5e5a81c60850c66afb158a4881dc",
-    "erlpack": "hammerandchisel/erlpack",
+    "discord.js": "https://github.com/discordjs/discord.js.git#faf27fabc055cb3850e823cf36c0af21c0139c35",
+    "discord.js-commando": "https://github.com/discordjs/Commando.git#061814a24030f74073b056e9cb05782c2dfa9587",
+    "erlpack": "discordapp/erlpack",
     "express": "^4.15.2",
     "mz": "^2.6.0",
     "request": "^2.81.0",
     "request-debug": "^0.2.0",
     "request-promise": "^4.2.0",
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "uws": "^10.148.0",
+    "zlib-sync": "^0.1.4"
   },
   "name": "rover",
   "version": "1.0.0",
@@ -19,6 +20,7 @@
   "author": "evaera",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "standard"
+    "test": "standard",
+    "start": "node src/index.js"
   }
 }

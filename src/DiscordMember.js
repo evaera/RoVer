@@ -280,7 +280,7 @@ class DiscordMember {
         let role = this.discordServer.getSetting('verifiedRole')
         if (!this.member.roles.has(role) && this.server.roles.has(role)) {
           try {
-            await this.member.addRole(role)
+            await this.member.roles.add(role)
           } catch (e) {
             if (config.loud) console.log(e)
             return status({
@@ -296,7 +296,7 @@ class DiscordMember {
         let role = this.discordServer.getSetting('verifiedRemovedRole')
         if (this.member.roles.has(role) && this.server.roles.has(role)) {
           try {
-            await this.member.removeRole(role)
+            await this.member.roles.remove(role)
           } catch (e) {
             if (config.loud) console.log(e)
             return status({
@@ -350,9 +350,9 @@ class DiscordMember {
               if (!this.server.roles.has(binding.role)) return
 
               if (state === true) {
-                this.member.addRole(binding.role).catch(e => {})
+                this.member.roles.add(binding.role).catch(e => {})
               } else {
-                this.member.removeRole(binding.role).catch(e => {})
+                this.member.roles.remove(binding.role).catch(e => {})
               }
             })
           )
@@ -388,7 +388,7 @@ class DiscordMember {
 
           if (this.discordServer.getSetting('verifiedRemovedRole')) {
             try {
-              await this.member.addRole(this.discordServer.getSetting('verifiedRemovedRole'))
+              await this.member.roles.add(this.discordServer.getSetting('verifiedRemovedRole'))
             } catch (e) {}
           }
 

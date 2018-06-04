@@ -10,7 +10,8 @@ const updateServer = require('./UpdateServer.js')
 // guilds into grouped processes called Shards.
 let shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
   token: config.token,
-  totalShards: config.totalShards || 'auto'
+  totalShards: config.totalShards || 'auto',
+  shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined
 })
 
 shardingManager.on('launch', shard => {

@@ -55,10 +55,12 @@ request('https://verify.eryn.io/api/count')
   })
 
 setInterval(async () => {
-  shardingManager.broadcast({
-    action: 'status',
-    argument: await getNextActivity()
-  })
+  if (shardingManager.shards.size === shardingManager.totalShards) {
+    shardingManager.broadcast({
+      action: 'status',
+      argument: await getNextActivity()
+    })
+  }
 }, 15000)
 
 // If updateServer is defined, start that up as well.

@@ -1,5 +1,7 @@
 /* global Cache */
 const Command = require('../Command')
+const DiscordServer = require('../../DiscordServer')
+const VirtualGroups = require('../../VirtualGroups')
 const request = require('request-promise')
 
 const Contributors = require('../../Contributors.json')
@@ -26,6 +28,7 @@ class WhoisCommand extends Command {
     })
   }
 
+  // This is probably the worst file in the entire project, so prepare yourself.
   // TODO: DRY this up and make the method that gets user data a method in DiscordMember
   async fn (msg, args) {
     let member = args.member
@@ -140,6 +143,24 @@ class WhoisCommand extends Command {
             { name: 'Builders Club', value: bc, inline: true },
             { name: 'Past Usernames', value: pastNames, inline: true }
           ]
+        }
+
+        // Nickname Group rank display
+        const nicknameGroup = this.server.getSetting('nicknameGroup')
+        if (nicknameGroup) {
+          const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
+
+          const serverGroup = userGroups.find(group => group.Id === parseInt(nicknameGroup))
+
+          let isAlly = false
+          if (!serverGroup) {
+            isAlly = await VirtualGroups._Relationship({ id: data.robloxId }, parseInt(nicknameGroup), DiscordServer, 'allies')
+          }
+
+          embed.fields.push({
+            name: `Group Rank`,
+            value: isAlly ? 'Ally' : (serverGroup ? serverGroup.Role : 'Guest')
+          })
         }
 
         if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'RoVer Contributor', inline: true })

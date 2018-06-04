@@ -87,40 +87,8 @@ class DiscordBot {
   ready () {
     console.log(`Shard ${process.env.SHARD_ID} is ready, serving ${this.bot.guilds.array().length} guilds.`)
 
-    let currentActivity = 0
-    let totalUsers = null
-
-    request('https://verify.eryn.io/api/count')
-      .then(count => {
-        totalUsers = (parseInt(count, 10) / 1000).toFixed(1) + 'K'
-      })
-
-    setInterval(async () => {
-      currentActivity++
-      if (currentActivity === 2 && totalUsers == null) currentActivity++
-
-      if (currentActivity > 3) {
-        currentActivity = 0
-      }
-
-      switch (currentActivity) {
-        case 0:
-          this.bot.user.setActivity('http://eryn.io/RoVer')
-          break
-        case 1:
-          let totalGuilds = (await this.shardClientUtil.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
-          this.bot.user.setActivity(`${totalGuilds} servers`, { type: 'WATCHING' })
-          break
-        case 2:
-          this.bot.user.setActivity(`${totalUsers} users`, { type: 'LISTENING' })
-          break
-        case 3:
-          this.bot.user.setActivity('!rover', { type: 'LISTENING' })
-          break
-      }
-    }, 15000)
-
-    this.bot.user.setActivity('http://eryn.io/RoVer')
+    // Set status message to the default until we get info from master process
+    this.setActivity()
   }
 
   /**
@@ -186,6 +154,16 @@ class DiscordBot {
         member.send(`Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Verifying your account is quick and safe and doesn't require any information other than your username. All you have to do is either join a game or put a code in your profile, and you're in!\n\nVisit the following link to verify your Roblox account: ${Util.getVerifyLink(member.guild)}`)
       }
     } catch (e) {}
+  }
+
+  /**
+   * Sets the bot's status text.
+   * @param {string} text The status message.
+   * @param {string} activityType The activity type.
+   * @memberof DiscordBot
+   */
+  setActivity (text, activityType) {
+    this.bot.user.setActivity(text || 'http://eryn.io/RoVer', { type: activityType })
   }
 
   /**

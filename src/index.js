@@ -1,6 +1,7 @@
 // This file is the entry point for the bot.
 
 const path = require('path')
+const request = require('request-promise')
 const Discord = require('discord.js')
 const {GlobalCache} = require('./GlobalCache')
 const config = require('./data/client.json')
@@ -22,6 +23,43 @@ shardingManager.spawn()
 
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)
+
+// Set bot status messages
+let currentActivity = 0
+let totalUsers = null
+
+async function getNextActivity () {
+  currentActivity++
+  if (currentActivity === 2 && totalUsers == null) currentActivity++
+
+  if (currentActivity > 3) {
+    currentActivity = 0
+  }
+
+  switch (currentActivity) {
+    case 0:
+      return { text: 'http://eryn.io/RoVer' }
+    case 1:
+      let totalGuilds = (await shardingManager.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
+      return { text: `${totalGuilds} servers`, type: 'WATCHING' }
+    case 2:
+      return { text: `${totalUsers} users`, type: 'LISTENING' }
+    case 3:
+      return { text: '!rover', type: 'LISTENING' }
+  }
+}
+
+request('https://verify.eryn.io/api/count')
+  .then(count => {
+    totalUsers = (parseInt(count, 10) / 1000).toFixed(1) + 'K'
+  })
+
+setInterval(async () => {
+  shardingManager.broadcast({
+    action: 'status',
+    argument: await getNextActivity()
+  })
+}, 15000)
 
 // If updateServer is defined, start that up as well.
 if (config.updateServer) {
@@ -59,19 +97,5 @@ if (config.mainLifeTime) {
     "commandPrefix"     : String. Default "!". The prefix for commands.
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing.
+    "invite"            : String. The bot invite link.
 */
-
-/**
- * @typedef Snowflake
- * @see {@link https://discord.js.org/#/docs/main/master/typedef/Snowflake}
- */
-
-/**
- * @typedef GuildMember
- * @see https://discord.js.org/#/docs/main/master/class/GuildMember
- */
-
-/**
- * @typedef Message
- * @see https://discord.js.org/#/docs/main/master/class/Message
- */

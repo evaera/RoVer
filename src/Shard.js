@@ -11,6 +11,8 @@ let discordBot = new DiscordBot()
 process.on('message', msg => {
   if (msg.action === 'globallyUpdateMember') {
     discordBot.globallyUpdateMember(msg.argument)
+  } else if (msg.action === 'status') {
+    discordBot.setActivity(msg.argument.text, msg.argument.type)
   }
 })
 

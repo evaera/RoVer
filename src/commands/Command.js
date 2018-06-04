@@ -6,7 +6,7 @@ class Command extends Commando.Command {
     info.group = 'rover'
     info.guildOnly = true
     info.memberName = info.name
-    info.argsPromptLimit = 0
+    info.argsPromptLimit = 1
 
     super(client, info)
 

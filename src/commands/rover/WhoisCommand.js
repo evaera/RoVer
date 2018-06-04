@@ -76,7 +76,7 @@ class WhoisCommand extends Command {
           })
 
           joinDate = profileSource.match(/Join Date<p class=text-lead>(.*?)<li/)[1]
-          bio = profileSource.match(/<meta name=description content=".*? is one of the millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ?((?:.|\n)*?)"/m)[1].substr(0, 1024)
+          bio = profileSource.match(/<meta name=description content=".*? is one of the millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ?((?:.|\n)*?)"/m)[1]
           pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1].substr(0, 1024)
         } catch (e) {}
 
@@ -108,6 +108,20 @@ class WhoisCommand extends Command {
         // Make sure the data is cached so we don't have to use the API in the future
         Cache.set('users', id, data)
 
+        // Remove excess new lines in the bio
+        while ((bio.match(/\n/mg) || []).length > 3) {
+          const lastN = bio.lastIndexOf('\n')
+          bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
+        }
+
+        // Truncate bio if it's too long
+        if (bio.length > 500) {
+          bio = bio.substr(0, 500) + '...'
+        }
+
+        // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
+        bio = bio.replace('@', '@ ')
+
         let embed = {
           title: 'View Profile',
           url: profileLink,
@@ -120,7 +134,7 @@ class WhoisCommand extends Command {
           thumbnail: {
             url: avatarURL
           },
-          description: bio.replace('@', '@ '),
+          description: bio,
           fields: [
             { name: 'Join Date', value: joinDate, inline: true },
             { name: 'Builders Club', value: bc, inline: true },

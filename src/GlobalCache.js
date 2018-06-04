@@ -104,9 +104,7 @@ class GlobalCache {
       action: 'setReply',
       id: message.id,
       collection: message.collection,
-      key: message.key,
-      // 'undefined' is not a valid json type (won't persist through serialization)
-      value: typeof collection[message.key] === 'undefined' ? null : collection[message.key]
+      key: message.key
     })
   }
 }

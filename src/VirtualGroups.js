@@ -162,7 +162,7 @@ module.exports = {
    * @param {number} groupid The group id
    * @param {DiscordServer} DiscordServer DiscordServer static reference
    * @param {"allies" | "enemies"} [relation] The relationship type to check.
-   * @returns {boolean} True if user is in the clan
+   * @returns {boolean} True if user meets relationship requirement.
    */
   async _Relationship (user, groupid, DiscordServer, relation = 'allies') {
     if (relation !== 'allies' && relation !== 'enemies') {
@@ -209,5 +209,32 @@ module.exports = {
 
   async Enemy (user, groupid, DiscordServer) {
     return module.exports._Relationship(user, groupid, DiscordServer, 'enemies')
+  },
+
+    /**
+   * Returns true if a given user is friends with a given user.
+   * @param {object} user The user to check
+   * @param {number} friendid The friend id
+   * @returns {boolean} True if user is friends with the given user.
+   */
+  async Friend (user, friendid) {
+    try {
+      let friends = await Cache.get(`bindings.${user.id}`, 'friends')
+      if (!friends) {
+        friends = (await request({
+          uri: `https://friends.roblox.com/v1/users/${user.id}/friends`,
+          simple: false,
+          json: true
+        })).data
+
+        Cache.set(`bindings.${user.id}`, 'friends', friends)
+      }
+
+      return friends.find(user => user.id.toString() === friendid.toString()) != null
+    } catch (e) {
+      // Do nothing
+    }
+
+    return false
   }
 }

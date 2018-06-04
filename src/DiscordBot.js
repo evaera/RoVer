@@ -145,11 +145,13 @@ class DiscordBot {
     let member = await server.getMember(message.author.id)
     if (!member) return
 
-    if (server.getSetting('verifyChannel') === message.channel.id && message.cleanContent.toLowerCase() !== message.guild.commandPrefix + 'verify') {
+    // If this is the verify channel, we want to delete the message and just verify the user if they aren't an admin.
+    if (server.getSetting('verifyChannel') === message.channel.id && message.cleanContent.toLowerCase() !== message.guild.commandPrefix + 'verify' && !(this.bot.isOwner(message.author) || message.member.hasPermission('MANAGE_GUILD') || message.member.roles.find(role => role.name === 'RoVer Admin'))) {
       message.delete()
       return member.verify({ message })
     }
 
+    // As a last resort, we just verify with cache on every message sent.
     await member.verify({
       announce: false,
       clearBindingsCache: false

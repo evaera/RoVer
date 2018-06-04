@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "common-tags": "^1.7.2",
-    "discord.js": "https://github.com/discordjs/discord.js.git#faf27fabc055cb3850e823cf36c0af21c0139c35",
+    "discord.js": "https://github.com/discordjs/discord.js.git#276109ed3c8ee990296af34e2ae0a6174e151c70",
     "discord.js-commando": "https://github.com/discordjs/Commando.git#061814a24030f74073b056e9cb05782c2dfa9587",
     "erlpack": "discordapp/erlpack",
     "express": "^4.15.2",

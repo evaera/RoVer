@@ -355,9 +355,9 @@ destroy@~1.0.4:
     escape-string-regexp "^1.0.0"
     require-all "^2.0.0"
 
-"discord.js@https://github.com/discordjs/discord.js.git#faf27fabc055cb3850e823cf36c0af21c0139c35":
+"discord.js@https://github.com/discordjs/discord.js.git#276109ed3c8ee990296af34e2ae0a6174e151c70":
   version "12.0.0-dev"
-  resolved "https://github.com/discordjs/discord.js.git#faf27fabc055cb3850e823cf36c0af21c0139c35"
+  resolved "https://github.com/discordjs/discord.js.git#276109ed3c8ee990296af34e2ae0a6174e151c70"
   dependencies:
     pako "^1.0.0"
     prism-media "^0.2.0"

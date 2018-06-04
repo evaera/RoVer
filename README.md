@@ -67,6 +67,7 @@ You can run any of the commands that have all optional arguments by themselves t
 - `!RoVer` - Displays a description of RoVer.
 - `!Help` - Displays a list of commands.
 - `!Support` - Posts a link to the official RoVer Discord server
+- `!Invite` - Posts an invite link for RoVer.
 
 ### User administration
 - `!Update <@user>` - Forcibly update verification status of a user, same as them running `!verify`. Requires "Manage Server" or a role named "RoVer Updater".
@@ -135,7 +136,10 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 - `DevForum` - DevForum full membership (devforum.roblox.com)
 - `DevForumBasic` - DevForum basic user
 - `DevForumAccess` - DevForum access (either full membership or basic user)
-- `HasAsset:<asset_id>` - Checks if user owns an asset, takes the id as an argument
+- `GamePass:<gamepass_id>` -  Binds ownership of a game pass, takes the id as an argument
+- `Badge:<badge_id>` - Binds ownership of a badge, takes the id as an argument
+- `Asset:<asset_id>` - Binds ownership of an asset, takes the id as an argument
+- `Friend:<user_id>` - Binds being a friend to the given user on Roblox
 - `BC` - Builders club
 - `TBC`
 - `OBC`

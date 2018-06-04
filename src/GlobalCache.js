@@ -120,7 +120,7 @@ class Cache {
    */
   constructor (client) {
     this.client = client
-    this.shardClientUtil = new Discord.ShardClientUtil(this.client)
+    this.shardClientUtil = Discord.ShardClientUtil.singleton(this.client)
     this.index = -1
     this.promises = {}
 
@@ -145,7 +145,7 @@ class Cache {
    * @memberof Cache
    */
   onMessage (msg) {
-    if (typeof msg.id === 'undefined' || typeof msg.value === 'undefined' || !this.promises[msg.id]) {
+    if (typeof msg.id === 'undefined' || !this.promises[msg.id]) {
       return
     }
 

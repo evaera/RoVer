@@ -58,30 +58,6 @@ module.exports = {
   },
 
   /**
-   * Returns if the user owns an asset
-   * @param {object} user The user data
-   * @param {int} assetid The roblox asset id
-   * @returns {boolean} The binding resolution
-   */
-  async HasAsset (user, assetid) {
-    let userid = user.id
-    try {
-      let responseData = await request({
-        uri: `http://api.roblox.com/ownership/hasasset?userId=${userid}&assetId=${assetid}`,
-        simple: false
-      })
-
-      if (responseData === 'true') {
-        return true
-      }
-    } catch (e) {
-      // Do nothing
-    }
-
-    return false
-  },
-
-  /**
    * Returns if the user has the specified type of bc
    * @param {object} user The user data
    * @param {string} [bcType] The type of BC to check for, if omitted works for any bc
@@ -211,7 +187,7 @@ module.exports = {
     return module.exports._Relationship(user, groupid, DiscordServer, 'enemies')
   },
 
-    /**
+  /**
    * Returns true if a given user is friends with a given user.
    * @param {object} user The user to check
    * @param {number} friendid The friend id
@@ -236,5 +212,52 @@ module.exports = {
     }
 
     return false
+  },
+
+  /**
+   * Checks if a user owns a specific item on Roblox.
+   * @param {object} user The user data.
+   * @param {int} itemId The item id.
+   * @param {DiscordServer} DiscordServer DiscordServer
+   * @param {string} [itemType='Asset'] The item type.
+   * @returns
+   */
+  async _Ownership (user, itemId, _, itemType = 'Asset') {
+    try {
+      let doesHaveAsset = await Cache.get(`bindings.${user.id}`, `${itemType}.${itemId}`)
+      if (doesHaveAsset == null) {
+        let responseData = await request({
+          uri: `https://inventory.roblox.com/v1/users/${user.id}/items/${itemType}/${itemId}`,
+          simple: false,
+          json: true
+        })
+
+        doesHaveAsset = responseData.data.length > 0
+        Cache.set(`bindings.${user.id}`, `${itemType}.${itemId}`, doesHaveAsset)
+      }
+
+      return doesHaveAsset
+    } catch (e) {
+      // Do nothing
+    }
+
+    return false
+  },
+
+  // HasAsset for backwards compatibility
+  async HasAsset (user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, 'Asset')
+  },
+
+  async Asset (user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, 'Asset')
+  },
+
+  async GamePass (user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, 'GamePass')
+  },
+
+  async Badge (user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, 'Badge')
   }
 }

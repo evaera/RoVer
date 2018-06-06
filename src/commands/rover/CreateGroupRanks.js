@@ -26,6 +26,7 @@ class CreateGroupRanksCommand extends Command {
       const { Roles } = await request(`https://api.roblox.com/groups/${args.groupid}`, { json: true })
 
       let serverBindings = this.server.getSetting('groupRankBindings')
+      Roles.reverse()
       for (let role of Roles) {
         const newRole = (await msg.guild.roles.find(guildRole => guildRole.name === role.Name)) || (await msg.guild.roles.create({
           data: {

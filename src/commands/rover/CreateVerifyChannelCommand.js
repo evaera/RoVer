@@ -56,7 +56,7 @@ class CreateVerifyChannelCommand extends Command {
       instructionsChannel.send(
         stripIndents`This server uses a Roblox verification system. In order to unlock all the features of this server, you'll need to verify your Roblox account with your Discord account!
 
-        Visit ${Util.getVerifyLink(msg.guild)} and follow the instructions. Then, say \`${msg.guild.commandPrefix}verify\` in ${verifyChannel} and it will update you accordingly.`
+        Visit ${Util.getVerifyLink(msg.guild)} and follow the instructions. Then, say \`${msg.guild.commandPrefix}verify\` in ${verifyChannel.toString()} and it will update you accordingly.`
       )
 
       msg.reply(`Created channels ${verifyChannel} and ${instructionsChannel}. You can delete the default message in the instructions channel and replace it with your own if you wish.`)

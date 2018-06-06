@@ -8,34 +8,48 @@ class CreateVerifyChannelCommand extends Command {
     super(client, {
       name: 'createverifychannel',
       properName: 'CreateVerifyChannel',
-      aliases: ['rovercreateverifychannel', 'createverify', 'createverificationchannel', 'createverification'],
+      aliases: ['rovercreateverifychannel', 'createverify', 'createverificationchannel', 'createverification', 'createverifychannels'],
       description: 'Creates a channel category with verification instructions for new members and a channel for users to verify themselves'
     })
   }
 
   async fn (msg) {
     try {
-      let category = await msg.guild.channels.create('Verification', {
-        type: 'category',
-        reason: `${msg.member.displayName} ran CreateVerifyChannel command`
-      })
-
       let overwritesInstructions = []
       let overwritesVerify = []
 
-      for (let role of msg.guild.roles.array()) {
-        overwritesInstructions.push({
-          id: role,
-          allow: ['READ_MESSAGE_HISTORY', 'VIEW_CHANNEL'],
-          deny: ['SEND_MESSAGES', 'ADD_REACTIONS']
+      overwritesInstructions.push({
+        id: msg.guild.roles.find(role => role.name === '@everyone'),
+        allowed: ['READ_MESSAGE_HISTORY', 'VIEW_CHANNEL'],
+        denied: ['SEND_MESSAGES', 'ADD_REACTIONS']
+      })
+
+      overwritesVerify.push({
+        id: msg.guild.roles.find(role => role.name === '@everyone'),
+        allowed: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
+        denied: ['READ_MESSAGE_HISTORY']
+      })
+
+      const verifiedRole = this.server.getSetting('verifiedRole')
+      if (verifiedRole) {
+        overwritesVerify.push({
+          id: verifiedRole,
+          allowed: [],
+          denied: ['VIEW_CHANNEL']
         })
 
-        overwritesVerify.push({
-          id: role,
-          allow: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
-          deny: ['READ_MESSAGE_HISTORY']
+        overwritesInstructions.push({
+          id: verifiedRole,
+          allowed: [],
+          denied: ['VIEW_CHANNEL']
         })
       }
+
+      let category = await msg.guild.channels.create('Verification', {
+        type: 'category',
+        reason: `${msg.member.displayName} ran CreateVerifyChannel command`,
+        overwrites: overwritesInstructions
+      })
 
       let instructionsChannel = await msg.guild.channels.create('verify-instructions', {
         type: 'text',

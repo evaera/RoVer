@@ -36,6 +36,8 @@ When a user joins your server, the bot will automatically check if they are alre
 
 You should probably make a read-only channel in the server explaining these processes to your members. (You can do this automatically with the !CreateVerifyChannel command). After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission or a role named "RoVer Admin" in the Discord server in order to use these commands.
 
+**Please note** that the "RoVer" role must be above any other roles that you want RoVer to act on. Anyone with a role that's above the RoVer role will not be able to be verified. This is just how the Discord permission system works, so please make sure to account for it!
+
 ## Commands
 **Note**: &lt;angled brackets&gt; denote *required* arguments, and [square brackets] denote *optional* arguments. They should not be included when you run the command.
 

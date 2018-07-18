@@ -42,7 +42,7 @@ module.exports = {
       return true
     }
 
-    if (!userTrustLevel || userTrustLevel !== trustLevel) {
+    if (!userTrustLevel || userTrustLevel < trustLevel) {
       return false
     }
 

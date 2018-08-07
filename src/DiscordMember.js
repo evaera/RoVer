@@ -318,7 +318,7 @@ class DiscordMember {
             return status({
               status: false,
               nonFatal: true,
-              error: this.member.guild.ownerID === this.member.id ? "Sorry, RoVer can't change the server owner's nickname due to Discord permission restrictions. Please manually update your nickname. Or don't, I'm just an error message." : "RoVer doesn't have permission to change that user's nickname." + errorAppend
+              error: this.member.guild.ownerID === this.member.id ? "Sorry, Discord doesn't allow bots to change the server owner's nickname. Please manually update your nickname. Or don't, I'm just an error message." : "RoVer doesn't have permission to change that user's nickname." + errorAppend
             })
           }
         }

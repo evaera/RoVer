@@ -23,7 +23,7 @@ RoVer is an open source, drop-in Discord verification bot that will allow your m
 
 RoVer is the official Discord bot for the [verify.eryn.io](https://verify.eryn.io) verification registry. RoVer uses its [public API](https://verify.eryn.io/api), so this API is available to you in your own projects as well.
 
-With over 300,000 accounts linked already, it's likely many of your users will already be verified and will have to take no new steps. For brand new users, the process looks something like this:
+With over 500,000 accounts linked already, it's likely many of your users will already be verified and will have to take no new steps. For brand new users, the process looks something like this:
 1. The user signs in with their Discord account.
 2. The user chooses how they want to verify: by joining a Roblox game, or by adding a code to their profile.
 3. The user is verified and can participate in your community.

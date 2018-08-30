@@ -12,8 +12,8 @@ class PingCommand extends Command {
   async fn (msg) {
     const start = Date.now()
     msg.channel.send('Pinging...').then(message => {
-        const end = Date.now()
-        message.edit(`:ping_pong: Pong! Took **${(end - start)}**ms`)
-      })
+      const end = Date.now()
+      message.edit(`:ping_pong: Pong! Took **${(end - start)}**ms`)
+    })
   }
 }

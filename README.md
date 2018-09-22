@@ -1,12 +1,12 @@
 <p align="center">
-    <a href="https://eryn.io/RoVer/"><img src="http://i.imgur.com/j1jxb5F.png" alt="RoVer" /></a>
+    <a href="https://eryn.io/RoVer/"><img src="/assets/Logo_Text.svg" alt="RoVer" height="150" /></a>
 </p>
 
 <p align="center">
-    <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="http://i.imgur.com/8UBldnL.png" alt="Add" /></a>
+    <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="/assets/Add_RoVer.svg" alt="Add" /></a>
 </p>
 
-[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-500K%2B-brightgreen.svg)](https://eryn.io/RoVer) [![Discord Servers](https://img.shields.io/badge/total%20servers-17K%2B-brightgreen.svg)](https://eryn.io/RoVer)
+[![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-650K%2B-brightgreen.svg)](https://eryn.io/RoVer) [![Discord Servers](https://img.shields.io/badge/total%20servers-45K%2B-brightgreen.svg)](https://eryn.io/RoVer)
 [![Discord](https://img.shields.io/discord/425800792679645204.svg)](https://discord.gg/7yfwrat)
 
 # What is it?
@@ -23,7 +23,7 @@ RoVer is an open source, drop-in Discord verification bot that will allow your m
 
 RoVer is the official Discord bot for the [verify.eryn.io](https://verify.eryn.io) verification registry. RoVer uses its [public API](https://verify.eryn.io/api), so this API is available to you in your own projects as well.
 
-With over 500,000 accounts linked already, it's likely many of your users will already be verified and will have to take no new steps. For brand new users, the process looks something like this:
+With over 650,000 accounts linked already, it's likely many of your users will already be verified and will have to take no new steps. For brand new users, the process looks something like this:
 1. The user signs in with their Discord account.
 2. The user chooses how they want to verify: by joining a Roblox game, or by adding a code to their profile.
 3. The user is verified and can participate in your community.

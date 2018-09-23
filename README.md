@@ -9,9 +9,9 @@
 [![Patreon](http://i.imgur.com/dujYlAK.png)](https://www.patreon.com/erynlynn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Verified Users](https://img.shields.io/badge/verified%20users-650K%2B-brightgreen.svg)](https://eryn.io/RoVer) [![Discord Servers](https://img.shields.io/badge/total%20servers-45K%2B-brightgreen.svg)](https://eryn.io/RoVer)
 [![Discord](https://img.shields.io/discord/425800792679645204.svg)](https://discord.gg/7yfwrat)
 
-# [Documentation can be found on the RoVer website](https://rover.link/)
+<h1 align="center"><a href="https://rover.link/#readme">Documentation can be found on the RoVer website</a></h1>
 
-# Self-hosting instructions
+## Self-hosting instructions
 Self-hosting is recommended for advanced users only who are experienced with the Node.js ecosystem. Note that setup or code support will not be given for attempting to run your own instance of RoVer, modified or otherwise.
 
 1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on.

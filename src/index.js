@@ -38,7 +38,7 @@ async function getNextActivity () {
 
   switch (currentActivity) {
     case 0:
-      return { text: 'http://eryn.io/RoVer' }
+      return { text: 'https://RoVer.link' }
     case 1:
       let totalGuilds = (await shardingManager.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
       return { text: `${totalGuilds} servers`, type: 'WATCHING' }

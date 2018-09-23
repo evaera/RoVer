@@ -4,7 +4,7 @@ layout: white
 # Jump Start Guide
 The quickest and easiest way to use RoVer is to [add the hosted version](https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264) to your server. These are all optional:
 
-1. Create a role - it can be called anything, but most name it "Verified" - that will be given to all verified users.
+1. Create a role&mdash;it can be called anything, but most name it "Verified"&mdash;that will be given to all verified users.
 2. Run the command `!VerifiedRole Verified`, replacing "Verified" with what your role is called.
 3. Modify your channel permissions so that only those with the "Verified" role can speak or see them.
 4. Run the command `!CreateVerifyChannel`, which will create a channel category to give instructions to new members of your server.

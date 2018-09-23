@@ -1,0 +1,32 @@
+---
+layout: base
+---
+<!-- <base target="_blank"> -->
+<section class="white iframe">
+  <div class="toc red">
+    <h2>Table of Contents</h2>
+    <ul>
+
+    </ul>
+  </div>
+
+  {{ content }}
+</section>
+<script>
+  document.querySelectorAll('a').forEach(a => {
+    if (a.href.indexOf('#') === -1) {
+      a.target = '_blank'
+    }
+  })
+
+  const tags = ['h1', 'h2', 'h3', 'h4']
+
+  $(tags.join(', ')).each(function () {
+    const id = $(this).attr('id')
+    const text = $(this).text()
+    if (id) {
+      let margin = tags.indexOf($(this).prop('tagName').toLowerCase()) * 10
+      $('.toc ul').append(`<li style="margin-left: ${margin}px"><a href="#${id}" onclick="top.window.location.hash = '${id}'">${text}</a></li>`)
+    }
+  })
+</script>

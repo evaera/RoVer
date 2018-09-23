@@ -1,79 +1,43 @@
 ---
+layout: base
 ---
-<html>
-    <head>
-        <title>RoVer: Roblox Verification Discord Bot</title>
-        <link rel="stylesheet" href="{{ site.baseurl }}/css/style.css">
-        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <header>
-            <img src="{{ site.baseurl }}/images/logo.png" alt="RoVer" />
-            <br><br><br><br>
-            <a target="_blank" href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264" class="button">Add to your server</a>
-            <a target="_blank" href="https://github.com/evaera/RoVer" class="button">View Source on GitHub</a>
-            <br><br>
-            <h2><span id="count">250,000+</span> Robloxians verified</h2> 
-            <br>
-            <small>Like RoVer? Please <a href="https://www.patreon.com/erynlynn" target="_blank">support me on Patreon</a> if you can spare some dollars! :)</small>
-        </header>
-        <section>
-            <div class="inner">
-                <h1>Key Features</h1>
-                <div class="split">
-                    <div>
-                        <p>Verified users can be nicknamed to their Roblox name and given a specific role upon verification.</p>
-                        <p>Other features like a customizable nickname format, removing a certain role upon verification, or toggling off certain features altogether.</p>
-                        <p>Nicknames are checked on a regular basis to ensure users don't change them.</p>
-                        <p>Completely open source and self-hostable.</p>
-                    </div>
-                    <div>
-                        <p><strong>Group integration</strong> &mdash; Full support for giving roles to group members meeting an array of customizable parameters.</p>
-                        <p>Support for other role integrations, such as user owning an asset (like a gamepass or badge) or DevForum membership.</p>
-                        <p>With hundreds of thousands of users verified already, Roblox Discord veterans won't have to verify again to join your community.</p>
-                        <p>Actively maintained and updated.</p>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            </div>
-        </section>
-        <section>
-            <div class="inner">
-                <h1>Getting Set Up</h1>
-                
-                <p>For the most up-to-date guide, please see the project's <a href="https://github.com/evaera/RoVer/blob/master/README.md#getting-started-with-rover">README file</a>. There, you will find detailed explanations of how the bot works, list of commands, and more. If you still have trouble, feel free to join our community <a href="https://discord.gg/7yfwrat">support server</a>.</p>
-            </div>
-        </section>
-        <section>
-            <div class="inner">
-                <h1>Frequently Asked Questions and Common Issues</h1>
-                <h2>User Verification Issues</h2>
-                <p>Somtimes a user will report that they are having issues verifying themselves. This is nearly always caused by a small user error, so please ask them to:</p>
-                <ul>
-                    <li>Ensure that they are logged in to the correct Discord account in their <strong>browser</strong>.</li>
-                    <li>If they are using the <em>profile code</em> verification method, ensure the code isn't being filtered by Roblox's chat filter. If it is, try using the in-game verification method instead. If it isn't, make sure they went back to the website and clicked "Done".</li>
-                </ul>
+<a href="https://www.patreon.com/erynlynn" target="_blank" class="patreon-banner">Like RoVer? Please support me on Patreon if you can spare some dollars! :)</a>
 
-                <h2>Verification</h2>
-                <ul>
-                    <li>You can change your verified account (or update your username) at any time, just follow the verification process again.</li>
-                </ul>
-
-                <h2>Miscellaneous</h2>
-                <ul>
-                    <li><strong>The bot is constantly adding and taking away roles from users!</strong> &mdash; Most likely cause is that you've bound the verification role to a group as well. Bind the group rank to a different Discord role.</li>
-                    <li><strong>How do I turn off the announcement channel?</strong> &mdash; Run the AnnounceChannel command without any arguments.</li>
-                    <li><strong>Can I change role names after they are set up in Rover?</strong> &mdash; Yes, roles are saved by id, not name.</li>
-                    <li><strong>Can I be verified as different users in different servers?</strong> &mdash; No, verifications are global across all servers, even if they are self-hosted.</li>
-                </ul>
+<header>
+    <img src="{{ site.baseurl }}/images/logo.svg" alt="RoVer" height="150" />
+    <br><br><br><br>
+    <a target="_blank" href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264" class="button">Add to your server</a>
+    <a target="_blank" href="https://verify.eryn.io" class="button">Get Verified</a>
+    <a target="_blank" href="https://discord.gg/7yfwrat" class="button">Support Server</a>
+    <br><br>
+    <a target="_blank" href="https://github.com/evaera/RoVer">View Source on GitHub</a>
+    <br><br>
+    <h2><span id="count">250,000+</span> Robloxians verified</h2>
+</header>
+<script src="{{ site.baseurl }}/js/site.js"></script>
+<section>
+    <div class="inner">
+        <h1>Key Features</h1>
+        <div class="split">
+            <div>
+                <p><strong>Verified users</strong> can be nicknamed to their Roblox name and given a specific role upon verification.</p>
+                <p><strong>Highly customizable</strong> &mdash; Customizable nickname format, adding or removing a certain role upon verification, or toggling off certain features altogether.</p>
+                <p><strong>Automatic updating</strong> &mdash; Active users are updated on a regular basis, so their roles and names are always accurate.</p>
+                <p><strong>Open Source</strong> &mdash; Completely self-hostable and hackable.</p>
             </div>
-        </section>
-        <section>
-            <div class="inner center">
-                ❤️
+            <div>
+                <p><strong>Group integration</strong> &mdash; Full support for giving roles to group members or allies meeting an array of customizable parameters.</p>
+                <p><strong>Binding roles to resources</strong> such as user owning a game pass, badge, or asset or DevForum membership.</p>
+                <p><strong>Trusted by thousands</strong> &mdash; RoVer empowers tens of thousands of servers with hundreds of thousands of users. With so many verified already, Roblox Discord veterans won't have to verify again to join your community- once and done.</p>
             </div>
-        </section>
-        <script src="{{ site.baseurl }}/js/site.js"></script>
-    </body>
-</html>
+            <div class="clear"></div>
+        </div>
+    </div>
+</section>
+<section class="white" id="readme">
+    <!-- <h1 class="grey">README</h1> -->
+    <iframe src="{{ site.baseurl }}/README" frameborder="0" onload="adjustHeight(this)"></iframe>
+</section>
+<p align="center" style="margin-bottom: 50px;">
+    ❤️️
+</p>

@@ -3,16 +3,19 @@
 
 $red: white;
 $white: black;
+$robloxred: #e2231a;
 
 html, body {
     padding: 0;
     margin: 0;
-    background: #095CA9;
-    font-family: Raleway, Helvetica, "sans-serif";
+    background: white;
+    font-family: Roboto, Helvetica, "sans-serif";
     color: white;
+    height: min-content;
 }
 
 h1, h2, h3 {
+    font-family: Raleway;
     font-weight: 300;
 }
 
@@ -43,7 +46,8 @@ a, a:visited {
 header {
     text-align: center;
     padding: 100px;
-    background: #095CA9;
+    padding-bottom: 20px;
+    background: $robloxred;;
     color: white;
 
     img {
@@ -55,15 +59,93 @@ header {
     text-align: center;
 }
 
+h1.grey {
+    display: block;
+    text-transform: uppercase;
+    margin: 0 auto;
+    color: grey;
+    padding-left: 100;
+    font-size: 25px;
+    margin-top: 20px;
+}
+
+code {
+    display: inline-block;
+    background: #eee;
+    padding: 0 5px;
+    border-radius: 4px;
+}
+
 section {
-    &:nth-of-type(2n+1) {
-        background: rgba(255, 255, 255, 0.1);
+    background: $robloxred;
+
+    &:first-of-type {
+        padding-top: 0;
+
+        .inner h1 {
+            margin-top: 0;
+        }
     }
 
     .inner {
         max-width: 1000px;
         margin: 0 auto;
-        padding: 50px;
+        padding: 10px 50px;
+    }
+
+    &.white {
+        background: white;
+        color: black;
+        padding: 20px;
+        
+        .inner {
+           max-width: 800px;
+           font-size: 18px;
+           margin: 0;
+        }
+
+        &.iframe {
+            // max-width: 800px;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            word-wrap: break-word;
+        }
+
+        p {
+            line-height: 2em;
+        }
+
+        a {
+            color: $robloxred;
+
+            &:hover {
+                color: darken($robloxred, 10%);
+            }
+        }
+
+        .toc {
+            // background: $robloxred;
+            padding: 20px;
+            // color: white;
+            float: left;
+            margin-right: 60px;
+
+            a {
+                // color: white;
+            }
+            h2 {
+                margin-bottom: 0;
+                margin-top: 10px;
+            }
+            ul {
+                padding: 20px;
+                margin: 0;
+                li {
+                    margin: 0;
+                }
+            }
+        }
     }
 
     .split {        
@@ -125,4 +207,31 @@ button, .button {
 		transform: scale(1.02);
 		box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
 	}
+}
+
+iframe {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    max-width: 800px;
+}
+
+.patreon-banner {
+    position: absolute;
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    padding: 10px 0;
+    font-size: 13px;
+    border: none;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.3);
+    }
+}
+
+#what-is-it {
+    clear: both;
 }

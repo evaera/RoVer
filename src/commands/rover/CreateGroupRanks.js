@@ -50,7 +50,7 @@ class CreateGroupRanksCommand extends Command {
 
       msg.reply(`Created ${Roles.length} role bindings successfully (and created the roles if necessary).`)
     } catch (e) {
-      msg.reply(`:no_entry_sign: RoVer does not have permission to create roles in this server.`)
+      msg.reply(`:no_entry_sign: Something went wrong. Maybe the group doesn't exist, or maybe RoVer doesn't have permission to create roles in this server.`)
     }
   }
 }

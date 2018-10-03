@@ -42,18 +42,26 @@ module.exports = {
       return true
     }
 
-    if (!userTrustLevel || userTrustLevel < trustLevel) {
+    if (!userTrustLevel || userTrustLevel !== trustLevel) {
       return false
     }
 
     return true
   },
 
-  async DevForum (user) {
+  async DevForum (user) { // old, left for compatibility
     return module.exports.DevForumAccess(user, 2)
   },
 
-  async DevForumBasic (user) {
+  async DevForumBasic (user) { // old, left for compatibility
+    return module.exports.DevForumAccess(user, 1)
+  },
+
+  async DevForumMember (user) {
+    return module.exports.DevForumAccess(user, 1)
+  },
+
+  async DevForumNewMember (user) {
     return module.exports.DevForumAccess(user, 1)
   },
 

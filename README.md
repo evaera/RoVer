@@ -137,8 +137,8 @@ See more examples below:
 
 Virtual groups are a way to bind ranks using the group rank binding system for external services that need not be Roblox groups, such as the developer forum. Currently, these are available by default:
 
-- `DevForum` - DevForum full membership (devforum.roblox.com)
-- `DevForumBasic` - DevForum basic user
+- `DevForumMember` - DevForum full membership (devforum.roblox.com)
+- `DevForumNewMember` - DevForum new member
 - `DevForumAccess` - DevForum access (either full membership or basic user)
 - `GamePass:<gamepass_id>` -  Binds ownership of a game pass, takes the id as an argument
 - `Badge:<badge_id>` - Binds ownership of a badge, takes the id as an argument

@@ -8,35 +8,64 @@ const request = require('request-promise')
 // returns true or false.
 
 /**
+ * Check if the given user is in the Roblox Dev Forum.
+ *
+ * @param {object} user The user data
+ * @returns {object} The DebForum profile data
+ */
+async function getDevForumProfile (user) {
+  let username = user.username
+  let userProfile = await Cache.get(`bindings.${user.id}`, 'DevForumProfile')
+
+  if (!userProfile) {
+    try {
+      let devForumData = await request({
+        uri: `https://devforum.roblox.com/users/${username}.json`,
+        json: true,
+        simple: false
+      })
+
+      userProfile = devForumData.user
+
+      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile)
+    } catch (e) {
+      return false
+    }
+  }
+
+  return userProfile
+}
+
+/**
  * @module VirtualGroups
  */
 module.exports = {
+  async DevForumTopContributor (user) {
+    const userProfile = await getDevForumProfile(user)
+    if (!userProfile) return
+
+    return userProfile.groups.find(g => g.name === 'Top_Contributor') != null
+  },
+
+  async RobloxStaff (user) {
+    const userProfile = await getDevForumProfile(user)
+    if (!userProfile) return
+
+    return userProfile.primary_group_name === 'Roblox_Staff'
+  },
+
   /**
    * Check if the given user is in the Roblox Dev Forum.
    *
    * @param {object} user The user data
-   * @param {int} trustLeve The trust level to check against
+   * @param {int} trustLevel The trust level to check against
    * @returns {boolean} The resolution of the binding
    */
   async DevForumAccess (user, trustLevel) {
-    let username = user.username
-    let userTrustLevel = await Cache.get(`bindings.${user.id}`, 'DevForumAccess')
+    const userProfile = await getDevForumProfile(user)
+    if (!userProfile) return
 
-    if (!userTrustLevel) {
-      try {
-        let devForumData = await request({
-          uri: `https://devforum.roblox.com/users/${username}.json`,
-          json: true,
-          simple: false
-        })
-
-        userTrustLevel = devForumData.user.trust_level
-
-        Cache.set(`bindings.${user.id}`, 'DevForumAccess', userTrustLevel)
-      } catch (e) {
-        return false
-      }
-    }
+    const userTrustLevel = userProfile.trust_level
 
     if (trustLevel == null && userTrustLevel > 0) {
       return true

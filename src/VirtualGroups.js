@@ -58,7 +58,7 @@ module.exports = {
   },
 
   async DevForumMember (user) {
-    return module.exports.DevForumAccess(user, 1)
+    return module.exports.DevForumAccess(user, 2)
   },
 
   async DevForumNewMember (user) {

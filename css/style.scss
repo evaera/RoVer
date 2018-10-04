@@ -98,20 +98,6 @@ section {
         color: black;
         padding: 20px;
         
-        .inner {
-           max-width: 800px;
-           font-size: 18px;
-           margin: 0;
-        }
-
-        &.iframe {
-            // max-width: 800px;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-            word-wrap: break-word;
-        }
-
         p {
             line-height: 2em;
         }

@@ -1,5 +1,5 @@
 ---
-layout: white
+layout: home
 ---
 # Jump Start Guide
 The quickest and easiest way to use RoVer is to [add the hosted version](https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264) to your server. These are all optional:

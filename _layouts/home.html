@@ -1,0 +1,77 @@
+---
+layout: base
+---
+<a href="https://www.patreon.com/erynlynn" target="_blank" class="patreon-banner">Like RoVer? Please support me on
+  Patreon if you can spare some dollars! :)</a>
+
+<header>
+  <img src="{{ site.baseurl }}/images/logo.svg" alt="RoVer" height="150" />
+  <br><br><br><br>
+  <a target="_blank" href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"
+    class="button">Add to your server</a>
+  <a target="_blank" href="https://verify.eryn.io" class="button">Get verified</a>
+  <a target="_blank" href="https://discord.gg/7yfwrat" class="button">Support server</a>
+  <br><br>
+  <a target="_blank" href="https://github.com/evaera/RoVer">View Source on GitHub</a>
+  <br><br>
+  <h2 style="visibility: hidden"><span id="count">250,000+</span> Robloxians verified</h2>
+</header>
+<script src="{{ site.baseurl }}/js/site.js"></script>
+<section>
+  <div class="inner">
+    <h1>Key Features</h1>
+    <div class="split">
+      <div>
+        <p><strong>Verified users</strong> can be nicknamed to their Roblox name and given a specific role upon
+          verification.</p>
+        <p><strong>Highly customizable</strong> &mdash; Customizable nickname format, adding or removing a certain role
+          upon verification, or toggling off certain features altogether.</p>
+        <p><strong>Automatic updating</strong> &mdash; Active users are updated on a regular basis, so their roles and
+          names are always accurate.</p>
+        <p><strong>Open Source</strong> &mdash; Completely self-hostable and hackable.</p>
+      </div>
+      <div>
+        <p><strong>Group integration</strong> &mdash; Full support for giving roles to group members or allies meeting
+          an array of customizable parameters.</p>
+        <p><strong>Binding roles to resources</strong> such as user owning a game pass, badge, or asset or DevForum
+          membership.</p>
+        <p><strong>Trusted by thousands</strong> &mdash; RoVer empowers tens of thousands of servers with hundreds of
+          thousands of users. With so many verified already, Roblox Discord veterans won't have to verify again to join
+          your community- once and done.</p>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</section>
+<section class="white" id="readme">
+  <div class="inner" style="max-width: 800px">
+    <div class="toc red">
+      <h2>Table of Contents</h2>
+      <ul>
+
+      </ul>
+    </div>
+    {{ content }}
+  </div>
+</section>
+<script>
+  document.querySelectorAll('a').forEach(a => {
+    if (a.href.indexOf('#') === -1) {
+      a.target = '_blank'
+    }
+  })
+
+  const tags = ['h1', 'h2', 'h3', 'h4']
+
+  $(tags.join(', ')).each(function () {
+    const id = $(this).attr('id')
+    const text = $(this).text()
+    if (id) {
+      let margin = tags.indexOf($(this).prop('tagName').toLowerCase()) * 10
+      $('.toc ul').append(`<li style="margin-left: ${margin}px"><a href="#${id}" onclick="top.window.location.hash = '${id}'">${text}</a></li>`)
+    }
+  })
+</script>
+<p align="center" style="margin-bottom: 50px;">
+  ❤️️
+</p>

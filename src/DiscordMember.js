@@ -263,6 +263,13 @@ class DiscordMember {
           return false
         }
 
+        if (apiUserData.errors && apiUserData.errors[0] && apiUserData.errors[0].code === 0) {
+          return status({
+            status: false,
+            error: 'Roblox is currently undergoing maintenance. Please try again later.'
+          })
+        }
+
         if (apiUserData.Username) {
           data.robloxUsername = apiUserData.Username
         }

@@ -61,7 +61,7 @@ class WhoisCommand extends Command {
             simple: false
           })
         } catch (e) {
-          return false
+          return editMessage.edit("An error occured while fetching that user's data.")
         }
 
         if (apiUserData.Username) {

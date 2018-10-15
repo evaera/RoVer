@@ -18,8 +18,8 @@ class AnnounceChannelCommand extends Command {
       if (msg.member) { // Wouldn't want to say this if it's in a DM conversation
         msg.reply('Sent you a DM with information.')
       }
-    } catch(e) {
-      msg.reply('I can\'t seem to message you - please make sure your DMs are enabled!')
+    } catch (e) {
+      msg.reply("I can't seem to message you - please make sure your DMs are enabled!")
     }
   }
 }

@@ -60,8 +60,10 @@ class BindingsCommand extends Command {
 
       let id = binding.role
 
-      groupBindingsText += `${this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
-
+      groupBindingsText += `${this.getRoleName(id)} <${id}>\n`
+      
+      groupBindingsText += '```markdown\n'
+      
       groupBindingsText += Util.getBindingText(binding)
 
       groupBindingsText += '```\n'

@@ -5,9 +5,10 @@ layout: home
 The quickest and easiest way to use RoVer is to [add the hosted version](https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264) to your server. These are all optional:
 
 1. Create a role&mdash;it can be called anything, but most name it "Verified"&mdash;that will be given to all verified users.
-2. Run the command `!VerifiedRole RoleNameHere`, replacing "RoleNameHere" with what your role is called.
-3. Modify your channel permissions so that only those with the role you made can speak or see them.
-4. Run the command `!CreateVerifyChannel`, which will create a channel category to give instructions to new members of your server.
+2. Drag the "RoVer" role above your role and any roles you would like RoVer to manage.
+3. Run the command `!VerifiedRole RoleNameHere`, replacing "RoleNameHere" with what your role is called.
+4. Modify your channel permissions so that only those with the role you made can speak or see them.
+5. Run the command `!CreateVerifyChannel`, which will create an instructional channel for new members of your server.
 
 You can also [bind groups](#integrating-with-roblox-groups) or [other resources](#virtual-groups) to roles. Or if you want to see how to customize everything, just keep reading...
 

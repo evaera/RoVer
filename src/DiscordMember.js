@@ -3,7 +3,7 @@ const { stripIndents } = require('common-tags')
 const config = require('./data/client.json')
 const Util = require('./Util')
 
-const request = require('request-promise').defaults({pool: {maxSockets: Infinity}})
+const request = require('request-promise').defaults({ pool: { maxSockets: Infinity } })
 
 let DiscordServer
 const VerificationAttempts = new Map()

@@ -164,11 +164,11 @@ To create a role for all members of the dev forum in your server, use the follow
 
 To create a role for all members who own a specific asset, use the following command:
 
-`!Bind Winner HasAsset:424242`, where `HasAsset` is the *Virtual Group*, `Winner` is the *Discord role name*, and `424242` is the *asset id*
+`!Bind Winner Asset:424242`, where `Asset` is the *Virtual Group*, `Winner` is the *Discord role name*, and `424242` is the *asset id*
 
 To create a role for all members who own at least one of two assets, use the following command:
 
-`!Bind Winner HasAsset:424242 HasAsset:525252`
+`!Bind Winner Asset:424242 Asset:525252`
 
 To create a role for all members who are either in the DevForum, have OBC, or is in group 372372 as an owner:
 

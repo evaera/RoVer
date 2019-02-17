@@ -51,7 +51,7 @@ module.exports = {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.primary_group_name === 'Roblox_Staff'
+    return userProfile.groups.find(g => g.name === 'Roblox_Staff') != null
   },
 
   /**

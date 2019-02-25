@@ -49,21 +49,21 @@ async function getNextActivity () {
   }
 }
 
-var numberAbbreviations = ["K","M","B","T"];
+var numberAbbreviations = ['K','M','B','T']
 request('https://verify.eryn.io/api/count')
   .then(count => {
-    totalUsers = parseInt(count, 10).toFixed(1);
+    totalUsers = parseInt(count, 10).toFixed(1)
 
     //Count how many times the place is shifted
-    var placeShift = 0;
+    var placeShift = 0
     while (totalUsers >= 1000) {
-      totalUsers = (totalUsers/1000).toFixed(1);
-      placeShift++;
+      totalUsers = (totalUsers/1000).toFixed(1)
+      placeShift++
     }
 
     if (placeShift > 0) {
-      totalUsers += numberAbbreviations[placeShift - 1];
-    };
+      totalUsers += numberAbbreviations[placeShift - 1]
+    }
   })
 
 setInterval(async () => {

@@ -49,7 +49,7 @@ async function getNextActivity () {
   }
 }
 
-const numberAbbreviations = ['K', 'M', 'B' ,'T']
+const numberAbbreviations = ['K', 'M', 'B', 'T']
 request('https://verify.eryn.io/api/count')
   .then(count => {
     totalUsers = parseInt(count, 10).toFixed(1)

@@ -91,7 +91,7 @@ module.exports = {
       compressedNumber += numberAbbreviations[placeShift - 1]
     }
     return compressedNumber
-  },  
+  },
 
   /**
    * Returns an md5 hash of the input string.

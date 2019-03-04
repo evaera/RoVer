@@ -78,21 +78,20 @@ module.exports = {
   toHumanReadableNumber (toCompress) {
     const numberAbbreviations = ['K', 'M', 'B', 'T']
     let compressedNumber = parseInt(toCompress, 10).toFixed(1)
-  
+
     // Count how many times the place is shifted
     let placeShift = 0
     while (compressedNumber >= 1000) {
       compressedNumber = (compressedNumber / 1000).toFixed(1)
       placeShift++
     }
-  
+
     // If the number was simplified, put a number abbreviation on the end
     if (placeShift > 0) {
       compressedNumber += numberAbbreviations[placeShift - 1]
     }
     return compressedNumber
-  },
-  
+  },  
 
   /**
    * Returns an md5 hash of the input string.

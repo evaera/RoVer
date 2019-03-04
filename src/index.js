@@ -42,7 +42,7 @@ async function getNextActivity () {
       return { text: 'https://RoVer.link' }
     case 1:
       let totalGuilds = (await shardingManager.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
-      totalGuilds = Util.compressNumber(totalGuilds)
+      totalGuilds = Util.toHumanReadableNumber(totalGuilds)
       return { text: `${totalGuilds} servers`, type: 'WATCHING' }
     case 2:
       return { text: `${totalUsers} users`, type: 'LISTENING' }
@@ -53,7 +53,7 @@ async function getNextActivity () {
 
 request('https://verify.eryn.io/api/count')
   .then(count => {
-    totalUsers = Util.compressNumber(count)
+    totalUsers = Util.toHumanReadableNumber(count)
   })
 
 setInterval(async () => {

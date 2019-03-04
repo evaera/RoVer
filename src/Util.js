@@ -70,12 +70,12 @@ module.exports = {
   },
 
   /**
-   * Takes a number and compresses it into a string ending with an abbreviation to signify the size of the number
+   * Takes a number and converts it into a simplified and human readable number
    * 1,142,546 --> 1.1M
    * @param {float} toCompress The number to compress
    * @returns {string} The compressed number
    */
-  compressNumber (toCompress) {
+  toHumanReadableNumber (toCompress) {
     const numberAbbreviations = ['K', 'M', 'B', 'T']
     let compressedNumber = parseInt(toCompress, 10).toFixed(1)
   
@@ -86,7 +86,7 @@ module.exports = {
       placeShift++
     }
   
-    // If the number was comprsesed, put a number abbreviation on the end
+    // If the number was simplified, put a number abbreviation on the end
     if (placeShift > 0) {
       compressedNumber += numberAbbreviations[placeShift - 1]
     }

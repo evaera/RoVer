@@ -70,6 +70,31 @@ module.exports = {
   },
 
   /**
+   * Takes a number and compresses it into a string ending with an abbreviation to signify the size of the number
+   * 1,142,546 --> 1.1M
+   * @param {float} toCompress The number to compress
+   * @returns {string} The compressed number
+   */
+  compressNumber (toCompress) {
+    const numberAbbreviations = ['K', 'M', 'B', 'T']
+    let compressedNumber = parseInt(toCompress, 10).toFixed(1)
+  
+    // Count how many times the place is shifted
+    let placeShift = 0
+    while (compressedNumber >= 1000) {
+      compressedNumber = (compressedNumber / 1000).toFixed(1)
+      placeShift++
+    }
+  
+    // If the number was comprsesed, put a number abbreviation on the end
+    if (placeShift > 0) {
+      compressedNumber += numberAbbreviations[placeShift - 1]
+    }
+    return compressedNumber
+  },
+  
+
+  /**
    * Returns an md5 hash of the input string.
    * This is used for a key for a group binding. The key is the hash of the json of the rank binding.
    * @param {string} string The input string.

@@ -6,6 +6,7 @@ const Discord = require('discord.js')
 const {GlobalCache} = require('./GlobalCache')
 const config = require('./data/client.json')
 const updateServer = require('./UpdateServer.js')
+const Util = require('./Util.js')
 
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards.
@@ -28,25 +29,6 @@ global.GlobalCache = new GlobalCache(shardingManager)
 let currentActivity = 0
 let totalUsers = null
 
-const numberAbbreviations = ['K', 'M', 'B', 'T']
-
-function simplifyNumber (toSimplify) {
-  let simplifiedNumber = parseInt(toSimplify, 10).toFixed(1)
-
-  // Count how many times the place is shifted
-  let placeShift = 0
-  while (simplifiedNumber >= 1000) {
-    simplifiedNumber = (simplifiedNumber / 1000).toFixed(1)
-    placeShift++
-  }
-
-  // If the number was simplified, put a number abbreviation on the end
-  if (placeShift > 0) {
-    simplifiedNumber += numberAbbreviations[placeShift - 1]
-  }
-  return simplifiedNumber
-}
-
 async function getNextActivity () {
   currentActivity++
   if (currentActivity === 2 && totalUsers == null) currentActivity++
@@ -60,7 +42,7 @@ async function getNextActivity () {
       return { text: 'https://RoVer.link' }
     case 1:
       let totalGuilds = (await shardingManager.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
-      totalGuilds = simplifyNumber(totalGuilds)
+      totalGuilds = Util.compressNumber(totalGuilds)
       return { text: `${totalGuilds} servers`, type: 'WATCHING' }
     case 2:
       return { text: `${totalUsers} users`, type: 'LISTENING' }
@@ -71,7 +53,7 @@ async function getNextActivity () {
 
 request('https://verify.eryn.io/api/count')
   .then(count => {
-    totalUsers = simplifyNumber(count)
+    totalUsers = Util.compressNumber(count)
   })
 
 setInterval(async () => {

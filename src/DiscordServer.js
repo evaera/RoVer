@@ -122,14 +122,23 @@ class DiscordServer {
    * @param {any} value The setting value to set
    * @memberof DiscordServer
    */
-  setSetting (key, value) {
+  async setSetting (key, value) {
     if (!this.areSettingsLoaded) {
       throw new Error('Attempt to change a setting from a server whose settings are not loaded')
     }
 
     this.settings[key] = value
 
-    fs.writeFileSync(this.settingsPath, JSON.stringify(this.settings))
+    const tmpSettingsPath = this.settingsPath + '.tmp'
+    await fs.writeFile(tmpSettingsPath, JSON.stringify(this.settings))
+
+    try {
+      JSON.parse(await fs.readFile(tmpSettingsPath, 'utf8')) // Throws if file got corrupted
+    } catch (e) {
+      throw new Error('Atomic save failed: file corrupted. Try again.')
+    }
+
+    await fs.rename(tmpSettingsPath, this.settingsPath)
   }
 
   /**
@@ -218,7 +227,7 @@ class DiscordServer {
 
     for (let group of binding.groups) {
       if (VirtualGroups[group.id]) {
-        returnValue = await VirtualGroups[group.id]({id: userid, username}, group.ranks[0], DiscordServer)
+        returnValue = await VirtualGroups[group.id]({ id: userid, username }, group.ranks[0], DiscordServer)
 
         if (returnValue) break
       } else {

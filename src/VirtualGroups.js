@@ -47,6 +47,13 @@ module.exports = {
     return userProfile.groups.find(g => g.name === 'Top_Contributor') != null
   },
 
+  async DevForumLeadTopContributor (user) {
+    const userProfile = await getDevForumProfile(user)
+    if (!userProfile) return
+
+    return userProfile.groups.find(g => g.name === 'Lead_Top_Contributor') != null
+  },
+
   async RobloxStaff (user) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
@@ -61,17 +68,17 @@ module.exports = {
    * @param {int} trustLevel The trust level to check against
    * @returns {boolean} The resolution of the binding
    */
-  async DevForumAccess (user, trustLevel) {
+  async DevForumAccess (user, trustLevelCheck) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
     const userTrustLevel = userProfile.trust_level
 
-    if (trustLevel == null && userTrustLevel > 0) {
+    if (trustLevelCheck == null && userTrustLevel > 0) {
       return true
     }
 
-    if (!userTrustLevel || userTrustLevel !== trustLevel) {
+    if (!userTrustLevel || trustLevelCheck(userTrustLevel)) {
       return false
     }
 
@@ -79,19 +86,19 @@ module.exports = {
   },
 
   async DevForum (user) { // old, left for compatibility
-    return module.exports.DevForumAccess(user, 2)
+    return module.exports.DevForumAccess(user, x => x === 2)
   },
 
   async DevForumBasic (user) { // old, left for compatibility
-    return module.exports.DevForumAccess(user, 1)
+    return module.exports.DevForumAccess(user, x => x === 1)
   },
 
   async DevForumMember (user) {
-    return module.exports.DevForumAccess(user, 2)
+    return module.exports.DevForumAccess(user, x => x >= 2)
   },
 
   async DevForumNewMember (user) {
-    return module.exports.DevForumAccess(user, 1)
+    return module.exports.DevForumAccess(user, x => x === 1)
   },
 
   /**

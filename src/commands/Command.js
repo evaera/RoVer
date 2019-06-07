@@ -1,4 +1,5 @@
 const Commando = require('discord.js-commando')
+const Contributors = require('../../Contributors.json')
 
 module.exports =
 class Command extends Commando.Command {
@@ -16,7 +17,7 @@ class Command extends Commando.Command {
   }
 
   hasPermission (msg) {
-    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.find(role => role.name === 'RoVer Admin')
+    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.find(role => role.name === 'RoVer Admin') || Contributors.includes(msg.author.id)
   }
 
   async run (msg, args, pattern) {

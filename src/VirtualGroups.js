@@ -78,7 +78,7 @@ module.exports = {
       return true
     }
 
-    if (!userTrustLevel || !trustLevelCheck(userTrustLevel)) {
+    if (!userTrustLevel || !trustLevelCheck(userTrustLevel) || userProfile['suspended_till']) {
       return false
     }
 

@@ -17,6 +17,10 @@ class GlobalCache {
 
     shardingManager.on('shardCreate', shard => shard.on('message', this.onMessage.bind(this, shard)))
     shardingManager.shards.forEach(shard => shard.on('message', this.onMessage.bind(this, shard)))
+
+    setInterval(() => {
+      this.collections = {}
+    }, 30000)
   }
 
   /**

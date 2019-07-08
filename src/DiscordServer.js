@@ -39,6 +39,12 @@ class DiscordServer {
     this.server = this.bot.guilds.get(id)
 
     this.verifyCooldowns = new Map()
+    this.nicknames = new Map()
+
+    setInterval(() => {
+      this.verifyCooldowns = new Map()
+      this.nicknames = new Map()
+    }, 7200000)
 
     // Load this server's settings.
     this.settings = {}

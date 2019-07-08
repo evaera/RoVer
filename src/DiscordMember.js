@@ -66,6 +66,19 @@ class DiscordMember {
     }
   }
 
+  getCachedNickname () {
+    return this.discordServer.nicknames.get(this.id)
+  }
+
+  shouldUpdateNickname (currentName) {
+    if (this.discordServer.getSetting('nicknameUsers')) {
+      return !this.discordServer.nicknames.has(this.id) ||
+        this.discordServer.nicknames.get(this.id) !== currentName
+    } else {
+      return false
+    }
+  }
+
   /**
    * Gets a member's nickname, formatted with this server's specific settings.
    *
@@ -317,6 +330,9 @@ class DiscordMember {
 
       if (this.discordServer.getSetting('nicknameUsers')) {
         let nickname = (await this.getNickname(data)).substring(0, 32)
+
+        this.discordServer.nicknames.set(this.id, nickname)
+
         if (this.member.displayName !== nickname) {
           try {
             await this.member.setNickname(nickname)

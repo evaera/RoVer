@@ -119,13 +119,13 @@ class DiscordBot {
       return member.verify({ message })
     }
 
-    if (member.shouldUpdateNickname(message.member.displayName)) {
-      // As a last resort, we just verify with cache on every message sent.
-      await member.verify({
-        announce: false,
-        clearBindingsCache: false
-      })
-    }
+    // if (member.shouldUpdateNickname(message.member.displayName)) {
+    //   // As a last resort, we just verify with cache on every message sent.
+    //   await member.verify({
+    //     announce: false,
+    //     clearBindingsCache: false
+    //   })
+    // }
   }
 
   /**

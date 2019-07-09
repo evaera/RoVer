@@ -34,7 +34,7 @@ class WhoisCommand extends Command {
     let member = args.member
     let data = {}
     if (member) { // If the member specified exists,
-      let editMessage = await msg.reply(`:mag: Looking up ${member.displayName.replace('@', '')}`)
+      let editMessage = await msg.reply(`:mag: Looking up ${member.displayName.replace(/@/g, '')}`)
 
       let id = member.user.id
       try {

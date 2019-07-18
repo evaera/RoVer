@@ -2,6 +2,7 @@ const { stripIndents, oneLine } = require('common-tags')
 const Command = require('../Command')
 const Util = require('../../Util')
 const VirtualGroups = require('../../VirtualGroups.js')
+const config = require('../../data/client.json')
 
 module.exports =
 class BindGroupCommand extends Command {
@@ -29,6 +30,10 @@ class BindGroupCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (config.maxServerBindings && this.server.getSetting('groupRankBindings').length > config.maxServerBindings) {
+      return msg.reply(`This server has exceeded the maximum amount of allowed role bindings.\n\nTo bind an unlimited number of roles, please consider a $6 monthly donation for RoVer Plus:\n <https://www.patreon.com/erynlynn>.\n\n*Please be aware that this is a temporary restriction as part of an effort to reduce resource consumption. In the future, more role bindings will be available for free.*`)
+    }
+
     let binding = {}
 
     if (this.server.isRoleInUse(args.role.id)) {

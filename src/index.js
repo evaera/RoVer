@@ -102,4 +102,5 @@ if (config.mainLifeTime) {
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing.
     "invite"            : String. The bot invite link.
+    "disableAutoUpdate" : Boolean. Disables auto update feature.
 */

@@ -18,6 +18,7 @@ class DiscordBot {
   constructor () {
     this.initialize()
     this.servers = {}
+    this.authorizedOwners = []
   }
 
   /**
@@ -62,6 +63,14 @@ class DiscordBot {
       this.bot.on('message', this.message.bind(this))
     }
 
+    if (config.patreonAccessToken) {
+      this.bot.dispatcher.addInhibitor(msg => !this.authorizedOwners.includes(msg.guild.ownerID))
+
+      this.updatePatrons()
+
+      setInterval(this.updatePatrons.bind(this), 5 * 60 * 1000)
+    }
+
     // Register commands
     this.bot.registry
       .registerGroup('rover', 'RoVer')
@@ -77,6 +86,42 @@ class DiscordBot {
 
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
+  }
+
+  async updatePatrons (page) {
+    if (!page) {
+      this.authorizedOwners = []
+    }
+
+    const url = page || `https://www.patreon.com/api/oauth2/api/campaigns/${config.patreonCampaignId}/pledges?include=patron.null`
+
+    const response = await request(url, {
+      json: true,
+      headers: {
+        'Authorization': `Bearer ${config.patreonAccessToken}`
+      }
+    })
+
+    this.authorizedOwners = [
+      config.owner || '0',
+      ...this.authorizedOwners,
+      ...(
+        response.data.filter(pledge => (
+          pledge.attributes.declined_since === null
+        )).map(pledge => (
+          response.included.find(include => include.id === pledge.relationships.patron.data.id)
+        )).filter(include => (
+          include.attributes.social_connections &&
+          include.attributes.social_connections.discord
+        )).map(include => (
+          include.attributes.social_connections.discord.user_id
+        ))
+      )
+    ]
+
+    if (response.links && response.links.next) {
+      return this.updatePatrons(response.links.next)
+    }
   }
 
   /**

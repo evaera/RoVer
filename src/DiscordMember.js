@@ -125,6 +125,7 @@ class DiscordMember {
    */
   async verify (options) {
     options = options || {}
+
     let data = {}
     let freshData = false
     let errorAppend = ''
@@ -203,6 +204,13 @@ class DiscordMember {
 
         return action
       }
+    }
+
+    if (config.patreonAccessToken && !this.discordServer.discordBot.authorizedOwners.includes(this.discordServer.server.ownerID)) {
+      return status({
+        status: false,
+        error: "Sorry, this server isn't authorized to use RoVer Plus. Donate at <https://www.patreon.com/erynlynn> or invite the regular RoVer bot at <https://RoVer.link>."
+      })
     }
 
     // Check if the user is even in the server

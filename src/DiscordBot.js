@@ -71,11 +71,11 @@ class DiscordBot {
       setInterval(() => {
         const beforePatrons = this.authorizedOwners
         this.updatePatrons().catch(() => {
-          console.error("Patron update failed!")
+          console.error('Patron update failed!')
 
           this.authorizedOwners = beforePatrons
         })
-      }), 5 * 60 * 1000)
+      }, 5 * 60 * 1000)
     }
 
     // Register commands

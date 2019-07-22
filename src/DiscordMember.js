@@ -336,7 +336,10 @@ class DiscordMember {
         }
       }
 
-      if (this.discordServer.getSetting('nicknameUsers')) {
+      if (
+        this.discordServer.getSetting('nicknameUsers') &&
+        !this.member.roles.find(role => role.name === 'RoVer Nickname Bypass')
+      ) {
         let nickname = (await this.getNickname(data)).substring(0, 32)
 
         this.discordServer.nicknames.set(this.id, nickname)

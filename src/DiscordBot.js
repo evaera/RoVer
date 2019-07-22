@@ -111,6 +111,7 @@ class DiscordBot {
 
     this.authorizedOwners = [
       config.owner || '0',
+      ...config(config.patreonOverrideOwners || []),
       ...this.authorizedOwners,
       ...(
         response.data.filter(pledge => (

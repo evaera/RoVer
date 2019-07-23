@@ -63,7 +63,7 @@ class DiscordBot {
       this.bot.on('message', this.message.bind(this))
     }
 
-    if (config.patreonAccessToken) {
+    if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg => !this.authorizedOwners.includes(msg.guild.ownerID))
 
       this.updatePatrons()
@@ -93,6 +93,10 @@ class DiscordBot {
 
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
+  }
+
+  isPremium () {
+    return !!config.patreonAccessToken
   }
 
   async updatePatrons (page) {

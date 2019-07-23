@@ -1,7 +1,7 @@
 const Command = require('../Command')
 const DiscordServer = require('../../DiscordServer')
 
-async function recursiveUpdate(memberArray, server, msg) {
+async function recursiveUpdate (memberArray, server, msg) {
   let nextMember = memberArray.pop()
   if (!nextMember) {
     return msg.reply(`:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected.`).then(() => {
@@ -13,11 +13,11 @@ async function recursiveUpdate(memberArray, server, msg) {
   if (!nextMember.user.bot) {
     let member = await server.getMember(nextMember.id)
     if (member) {
-      let res = await member.verify({ skipWelcomeMessage: true })
+      await member.verify({ skipWelcomeMessage: true })
       server.bulkUpdateCount++
     }
   }
-  return recursiveUpdate(memberArray, server, msg);
+  return recursiveUpdate(memberArray, server, msg)
 }
 
 module.exports =
@@ -61,7 +61,7 @@ class UpdateCommand extends Command {
       let server = await this.discordBot.getServer(msg.guild.id)
 
       if (server.ongoingBulkUpdate) {
-        return msg.reply("There is already an ongoing bulk update in this server.")
+        return msg.reply('There is already an ongoing bulk update in this server.')
       }
 
       if (affectedCount > 250) {
@@ -70,7 +70,7 @@ class UpdateCommand extends Command {
 
       server.ongoingBulkUpdate = true
       msg.channel.send(`:hourglass_flowing_sand: Please wait - bulk update for ${affectedCount} members in progress. We'll let you know when it's done.`)
-    
+
       recursiveUpdate(roleMembers, server, msg)
     }
   }

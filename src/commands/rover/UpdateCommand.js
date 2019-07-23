@@ -56,6 +56,8 @@ class UpdateCommand extends Command {
       }
 
       member.verify({ message: msg, skipWelcomeMessage: true })
+    } else if (!this.discordBot.isPremium()) {
+      return msg.reply('Sorry, updating more than one user is only available with RoVer Plus: <https://www.patreon.com/erynlynn>.')
     } else { // They want to update a whole role (premium feature)
       let roleMembers = target.members.array()
       let affectedCount = roleMembers.length // # of affected users
@@ -70,7 +72,7 @@ class UpdateCommand extends Command {
       }
 
       server.ongoingBulkUpdate = true
-      msg.channel.send(`:hourglass_flowing_sand: Please wait - bulk update for ${affectedCount} members in progress. We'll let you know when it's done.`)
+      msg.reply(`:hourglass_flowing_sand: Updating ${affectedCount} members. We'll let you know when we're done.`)
 
       recursiveUpdate(roleMembers, server, msg)
     }

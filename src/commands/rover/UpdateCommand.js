@@ -1,6 +1,25 @@
 const Command = require('../Command')
 const DiscordServer = require('../../DiscordServer')
 
+async function recursiveUpdate(memberArray, server, msg) {
+	let nextMember = memberArray.pop()
+	if (!nextMember) {
+		return msg.reply(`:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected.`).then(() => {
+			server.bulkUpdateCount = 0
+			server.ongoingBulkUpdate = false
+		})
+	}
+
+	if (!nextMember.user.bot) {
+		let member = await server.getMember(nextMember.id)
+		if (member) {
+			let res = await member.verify({ skipWelcomeMessage: true })
+			server.bulkUpdateCount++
+		}
+	}
+	return recursiveUpdate(memberArray, server, msg);
+}
+
 module.exports =
 class UpdateCommand extends Command {
   constructor (client) {
@@ -14,7 +33,7 @@ class UpdateCommand extends Command {
         {
           key: 'user',
           prompt: 'User to update',
-          type: 'user'
+          type: 'user|role'
         }
       ]
     })
@@ -25,16 +44,34 @@ class UpdateCommand extends Command {
   }
 
   async fn (msg, args) {
-    let user = args.user
+		let user = args.user
     DiscordServer.clearMemberCache(user.id)
 
-    let server = await this.discordBot.getServer(msg.guild.id)
-    let member = await server.getMember(user.id)
+		let server = await this.discordBot.getServer(msg.guild.id)
+		if (user.hoist === undefined) { // They want to update a specific user (roles have .hoist, users do not)
+			let member = await server.getMember(user.id)
+			if (!member) {
+				return msg.reply('User not in guild.')
+			}
 
-    if (!member) {
-      return msg.reply('User not in guild.')
-    }
+			member.verify({ message: msg, skipWelcomeMessage: true })
+		} else { // They want to update a whole role (premium feature)
+			let roleMembers = user.members.array()
+			let affectedCount = roleMembers.length // # of affected users
+			let server = await this.discordBot.getServer(msg.guild.id)
 
-    member.verify({ message: msg, skipWelcomeMessage: true })
-  }
+			if (server.ongoingBulkUpdate) {
+				return msg.reply("There is already an ongoing bulk update in this server.")
+			}
+
+			if (affectedCount > 250) {
+				return msg.reply(`Sorry, but RoVer only supports updating up to 250 members at once. Updating this role would affect ${affectedCount} members.`)
+			}
+
+			server.ongoingBulkUpdate = true
+			msg.channel.send(`:hourglass_flowing_sand: Please wait - bulk update for ${affectedCount} members in progress. We'll let you know when it's done.`)
+		
+			recursiveUpdate(roleMembers, server, msg)
+		}
+	}
 }

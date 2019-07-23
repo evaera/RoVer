@@ -2,7 +2,6 @@
 
 const path = require('path')
 const fs = require('mz/fs')
-const config = require('./data/client.json')
 const request = require('request-promise')
 const VirtualGroups = require('./VirtualGroups.js')
 const DiscordMember = require('./DiscordMember')
@@ -42,6 +41,9 @@ class DiscordServer {
     this.verifyCooldowns = new Map()
     this.nicknames = new Map()
 
+    this.ongoingBulkUpdate = false
+    this.bulkUpdateCount = 0
+
     setInterval(() => {
       this.verifyCooldowns = new Map()
       this.nicknames = new Map()
@@ -58,7 +60,7 @@ class DiscordServer {
   }
 
   isAuthorized () {
-    return !config.patreonAccessToken || this.discordBot.authorizedOwners.includes(this.server.ownerID)
+    return !this.discordBot.isPremium() || this.discordBot.authorizedOwners.includes(this.server.ownerID)
   }
 
   /**

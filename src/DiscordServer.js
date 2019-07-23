@@ -39,6 +39,7 @@ class DiscordServer {
     this.server = this.bot.guilds.get(id)
 
     this.verifyCooldowns = new Map()
+    this.nicknames = new Map()
 
     this.ongoingBulkUpdate = false
     this.bulkUpdateCount = 0

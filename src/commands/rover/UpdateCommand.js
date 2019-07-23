@@ -1,5 +1,6 @@
 const Command = require('../Command')
 const DiscordServer = require('../../DiscordServer')
+const { Role } = require('discord.js')
 
 async function recursiveUpdate (memberArray, server, msg) {
   let nextMember = memberArray.pop()
@@ -44,19 +45,19 @@ class UpdateCommand extends Command {
   }
 
   async fn (msg, args) {
-    let user = args.user
-    DiscordServer.clearMemberCache(user.id)
+    let target = args.user
+    DiscordServer.clearMemberCache(target.id)
 
     let server = await this.discordBot.getServer(msg.guild.id)
-    if (user.hoist === undefined) { // They want to update a specific user (roles have .hoist, users do not)
-      let member = await server.getMember(user.id)
+    if (!(target instanceof Role)) { // They want to update a specific user (roles have .hoist, users do not)
+      let member = await server.getMember(target.id)
       if (!member) {
         return msg.reply('User not in guild.')
       }
 
       member.verify({ message: msg, skipWelcomeMessage: true })
     } else { // They want to update a whole role (premium feature)
-      let roleMembers = user.members.array()
+      let roleMembers = target.members.array()
       let affectedCount = roleMembers.length // # of affected users
       let server = await this.discordBot.getServer(msg.guild.id)
 

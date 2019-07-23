@@ -2,6 +2,7 @@
 
 const path = require('path')
 const fs = require('mz/fs')
+const config = require('./data/client.json')
 const request = require('request-promise')
 const VirtualGroups = require('./VirtualGroups.js')
 const DiscordMember = require('./DiscordMember')
@@ -54,6 +55,10 @@ class DiscordServer {
     // We will load the settings in DiscordBot.getServer in order to know when
     // the server is ready from the promise it returns.
     // this.loadSettings();
+  }
+
+  isAuthorized () {
+    return !config.patreonAccessToken || this.discordBot.authorizedOwners.includes(this.server.ownerID)
   }
 
   /**

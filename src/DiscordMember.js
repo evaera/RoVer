@@ -206,7 +206,7 @@ class DiscordMember {
       }
     }
 
-    if (config.patreonAccessToken && !this.discordServer.discordBot.authorizedOwners.includes(this.discordServer.server.ownerID)) {
+    if (!this.discordServer.isAuthorized()) {
       return status({
         status: false,
         error: "Sorry, this server isn't authorized to use RoVer Plus. Donate at <https://www.patreon.com/erynlynn> or invite the regular RoVer bot at <https://RoVer.link>."

@@ -1,7 +1,7 @@
 const Command = require('../Command')
 
 module.exports =
-class AnnounceChannelCommand extends Command {
+class SupportServerCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'support',

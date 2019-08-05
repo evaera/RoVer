@@ -206,11 +206,11 @@ class DiscordBot {
 
     try {
       if (action.status) {
-        member.send(server.getWelcomeMessage(action, member))
+        member.send(server.getWelcomeMessage(action, member)).catch(() => {})
       } else if (!action.status && action.nonFatal) {
-        member.send(`Welcome to ${member.guild.name}! You are already verified, but something went wrong when updating your roles. Try running \`${member.guild.commandPrefix}verify\` in the server for more information.`)
+        member.send(`Welcome to ${member.guild.name}! You are already verified, but something went wrong when updating your roles. Try running \`${member.guild.commandPrefix}verify\` in the server for more information.`).catch(() => {})
       } else {
-        member.send(`Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Verifying your account is quick and safe and doesn't require any information other than your username. All you have to do is either join a game or put a code in your profile, and you're in!\n\nVisit the following link to verify your Roblox account: ${Util.getVerifyLink(member.guild)}`)
+        member.send(`Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Verifying your account is quick and safe and doesn't require any information other than your username. All you have to do is either join a game or put a code in your profile, and you're in!\n\nVisit the following link to verify your Roblox account: ${Util.getVerifyLink(member.guild)}`).catch(() => {})
       }
     } catch (e) {}
   }
@@ -281,7 +281,7 @@ class DiscordBot {
           await this.bot.users.fetch(id)
 
           let guildMember = await this.bot.guilds.get(guild.id).members.fetch(id)
-          guildMember.send(server.getWelcomeMessage(action, guildMember))
+          guildMember.send(server.getWelcomeMessage(action, guildMember)).catch(() => {})
         }
 
         firstRun = false

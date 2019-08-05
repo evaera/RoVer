@@ -23,6 +23,7 @@ class NicknameGroupCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     if (args.groupid) {
       this.server.setSetting('nicknameGroup', args.groupid)
       msg.reply(`Set nickname group to \`${args.groupid}\``)

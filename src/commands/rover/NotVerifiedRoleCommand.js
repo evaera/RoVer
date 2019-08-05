@@ -22,6 +22,7 @@ class NotVerifiedRoleCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     let role = args.role
     if (role) {
       if (this.server.isRoleInUse(role.id)) {

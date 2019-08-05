@@ -23,6 +23,7 @@ class NicknameFormatCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     if (args.format) {
       this.server.setSetting('nicknameFormat', args.format)
       msg.reply(`Set nickname format to \`${args.format}\``)

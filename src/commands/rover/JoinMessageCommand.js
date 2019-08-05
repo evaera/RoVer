@@ -21,6 +21,7 @@ class JoinMessageCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     this.server.setSetting('joinDM', args.state)
     if (args.state) {
       msg.reply('The bot will now direct message new users with the welcome message or verification instructions.')

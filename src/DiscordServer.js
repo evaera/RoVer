@@ -52,6 +52,7 @@ class DiscordServer {
     // Load this server's settings.
     this.settings = {}
     this.areSettingsLoaded = false
+    this.ongoingSettingsUpdate = false
     this.settingsPath = path.join(__dirname, 'data', `${id}.json`)
 
     // We will load the settings in DiscordBot.getServer in order to know when
@@ -139,6 +140,7 @@ class DiscordServer {
     if (!this.areSettingsLoaded) {
       throw new Error('Attempt to change a setting from a server whose settings are not loaded')
     }
+    this.ongoingSettingsUpdate = true
 
     this.settings[key] = value
 
@@ -148,10 +150,12 @@ class DiscordServer {
     try {
       JSON.parse(await fs.readFile(tmpSettingsPath, 'utf8')) // Throws if file got corrupted
     } catch (e) {
+      this.ongoingSettingsUpdate = false
       throw new Error('Atomic save failed: file corrupted. Try again.')
     }
 
     await fs.rename(tmpSettingsPath, this.settingsPath)
+    this.ongoingSettingsUpdate = false
   }
 
   /**

@@ -21,6 +21,7 @@ class UnbindGroupCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     let role = args.role
     if (role) {
       this.server.deleteGroupRankBinding(role.id)

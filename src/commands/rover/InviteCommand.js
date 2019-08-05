@@ -14,11 +14,10 @@ class InviteCommand extends Command {
   }
 
   async fn (msg) {
-    try {
-      msg.author.send(`Use the following link to invite RoVer: <${config.invite}>`)
+    msg.author.send(`Use the following link to invite RoVer: <${config.invite}>`).then(() => {
       msg.reply('Sent you a DM with information.')
-    } catch (e) {
-      msg.reply("I can't seem to message you - please make sure your DMs are enabled!")
-    }
+    }).catch(() => {
+      msg.reply('I can\'t seem to message you - please make sure your DMs are enabled!')
+    })
   }
 }

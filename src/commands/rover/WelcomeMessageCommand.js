@@ -23,6 +23,7 @@ class WelcomeMessageCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     if (args.message) {
       this.server.setSetting('welcomeMessage', args.message)
       msg.reply(`Set welcome message to \`${args.message}\``)

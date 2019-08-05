@@ -12,6 +12,7 @@ class UnbindAllGroupCommand extends Command {
   }
 
   async fn (msg) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     this.server.deleteGroupRankBinding('all')
     msg.reply('Deleted all group rank bindings.')
   }

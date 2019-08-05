@@ -21,6 +21,7 @@ class NicknameCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     this.server.setSetting('nicknameUsers', args.state)
     if (args.state) {
       msg.reply('The bot will now nickname users to their Roblox username.')

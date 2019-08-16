@@ -60,7 +60,21 @@ module.exports = {
 
     return userProfile.groups.find(g => g.name === 'Roblox_Staff') != null
   },
+  
+  async CommunitySage (user) {
+    const userProfile = await getDevForumProfile(user)
+    if (!userProfile) return
 
+    return userProfile.groups.find(g => g.name === 'Community_Sage') != null
+  },
+  
+  async PostApproval (user) {
+    const userProfile = await getDevForumProfile(user)
+    if (!userProfile) return
+
+    return userProfile.groups.find(g => g.name === 'Post_Approval') != null
+  },
+  
   /**
    * Check if the given user is in the Roblox Dev Forum.
    *

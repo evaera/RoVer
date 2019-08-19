@@ -88,21 +88,27 @@ class WhoisCommand extends Command {
           bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
           if (!bc) {
             let response = await request({
-              uri: `https://www.roblox.com/Thumbs/BCOverlay.ashx?username=${encodeURIComponent(data.robloxUsername)}`,
+              uri: `https://premiumfeatures.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/subscriptions`,
               simple: false,
               resolveWithFullResponse: true
             })
 
             let url = response.request.uri.href
+            let bcType = JSON.parse(response.body).subscriptionProductModel.subscriptionTypeName;
+            let isLifetime = JSON.parse(response.body).subscriptionProductModel.isLifetime;
             bc = 'NBC'
 
-            if (url.includes('overlay_obcOnly')) {
+            if (bcType === 'BC_OutrageousBuildersClub') {
               bc = 'OBC'
-            } else if (url.includes('overlay_tbcOnly')) {
+            } else if (bcType === 'BC_TurboBuildersClub') {
               bc = 'TBC'
-            } else if (url.includes('overlay_bcOnly')) {
+            } else if (bcType === 'BC_ClassicBuildersClub') {
               bc = 'BC'
+            } else if (bcType.includes('RobloxPremium')) { // can be numerous things - varies by robux amt & month amt
+              bc = 'Premium'
             }
+
+            if (isLifetime) bc = `Lifetime ${bc}`
 
             Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
           }

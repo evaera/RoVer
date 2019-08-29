@@ -93,9 +93,8 @@ class WhoisCommand extends Command {
               resolveWithFullResponse: true
             })
 
-            let url = response.request.uri.href
-            let bcType = JSON.parse(response.body).subscriptionProductModel.subscriptionTypeName;
-            let isLifetime = JSON.parse(response.body).subscriptionProductModel.isLifetime;
+            let bcType = JSON.parse(response.body).subscriptionProductModel.subscriptionTypeName
+            let isLifetime = JSON.parse(response.body).subscriptionProductModel.isLifetime
             bc = 'NBC'
 
             if (bcType === 'BC_OutrageousBuildersClub') {

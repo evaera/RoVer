@@ -9,7 +9,6 @@ class LookupCommand extends Command {
       name: 'reverselookup',
       properName: 'Reverse Lookup',
       aliases: ['rlookup', 'rlook'],
-      userPermissions: [],
       description: "`<user id>` Get a Roblox User's Discord username if they are in your server.",
 
       args: [

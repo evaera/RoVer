@@ -301,27 +301,27 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   cleanupRankBindings (lastResortChannel) {
-    let verifiedRole = this.getSetting('verifiedRole')
-    let unverifiedRole = this.getSetting('verifiedRemovedRole')
+    // let verifiedRole = this.getSetting('verifiedRole')
+    // let unverifiedRole = this.getSetting('verifiedRemovedRole')
 
-    if (verifiedRole && !this.server.roles.get(verifiedRole)) {
-      this.setSetting('verifiedRole', null)
-      this.announce('Verified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the verified role, so users will no longer get that when they verify.', { important: true, lastResortChannel })
-    }
+    // if (verifiedRole && !this.server.roles.get(verifiedRole)) {
+    //   this.setSetting('verifiedRole', null)
+    //   this.announce('Verified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the verified role, so users will no longer get that when they verify.', { important: true, lastResortChannel })
+    // }
 
-    if (unverifiedRole && !this.server.roles.get(unverifiedRole)) {
-      this.setSetting('verifiedRemovedRole', null)
-      this.announce('Unverified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the unverified role, so unverified users will no longer receive that role.', { important: true, lastResortChannel })
-    }
+    // if (unverifiedRole && !this.server.roles.get(unverifiedRole)) {
+    //   this.setSetting('verifiedRemovedRole', null)
+    //   this.announce('Unverified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the unverified role, so unverified users will no longer receive that role.', { important: true, lastResortChannel })
+    // }
 
-    for (let binding of this.getSetting('groupRankBindings')) {
-      let id = binding.role
-      if (!this.server.roles.get(id)) {
-        this.deleteGroupRankBinding(id)
+    // for (let binding of this.getSetting('groupRankBindings')) {
+    //   let id = binding.role
+    //   if (!this.server.roles.get(id)) {
+    //     this.deleteGroupRankBinding(id)
 
-        this.announce('Bound Role Deleted', 'Heads up! Looks like you (or someone) has deleted a Discord role that was bound to ' + Util.getBindingText(binding, true), { important: true, lastResortChannel })
-      }
-    }
+    //     this.announce('Bound Role Deleted', 'Heads up! Looks like you (or someone) has deleted a Discord role that was bound to ' + Util.getBindingText(binding, true), { important: true, lastResortChannel })
+    //   }
+    // }
   }
 
   /**

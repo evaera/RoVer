@@ -4,7 +4,7 @@ module.exports =
 class Command extends Commando.Command {
   constructor (client, info) {
     info.group = 'rover'
-    info.guildOnly = true
+    info.guildOnly = info.guildOnly == null ? true : info.guildOnly
     info.memberName = info.name
     info.argsPromptLimit = 1
 
@@ -16,11 +16,11 @@ class Command extends Commando.Command {
   }
 
   hasPermission (msg) {
-    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.find(role => role.name === 'RoVer Admin')
+    return this.client.isOwner(msg.author) || !msg.guild || msg.member.hasPermission(this.userPermissions) || msg.member.roles.find(role => role.name === 'RoVer Admin')
   }
 
   async run (msg, args, pattern) {
-    this.server = await this.discordBot.getServer(msg.guild.id)
+    this.server = msg.guild && await this.discordBot.getServer(msg.guild.id)
     return this.fn(msg, args, pattern)
   }
 }

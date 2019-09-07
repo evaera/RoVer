@@ -7,6 +7,7 @@ const {Cache} = require('./GlobalCache')
 const requestDebug = require('request-debug')
 const SettingProvider = require('./commands/SettingProvider')
 const Util = require('./Util')
+const fs = require('mz/fs')
 
 if (config.loud) requestDebug(request, (type, data) => console.log(`${type} ${data.debugId} : ${data.uri || data.statusCode}`))
 
@@ -19,6 +20,7 @@ class DiscordBot {
     this.initialize()
     this.servers = {}
     this.authorizedOwners = []
+    this.patronTransfers = {}
   }
 
   /**
@@ -64,7 +66,11 @@ class DiscordBot {
     }
 
     if (this.isPremium()) {
-      this.bot.dispatcher.addInhibitor(msg => !this.authorizedOwners.includes(msg.guild.ownerID))
+      this.bot.dispatcher.addInhibitor(msg =>
+         msg.guild &&
+         msg.command.name !== 'verify' &&
+         !this.authorizedOwners.includes(msg.guild.ownerID)
+      )
 
       this.updatePatrons()
 
@@ -104,6 +110,21 @@ class DiscordBot {
       this.authorizedOwners = []
     }
 
+    const transferFilePath = path.join(__dirname, './data/transfers.csv')
+
+    if (await fs.exists(transferFilePath)) {
+      const contents = await fs.readFile(transferFilePath, {
+        encoding: 'utf8'
+      })
+
+      this.patronTransfers = contents.split(/\n\r?/)
+        .map(line => line.split(','))
+        .reduce((a, transfer) => {
+          a[transfer[0]] = transfer[1]
+          return a
+        }, {})
+    }
+
     const url = page || `https://www.patreon.com/api/oauth2/api/campaigns/${config.patreonCampaignId}/pledges?include=patron.null`
 
     const response = await request(url, {
@@ -129,7 +150,7 @@ class DiscordBot {
           include.attributes.social_connections.discord.user_id
         ))
       )
-    ]
+    ].map(id => this.patronTransfers[id] || id)
 
     if (response.links && response.links.next) {
       return this.updatePatrons(response.links.next)

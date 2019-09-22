@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "common-tags": "^1.7.2",
-    "discord.js": "https://github.com/discordjs/discord.js.git#276109ed3c8ee990296af34e2ae0a6174e151c70",
-    "discord.js-commando": "https://github.com/discordjs/Commando.git#061814a24030f74073b056e9cb05782c2dfa9587",
+    "discord.js": "github:discordjs/discord.js#d05334fd3cd8fb913e869654f25eb8230493de11",
+    "discord.js-commando": "github:discordjs/commando#4beeec829ed25fc2c6ec0896edf7e0ac4d8bfcf0",
     "erlpack": "discordapp/erlpack",
     "express": "^4.15.2",
     "mz": "^2.6.0",

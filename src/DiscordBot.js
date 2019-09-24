@@ -35,6 +35,10 @@ class DiscordBot {
       commandPrefix: config.commandPrefix || '!',
       unknownCommandResponse: false
     })
+    
+    this.bot.registry.registerDefaultTypes()
+      .registerDefaultGroups()
+      .registerDefaultCommands({unknownCommand: false}) // Remove "unknown command" message
 
     this.bot.setProvider(new SettingProvider())
 

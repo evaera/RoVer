@@ -1,6 +1,7 @@
 const Command = require('../Command')
 const DiscordServer = require('../../DiscordServer')
 const { Role } = require('discord.js')
+const config = require('../../data/client.json')
 
 async function recursiveUpdate (memberArray, server, msg) {
   let nextMember = memberArray.pop()
@@ -67,8 +68,9 @@ class UpdateCommand extends Command {
         return msg.reply('There is already an ongoing bulk update in this server.')
       }
 
-      if (affectedCount > 250) {
-        return msg.reply(`Sorry, but RoVer only supports updating up to 250 members at once. Updating this role would affect ${affectedCount} members.`)
+      const limit = config.massUpdateLimit || 0
+      if (affectedCount > limit) {
+        return msg.reply(`Sorry, but RoVer only supports updating up to ${limit} members at once. Updating this role would affect ${affectedCount} members.`)
       }
 
       server.ongoingBulkUpdate = true

@@ -170,7 +170,7 @@ class WhoisCommand extends Command {
 
         if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'RoVer Contributor', inline: true })
 
-        editMessage.edit({embed}).catch(console.error)
+        editMessage.edit({embed: embed}).catch(console.error)
       } else {
         editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
       }

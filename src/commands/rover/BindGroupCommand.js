@@ -45,7 +45,7 @@ class BindGroupCommand extends Command {
       return
     }
     
-    if (args.role.name === "@everyone" || role.name === "@here") return msg.reply('You are unable to bind this role.')
+    if (args.role.name === "@everyone" || args.role.name === "@here") return msg.reply('You are unable to bind this role.')
 
     binding.role = args.role.id
     binding.groups = []

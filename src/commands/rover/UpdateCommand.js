@@ -30,6 +30,7 @@ class UpdateCommand extends Command {
       properName: 'Update',
       aliases: ['roverupdate'],
       description: '`<Discord User>` Forcibly update verification status of a user, same as them running !verify. Make sure you @mention the user.',
+      throttling: {usages: 1, duration: 10}, // 1 usage every 30 seconds 
 
       args: [
         {

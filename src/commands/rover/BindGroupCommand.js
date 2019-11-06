@@ -32,10 +32,10 @@ class BindGroupCommand extends Command {
   async fn (msg, args) {
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     if (config.maxServerBindings && this.server.getSetting('groupRankBindings').length > config.maxServerBindings) {
-      return msg.reply(`This server has exceeded the maximum amount of allowed role bindings.\n\nTo bind an unlimited number of roles, please consider a $6 monthly donation for RoVer Plus:\n <https://www.patreon.com/erynlynn>.\n\n*Please be aware that this is a temporary restriction as part of an effort to reduce resource consumption. In the future, more role bindings will be available for free.*`)
+      return msg.reply('This server has exceeded the maximum amount of allowed role bindings.\n\nTo bind an unlimited number of roles, please consider a $6 monthly donation for RoVer Plus:\n <https://www.patreon.com/erynlynn>.\n\n*Please be aware that this is a temporary restriction as part of an effort to reduce resource consumption. In the future, more role bindings will be available for free.*')
     }
 
-    let binding = {}
+    const binding = {}
 
     if (this.server.isRoleInUse(args.role.id)) {
       msg.reply(
@@ -45,12 +45,14 @@ class BindGroupCommand extends Command {
       return
     }
 
+    if (args.role.name === '@everyone' || args.role.name === '@here') return msg.reply('You are unable to bind this role.')
+
     binding.role = args.role.id
     binding.groups = []
 
-    for (let groupString of args.groups) {
-      let [groupId, ranksString] = groupString.split(':')
-      let group = { id: groupId }
+    for (const groupString of args.groups) {
+      const [groupId, ranksString] = groupString.split(':')
+      const group = { id: groupId }
 
       if (groupId.match(/[^\d]/) && !VirtualGroups[groupId]) {
         return msg.reply(
@@ -65,15 +67,15 @@ class BindGroupCommand extends Command {
       }
 
       if (ranksString != null) {
-        let ranks = []
-        let unparsedRanks = ranksString.split(',')
-        for (let rank of unparsedRanks) {
-          let rangeMatch = rank.match(/(\d+)-(\d+)/)
-          let rankNumber = parseInt(rank, 10)
+        const ranks = []
+        const unparsedRanks = ranksString.split(',')
+        for (const rank of unparsedRanks) {
+          const rangeMatch = rank.match(/(\d+)-(\d+)/)
+          const rankNumber = parseInt(rank, 10)
 
           if (rangeMatch) {
-            let start = parseInt(rangeMatch[1], 10)
-            let stop = parseInt(rangeMatch[2], 10)
+            const start = parseInt(rangeMatch[1], 10)
+            const stop = parseInt(rangeMatch[2], 10)
 
             if (start && stop) {
               for (let i = start; i <= stop; i++) {
@@ -101,7 +103,7 @@ class BindGroupCommand extends Command {
     this.server.deleteGroupRankBinding(binding.role)
 
     // Add the new binding.
-    let serverBindings = this.server.getSetting('groupRankBindings')
+    const serverBindings = this.server.getSetting('groupRankBindings')
     serverBindings.push(binding)
     this.server.setSetting('groupRankBindings', serverBindings)
 

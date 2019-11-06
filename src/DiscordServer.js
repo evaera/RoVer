@@ -81,7 +81,7 @@ class DiscordServer {
     }
 
     // Load the settings file.
-    let fileData = await fs.readFile(this.settingsPath)
+    const fileData = await fs.readFile(this.settingsPath)
 
     if (this.areSettingsLoaded) return
 
@@ -166,9 +166,9 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   static convertOldBinding (binding) {
-    let newBinding = { role: binding.role }
+    const newBinding = { role: binding.role }
 
-    let ranks = []
+    const ranks = []
     if (binding.operator === 'gt') {
       for (let i = binding.rank; i <= 255; i++) {
         ranks.push(i)
@@ -231,18 +231,18 @@ class DiscordServer {
       binding = this.convertOldBinding(binding)
     }
 
-    let bindingHash = Util.md5(JSON.stringify(binding))
+    const bindingHash = Util.md5(JSON.stringify(binding))
 
     // Check if the return value of this method has already been
     // cached in memory. If so, return that.
-    let cachedBinding = await Cache.get(`bindings.${userid}`, bindingHash)
+    const cachedBinding = await Cache.get(`bindings.${userid}`, bindingHash)
     if (cachedBinding !== null) {
       return cachedBinding
     }
 
     let returnValue = false
 
-    for (let group of binding.groups) {
+    for (const group of binding.groups) {
       if (VirtualGroups[group.id]) {
         returnValue = await VirtualGroups[group.id]({ id: userid, username }, group.ranks[0], DiscordServer)
 
@@ -252,7 +252,7 @@ class DiscordServer {
         const groups = await DiscordServer.getRobloxMemberGroups(userid)
 
         let rank = 0
-        for (let groupObj of groups) {
+        for (const groupObj of groups) {
           if (groupObj.Id.toString() === group.id) {
             rank = groupObj.Rank
             break
@@ -281,10 +281,10 @@ class DiscordServer {
       return this.setSetting('groupRankBindings', [])
     }
 
-    let rankBindings = this.getSetting('groupRankBindings')
+    const rankBindings = this.getSetting('groupRankBindings')
 
     for (let i = 0; i < rankBindings.length; i++) {
-      let binding = rankBindings[i]
+      const binding = rankBindings[i]
 
       if (binding.role === roleid || roleid === 'all') {
         rankBindings.splice(i, 1)
@@ -334,14 +334,14 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   async announce (title, text, options = {}) {
-    let embed = {
+    const embed = {
       color: options.important ? 0xe74c3c : 0x0064ba,
       title,
       description: text
     }
 
     if (this.getSetting('announceChannel')) {
-      let channel = await this.server.channels.get(this.getSetting('announceChannel'))
+      const channel = await this.server.channels.get(this.getSetting('announceChannel'))
 
       if (channel) {
         try {
@@ -413,7 +413,7 @@ class DiscordServer {
     if (this.getSetting('verifiedRole') === id) return true
     if (this.getSetting('verifiedRemovedRole') === id) return true
 
-    for (let binding of this.getSetting('groupRankBindings')) {
+    for (const binding of this.getSetting('groupRankBindings')) {
       if (binding.role === id) return true
     }
 

@@ -23,8 +23,9 @@ class VerifiedRoleCommand extends Command {
 
   async fn (msg, args) {
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
-    let role = args.role
+    const role = args.role
     if (role) {
+      if (role.name === '@everyone' || role.name === '@here') return msg.reply('You are unable to use this role.')
       if (this.server.isRoleInUse(role.id)) {
         msg.reply(`That role is already in use. (verified role, not verified role, or from a group binding). Run \`${msg.guild.commandPrefix}bindings\` to see all role bindings.`)
       } else {

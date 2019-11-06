@@ -240,7 +240,7 @@ class DiscordMember {
     }
 
     // Create a warning to append to any errors. In some permission setups, RoVer is reliant on role positioning (specifically if it has administrator or not)
-    if (!(await this.server.members.fetch(this.bot.user.id)).manageable) {
+    if (!this.member.manageable) {
       errorAppend = "\n\nRoVer's position in the role list is below that of this user. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
     }
 
@@ -263,7 +263,7 @@ class DiscordMember {
       if (config.loud) console.log(e)
       return status({
         status: false,
-        error: 'Unknown error.'
+        error: 'There was an error while trying to fetch this user\'s verification data!'
       })
     }
 
@@ -281,7 +281,11 @@ class DiscordMember {
             simple: false
           })
         } catch (e) {
-          return false
+          if (config.loud) console.log(e)
+          return status({
+            status: false,
+            error: 'There was an error while fetching the user\'s data!'
+          })
         }
 
         if (apiUserData.errors && apiUserData.errors[0] && apiUserData.errors[0].code === 0) {
@@ -314,7 +318,7 @@ class DiscordMember {
             return status({
               status: false,
               nonFatal: true,
-              error: "RoVer doesn't have permissions to add roles to that user." + errorAppend
+              error: "There was an error while trying to assign the verified role! Ensure RoVer's role is above it." + errorAppend
             })
           }
         }
@@ -330,7 +334,7 @@ class DiscordMember {
             return status({
               status: false,
               nonFatal: true,
-              error: "RoVer doesn't have permission to remove roles from that user." + errorAppend
+              error: "There was an error while trying to remove the verified role! Ensure RoVer's role is above it." + errorAppend
             })
           }
         }

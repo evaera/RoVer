@@ -26,9 +26,9 @@ class CreateGroupRanksCommand extends Command {
     try {
       const { Roles } = await request(`https://api.roblox.com/groups/${args.groupid}`, { json: true })
 
-      let serverBindings = this.server.getSetting('groupRankBindings')
+      const serverBindings = this.server.getSetting('groupRankBindings')
       Roles.reverse()
-      for (let role of Roles) {
+      for (const role of Roles) {
         const newRole = (await msg.guild.roles.find(guildRole => guildRole.name === role.Name)) || (await msg.guild.roles.create({
           data: {
             name: role.Name,
@@ -51,7 +51,7 @@ class CreateGroupRanksCommand extends Command {
 
       msg.reply(`Created ${Roles.length} role bindings successfully (and created the roles if necessary).`)
     } catch (e) {
-      msg.reply(`:no_entry_sign: Something went wrong. Maybe the group doesn't exist, or maybe RoVer doesn't have permission to create roles in this server.`)
+      msg.reply(':no_entry_sign: Something went wrong. Maybe the group doesn\'t exist, or maybe RoVer doesn\'t have permission to create roles in this server.')
     }
   }
 }

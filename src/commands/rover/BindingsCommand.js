@@ -20,7 +20,7 @@ class BindingsCommand extends Command {
    * @returns {string} The processed role name
    */
   getRoleName (id) {
-    let role = this.server.server.roles.get(id)
+    const role = this.server.server.roles.get(id)
     if (role) return role.name
     return '<Deleted role>'
   }
@@ -29,12 +29,12 @@ class BindingsCommand extends Command {
     let bindingText = ''
 
     if (this.server.getSetting('verifiedRole')) {
-      let id = this.server.getSetting('verifiedRole')
+      const id = this.server.getSetting('verifiedRole')
       bindingText += `**Verified Role**\n${this.getRoleName(id)} <${id}>\n\n`
     }
 
     if (this.server.getSetting('verifiedRemovedRole')) {
-      let id = this.server.getSetting('verifiedRemovedRole')
+      const id = this.server.getSetting('verifiedRemovedRole')
       bindingText += `**Unverified Role**\n${this.getRoleName(id)} <${id}>\n\n`
     }
 
@@ -58,7 +58,7 @@ class BindingsCommand extends Command {
         groupBindingsText = '**__Group Bindings (cont.)__**\n\n'
       }
 
-      let id = binding.role
+      const id = binding.role
 
       groupBindingsText += `${this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
 

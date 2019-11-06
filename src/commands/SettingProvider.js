@@ -20,13 +20,13 @@ class SettingProvider {
   }
 
   async get (guild, key, defaultValue) {
-    let settings = await this.getSettings(guild)
+    const settings = await this.getSettings(guild)
 
     return settings[key] || defaultValue
   }
 
   async set (guild, key, value) {
-    let settings = await this.getSettings(guild)
+    const settings = await this.getSettings(guild)
 
     settings[key] = value
 

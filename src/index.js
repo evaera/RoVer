@@ -3,14 +3,14 @@
 const path = require('path')
 const request = require('request-promise')
 const Discord = require('discord.js')
-const {GlobalCache} = require('./GlobalCache')
+const { GlobalCache } = require('./GlobalCache')
 const config = require('./data/client.json')
 const updateServer = require('./UpdateServer.js')
 const Util = require('./Util.js')
 
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards.
-let shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
+const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
   token: config.token,
   totalShards: config.totalShards || 'auto',
   shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined
@@ -40,11 +40,11 @@ async function getNextActivity () {
   switch (currentActivity) {
     case 0:
       return { text: 'https://RoVer.link' }
-    case 1:
+    case 1: {
       let totalGuilds = (await shardingManager.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
       totalGuilds = Util.toHumanReadableNumber(totalGuilds)
       return { text: `${totalGuilds} servers`, type: 'WATCHING' }
-    case 2:
+    } case 2:
       return { text: `${totalUsers} users`, type: 'LISTENING' }
     case 3:
       return { text: '!rover', type: 'LISTENING' }

@@ -31,12 +31,12 @@ class WhoisCommand extends Command {
   // This is probably the worst file in the entire project, so prepare yourself.
   // TODO: DRY this up and make the method that gets user data a method in DiscordMember
   async fn (msg, args) {
-    let member = args.member
+    const member = args.member
     let data = {}
     if (member) { // If the member specified exists,
-      let editMessage = await msg.reply(`:mag: Looking up ${member.displayName.replace(/@/g, '')}`)
+      const editMessage = await msg.reply(`:mag: Looking up ${member.displayName.replace(/@/g, '')}`)
 
-      let id = member.user.id
+      const id = member.user.id
       try {
         // Read user data from memory, or request it if there isn't any cached.
         data = await Cache.get('users', id)
@@ -67,14 +67,14 @@ class WhoisCommand extends Command {
         if (apiUserData.Username) {
           data.robloxUsername = apiUserData.Username
         }
-        let profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
-        let avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${encodeURIComponent(data.robloxUsername)}`
+        const profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
+        const avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${encodeURIComponent(data.robloxUsername)}`
 
         let bio = 'Bio failed to load'
         let joinDate = 'Unknown'
         let pastNames = 'Unknown'
         try {
-          let profileSource = await request({
+          const profileSource = await request({
             uri: profileLink
           })
 
@@ -130,7 +130,7 @@ class WhoisCommand extends Command {
         // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
         bio = bio.replace('@', '@ ')
 
-        let embed = {
+        const embed = {
           title: 'View Profile',
           url: profileLink,
           author: {
@@ -163,7 +163,7 @@ class WhoisCommand extends Command {
           }
 
           embed.fields.push({
-            name: `Group Rank`,
+            name: 'Group Rank',
             value: isAlly ? 'Ally' : (serverGroup ? serverGroup.Role : 'Guest')
           })
         }

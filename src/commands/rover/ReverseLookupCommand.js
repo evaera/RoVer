@@ -27,7 +27,7 @@ class LookupCommand extends Command {
       return msg.reply('Sorry, reverse lookup is only available on official versions of RoVer.')
     }
 
-    let userId = args.id
+    const userId = args.id
 
     const data = await request({
       uri: `https://verify.eryn.io/api/roblox/${userId}?apiKey=${config.reverseLookupApiKey}`,

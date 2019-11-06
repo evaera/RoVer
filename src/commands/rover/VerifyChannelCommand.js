@@ -23,7 +23,7 @@ class VerifyChannelCommand extends Command {
 
   async fn (msg, args) {
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
-    let channel = args.channel
+    const channel = args.channel
 
     if (channel) {
       this.server.setSetting('verifyChannel', channel.id)

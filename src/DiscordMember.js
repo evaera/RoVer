@@ -41,7 +41,7 @@ class DiscordMember {
    * @memberof DiscordMember
    */
   static async new (discordServer, id) {
-    let discordMember = new DiscordMember(discordServer, id)
+    const discordMember = new DiscordMember(discordServer, id)
 
     if (!await discordMember.prepareMember()) {
       return false
@@ -87,7 +87,7 @@ class DiscordMember {
    * @memberof DiscordMember
    */
   async getNickname (data) {
-    let nicknameData = {
+    const nicknameData = {
       robloxUsername: data.robloxUsername,
       robloxId: data.robloxId,
       discordId: data.discordId,
@@ -95,11 +95,11 @@ class DiscordMember {
     }
 
     if (this.discordServer.getSetting('nicknameGroup')) {
-      let apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
+      const apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
 
-      for (let groups of apiRank) {
+      for (const groups of apiRank) {
         if (parseInt(groups.Id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
-          let rankMatch = groups.Role.match(/(.+(?:\]|\)|\}|\|))/)
+          const rankMatch = groups.Role.match(/(.+(?:\]|\)|\}|\|))/)
           nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.Role}]`
           break
         }
@@ -164,7 +164,7 @@ class DiscordMember {
 
     if (options.message) {
       // Create the status message and save initial information.
-      let statusMessage = await options.message.reply(':bulb: Working...')
+      const statusMessage = await options.message.reply(':bulb: Working...')
 
       // We don't want to edit the message too quickly, otherwise Discord will throttle us. T
       // This limits edits to one per second but keeps it up to date after at least 1 second passes.
@@ -172,7 +172,7 @@ class DiscordMember {
       let editIndex = 0
       status = action => {
         editIndex++
-        let thisIndex = editIndex
+        const thisIndex = editIndex
 
         // A self-invoking async function so that we can delay the message sending if necessary,
         // but we don't delay the return value.
@@ -305,7 +305,7 @@ class DiscordMember {
       status(':dividers:️ Updating your nickname and roles...')
 
       if (this.discordServer.getSetting('verifiedRole')) {
-        let role = this.discordServer.getSetting('verifiedRole')
+        const role = this.discordServer.getSetting('verifiedRole')
         if (!this.member.roles.has(role) && this.server.roles.has(role)) {
           try {
             await this.member.roles.add(role)
@@ -321,7 +321,7 @@ class DiscordMember {
       }
 
       if (this.discordServer.getSetting('verifiedRemovedRole')) {
-        let role = this.discordServer.getSetting('verifiedRemovedRole')
+        const role = this.discordServer.getSetting('verifiedRemovedRole')
         if (this.member.roles.has(role) && this.server.roles.has(role)) {
           try {
             await this.member.roles.remove(role)
@@ -340,7 +340,7 @@ class DiscordMember {
         this.discordServer.getSetting('nicknameUsers') &&
         !this.member.roles.find(role => role.name === 'RoVer Nickname Bypass')
       ) {
-        let nickname = (await this.getNickname(data)).substring(0, 32)
+        const nickname = (await this.getNickname(data)).substring(0, 32)
 
         this.discordServer.nicknames.set(this.id, nickname)
 
@@ -373,12 +373,12 @@ class DiscordMember {
 
         await DiscordServer.getRobloxMemberGroups(data.robloxId)
 
-        let promises = []
-        for (let binding of this.discordServer.getSetting('groupRankBindings')) {
+        const promises = []
+        for (const binding of this.discordServer.getSetting('groupRankBindings')) {
           // We use a Promise.then here so that they all execute asynchronously.
           promises.push(DiscordServer.resolveGroupRankBinding(binding, data.robloxId, data.robloxUsername)
             .then((state) => {
-              let hasRole = this.member.roles.get(binding.role) != null
+              const hasRole = this.member.roles.get(binding.role) != null
               if (hasRole === state) return
 
               if (!this.server.roles.has(binding.role)) return
@@ -416,7 +416,7 @@ class DiscordMember {
     } else {
       // Status was not "ok".
       switch (data.errorCode) {
-        case 404:
+        case 404: {
           // User isn't in the database.
           // Add the "Not Verified" role to the user.
 
@@ -452,7 +452,7 @@ class DiscordMember {
             status: false,
             error
           })
-        case 429:
+        } case 429:
           // This client has exceeded the amount of requests allowed in a 60 second period.
           return status({
             status: false,

@@ -5,7 +5,7 @@ module.exports =
 // to cause the bot to download new information about a
 // target user and update the user's state in all servers.
 function (shardingManager, config) {
-  let server = express()
+  const server = express()
 
   server.get('/update-user', (req, res) => {
     if (config.apiKey && config.apiKey !== req.query.apiKey) {
@@ -16,8 +16,8 @@ function (shardingManager, config) {
       return res.status(400).end()
     }
 
-    let id = req.query.id
-    let guilds = req.query.guilds.split(',')
+    const id = req.query.id
+    const guilds = req.query.guilds.split(',')
 
     res.end('ok')
 

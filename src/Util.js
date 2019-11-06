@@ -13,7 +13,7 @@ module.exports = {
    * @returns {string} The processed string
    */
   formatDataString (formatString, data, member) {
-    let replacements = {
+    const replacements = {
       '%USERNAME%': data.robloxUsername,
       '%USERID%': data.robloxId,
       '%RANK%': data.groupRank || '',
@@ -50,11 +50,11 @@ module.exports = {
    * @returns {string} The output string
    */
   simplifyNumbers (numbers) {
-    let output = []
+    const output = []
     let rangeStart
     for (let i = 0; i < numbers.length; i++) {
-      let number = numbers[i]
-      let next = numbers[i + 1]
+      const number = numbers[i]
+      const next = numbers[i + 1]
 
       if (rangeStart != null && (next - number !== 1 || next == null)) {
         output.push(`${rangeStart}-${number}`)
@@ -117,7 +117,7 @@ module.exports = {
       return `\nInvalid Group Format - Unbind role ${binding.role} to fix this problem.\n`
     }
 
-    for (let [index, group] of binding.groups.entries()) {
+    for (const [index, group] of binding.groups.entries()) {
       if (index > 0) bindingMessage += '...or\n'
 
       if (group.id.match(/[a-z]/i)) {
@@ -142,6 +142,6 @@ module.exports = {
    * @returns {string} The link to the verification site
    */
   getVerifyLink (guild) {
-    return `https://verify.eryn.io` // /?from=${guild.id}`
+    return 'https://verify.eryn.io' // /?from=${guild.id}`
   }
 }

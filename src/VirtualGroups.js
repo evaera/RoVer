@@ -14,12 +14,12 @@ const request = require('request-promise')
  * @returns {object} The DebForum profile data
  */
 async function getDevForumProfile (user) {
-  let username = user.username
+  const username = user.username
   let userProfile = await Cache.get(`bindings.${user.id}`, 'DevForumProfile')
 
   if (!userProfile) {
     try {
-      let devForumData = await request({
+      const devForumData = await request({
         uri: `https://devforum.roblox.com/users/${username}.json`,
         json: true,
         simple: false
@@ -92,7 +92,7 @@ module.exports = {
       return true
     }
 
-    if (!userTrustLevel || !trustLevelCheck(userTrustLevel) || userProfile['suspended_till']) {
+    if (!userTrustLevel || !trustLevelCheck(userTrustLevel) || userProfile.suspended_till) {
       return false
     }
 
@@ -126,13 +126,13 @@ module.exports = {
   async BuildersClub (user, bcType) {
     let bc = await Cache.get(`bindings.${user.id}`, 'bc')
     if (!bc) {
-      let response = await request({
+      const response = await request({
         uri: `https://www.roblox.com/Thumbs/BCOverlay.ashx?username=${user.username}`,
         simple: false,
         resolveWithFullResponse: true
       })
 
-      let url = response.request.uri.href
+      const url = response.request.uri.href
       bc = 'NBC'
 
       if (url.includes('overlay_obcOnly')) {
@@ -181,7 +181,7 @@ module.exports = {
   async Clan (user, groupid, DiscordServer) {
     const userGroups = await DiscordServer.getRobloxMemberGroups(user.id)
 
-    for (let group of userGroups) {
+    for (const group of userGroups) {
       if (group.Id === groupid) {
         return group.IsInClan
       }
@@ -216,7 +216,7 @@ module.exports = {
           json: true
         })
 
-        for (let group of content.Groups) {
+        for (const group of content.Groups) {
           allies.push(group.Id)
         }
 
@@ -230,7 +230,7 @@ module.exports = {
       Cache.set(`groups.${groupid}`, relation, allies)
     }
 
-    for (let group of userGroups) {
+    for (const group of userGroups) {
       if (allies.includes(group.Id)) {
         return true
       }
@@ -284,7 +284,7 @@ module.exports = {
     try {
       let doesHaveAsset = await Cache.get(`bindings.${user.id}`, `${itemType}.${itemId}`)
       if (doesHaveAsset == null) {
-        let responseData = await request({
+        const responseData = await request({
           uri: `https://inventory.roblox.com/v1/users/${user.id}/items/${itemType}/${itemId}`,
           simple: false,
           json: true

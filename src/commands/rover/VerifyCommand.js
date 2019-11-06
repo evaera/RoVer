@@ -16,8 +16,8 @@ class VerifyCommand extends Command {
   async fn (msg) {
     // The user ran `!verify`, we are checking their status now.
 
-    let server = await this.discordBot.getServer(msg.guild.id)
-    let member = await server.getMember(msg.author.id)
+    const server = await this.discordBot.getServer(msg.guild.id)
+    const member = await server.getMember(msg.author.id)
 
     if (!member) {
       return msg.reply('User not in guild.')

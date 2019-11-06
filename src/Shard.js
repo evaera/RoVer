@@ -4,7 +4,7 @@ const config = require('./data/client.json')
 const DiscordBot = require('./DiscordBot')
 
 // Instantiate the bot.
-let discordBot = new DiscordBot()
+const discordBot = new DiscordBot()
 
 // Listen for when we need to globally update a member
 // from the Update Server.

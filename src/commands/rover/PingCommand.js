@@ -10,6 +10,7 @@ class PingCommand extends Command {
       userPermissions: []
     })
   }
+
   async fn (msg) {
     msg.channel.send('Pinging...').then(message => {
       message.edit(`:ping_pong: Pong! Took **${message.createdTimestamp - msg.createdTimestamp}ms**`)

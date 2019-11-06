@@ -9,7 +9,7 @@ class VerifyCommand extends Command {
       aliases: ['getroles', 'getrole'],
       userPermissions: [],
       description: "Update the sender's roles and nickname.",
-      throttling: {usages: 1, duration: 30} // 1 usage every 30 seconds 
+      throttling: { usages: 1, duration: 30 } // 1 usage every 30 seconds
     })
   }
 

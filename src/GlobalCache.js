@@ -65,7 +65,7 @@ class GlobalCache {
    * @memberof GlobalCache
    */
   get (shard, message) {
-    let collection = this.getCollection(message.collection)
+    const collection = this.getCollection(message.collection)
 
     shard.send({
       action: 'getReply',
@@ -101,7 +101,7 @@ class GlobalCache {
    * @memberof GlobalCache
    */
   set (shard, message) {
-    let collection = this.getCollection(message.collection)
+    const collection = this.getCollection(message.collection)
     collection[message.key] = message.value
 
     shard.send({
@@ -165,7 +165,7 @@ class Cache {
    * @memberof Cache
    */
   get (collection, key) {
-    let id = this.getNextIndex()
+    const id = this.getNextIndex()
 
     this.shardClientUtil.send({
       action: 'get',
@@ -187,7 +187,7 @@ class Cache {
    * @memberof Cache
    */
   clear (collection) {
-    let id = this.getNextIndex()
+    const id = this.getNextIndex()
 
     this.shardClientUtil.send({
       action: 'clear',
@@ -210,7 +210,7 @@ class Cache {
    * @memberof Cache
    */
   set (collection, key, value) {
-    let id = this.getNextIndex()
+    const id = this.getNextIndex()
 
     this.shardClientUtil.send({
       action: 'set',
@@ -226,4 +226,4 @@ class Cache {
   }
 }
 
-module.exports = {GlobalCache, Cache}
+module.exports = { GlobalCache, Cache }

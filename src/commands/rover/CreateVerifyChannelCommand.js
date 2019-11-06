@@ -15,8 +15,8 @@ class CreateVerifyChannelCommand extends Command {
 
   async fn (msg) {
     try {
-      let overwritesInstructions = []
-      let overwritesVerify = []
+      const overwritesInstructions = []
+      const overwritesVerify = []
 
       overwritesInstructions.push({
         id: msg.guild.roles.find(role => role.name === '@everyone'),
@@ -45,20 +45,20 @@ class CreateVerifyChannelCommand extends Command {
         })
       }
 
-      let category = await msg.guild.channels.create('Verification', {
+      const category = await msg.guild.channels.create('Verification', {
         type: 'category',
         reason: `${msg.member.displayName} ran CreateVerifyChannel command`,
         overwrites: overwritesInstructions
       })
 
-      let instructionsChannel = await msg.guild.channels.create('verify-instructions', {
+      const instructionsChannel = await msg.guild.channels.create('verify-instructions', {
         type: 'text',
         parent: category,
         reason: `${msg.member.displayName} ran CreateVerifyChannel command`,
         overwrites: overwritesInstructions
       })
 
-      let verifyChannel = await msg.guild.channels.create('verify', {
+      const verifyChannel = await msg.guild.channels.create('verify', {
         type: 'text',
         parent: category,
         reason: `${msg.member.displayName} ran CreateVerifyChannel command`,
@@ -75,7 +75,7 @@ class CreateVerifyChannelCommand extends Command {
 
       msg.reply(`Created channels ${verifyChannel} and ${instructionsChannel}. You can delete the default message in the instructions channel and replace it with your own if you wish.`)
     } catch (err) {
-      msg.reply(`:no_entry_sign: RoVer does not have permission to create channels in this server.`)
+      msg.reply(':no_entry_sign: RoVer does not have permission to create channels in this server.')
     }
   }
 }

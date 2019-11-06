@@ -3,7 +3,7 @@ const Discord = require('discord.js-commando')
 const request = require('request-promise')
 const config = require('./data/client.json')
 const DiscordServer = require('./DiscordServer')
-const {Cache} = require('./GlobalCache')
+const { Cache } = require('./GlobalCache')
 const requestDebug = require('request-debug')
 const SettingProvider = require('./commands/SettingProvider')
 const Util = require('./Util')
@@ -67,7 +67,7 @@ class DiscordBot {
 
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg =>
-         msg.guild &&
+        msg.guild &&
          msg.command.name !== 'verify' &&
          !this.authorizedOwners.includes(msg.guild.ownerID)
       )
@@ -130,7 +130,7 @@ class DiscordBot {
     const response = await request(url, {
       json: true,
       headers: {
-        'Authorization': `Bearer ${config.patreonAccessToken}`
+        Authorization: `Bearer ${config.patreonAccessToken}`
       }
     })
 
@@ -187,8 +187,8 @@ class DiscordBot {
 
     // We call discordMember.verify but we want to retain the cache
     // and we don't want it to post any announcements.
-    let server = await this.getServer(message.guild.id)
-    let member = await server.getMember(message.author.id)
+    const server = await this.getServer(message.guild.id)
+    const member = await server.getMember(message.author.id)
     if (!member) return
 
     // If this is the verify channel, we want to delete the message and just verify the user if they aren't an admin.
@@ -215,15 +215,15 @@ class DiscordBot {
   async guildMemberAdd (member) {
     if (member.user.bot) return
 
-    let server = await this.getServer(member.guild.id)
+    const server = await this.getServer(member.guild.id)
 
     if (server.getSetting('joinDM') === false) {
       return
     }
 
-    let discordMember = await server.getMember(member.id)
+    const discordMember = await server.getMember(member.id)
     if (!member) return
-    let action = await discordMember.verify()
+    const action = await discordMember.verify()
 
     try {
       if (action.status) {
@@ -271,7 +271,7 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   async globallyUpdateMember (args) {
-    let {id, guilds} = args
+    const { id, guilds } = args
 
     // Start off by clearing their global cache.
     await DiscordServer.clearMemberCache(id)
@@ -279,16 +279,16 @@ class DiscordBot {
     let firstRun = true
 
     // Iterate through all of the guilds the bot is in.
-    for (let guildId of guilds) {
+    for (const guildId of guilds) {
       try {
         if (!this.bot.guilds.has(guildId)) continue
 
-        let guild = this.bot.guilds.get(guildId)
-        let server = await this.getServer(guild.id)
+        const guild = this.bot.guilds.get(guildId)
+        const server = await this.getServer(guild.id)
 
-        let member = await server.getMember(id)
+        const member = await server.getMember(id)
         if (!member) continue
-        let action = await member.verify({
+        const action = await member.verify({
           // We want to clear the group rank bindings cache because
           // this is the first iteration.
           clearBindingsCache: firstRun
@@ -301,7 +301,7 @@ class DiscordBot {
           // It worked, checking if there's a custom welcome message.
           await this.bot.users.fetch(id)
 
-          let guildMember = await this.bot.guilds.get(guild.id).members.fetch(id)
+          const guildMember = await this.bot.guilds.get(guild.id).members.fetch(id)
           guildMember.send(server.getWelcomeMessage(action, guildMember)).catch(() => {})
         }
 

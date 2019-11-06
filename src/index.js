@@ -16,11 +16,11 @@ const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.
   shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined
 })
 
-shardingManager.on('launch', shard => {
+shardingManager.on('shardCreate', shard => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })
 
-shardingManager.spawn('auto', 5500, false)
+shardingManager.spawn('auto', 1000, 30000)
 
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)

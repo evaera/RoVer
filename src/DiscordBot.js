@@ -29,10 +29,8 @@ class DiscordBot {
    */
   initialize () {
     this.bot = new Discord.Client({
-      shardId: parseInt(process.env.SHARD_ID, 10),
-      shardCount: parseInt(process.env.SHARD_COUNT, 10),
       apiRequestMethod: config.apiRequestMethod || 'sequential',
-      disabledEvents: ['TYPING_START', 'VOICE_STATE_UPDATE', 'PRESENCE_UPDATE', 'MESSAGE_DELETE', 'MESSAGE_UPDATE'],
+      disabledEvents: ['TYPING_START', 'VOICE_STATE_UPDATE', 'PRESENCE_UPDATE', 'MESSAGE_DELETE', 'MESSAGE_UPDATE', 'CHANNEL_PINS_UPDATE', 'MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE', 'MESSAGE_REACTION_REMOVE_ALL', 'CHANNEL_PINS_UPDATE', 'MESSAGE_DELETE_BULK', 'WEBHOOKS_UPDATE'],
       owner: config.owner || '0',
       commandPrefix: config.commandPrefix || '!',
       unknownCommandResponse: false
@@ -93,7 +91,8 @@ class DiscordBot {
         ping: false,
         commandState: false,
         prefix: true,
-        help: true
+        help: true,
+        unknownCommand: false
       })
       .registerCommandsIn(path.join(__dirname, 'commands'))
 
@@ -163,7 +162,7 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   ready () {
-    console.log(`Shard ${process.env.SHARD_ID} is ready, serving ${this.bot.guilds.array().length} guilds.`)
+    console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.array().length} guilds.`)
 
     // Set status message to the default until we get info from master process
     this.setActivity()

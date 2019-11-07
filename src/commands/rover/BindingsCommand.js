@@ -20,7 +20,7 @@ class BindingsCommand extends Command {
    * @returns {string} The processed role name
    */
   getRoleName (id) {
-    const role = this.server.server.roles.get(id)
+    const role = this.server.server.roles.fetch(id)
     if (role) return role.name
     return '<Deleted role>'
   }

@@ -19,8 +19,8 @@ class BindingsCommand extends Command {
    * @param {Snowflake} id The Role id
    * @returns {string} The processed role name
    */
-  getRoleName (id) {
-    const role = this.server.server.roles.fetch(id)
+  async getRoleName (id) {
+    const role = await this.server.server.roles.fetch(id)
     if (role) return role.name
     return '<Deleted role>'
   }
@@ -30,12 +30,12 @@ class BindingsCommand extends Command {
 
     if (this.server.getSetting('verifiedRole')) {
       const id = this.server.getSetting('verifiedRole')
-      bindingText += `**Verified Role**\n${this.getRoleName(id)} <${id}>\n\n`
+      bindingText += `**Verified Role**\n${await this.getRoleName(id)} <${id}>\n\n`
     }
 
     if (this.server.getSetting('verifiedRemovedRole')) {
       const id = this.server.getSetting('verifiedRemovedRole')
-      bindingText += `**Unverified Role**\n${this.getRoleName(id)} <${id}>\n\n`
+      bindingText += `**Unverified Role**\n${await this.getRoleName(id)} <${id}>\n\n`
     }
 
     if (bindingText.length > 0) {
@@ -60,7 +60,7 @@ class BindingsCommand extends Command {
 
       const id = binding.role
 
-      groupBindingsText += `${this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
+      groupBindingsText += `${await this.getRoleName(id)} <${id}>\n\`\`\`markdown\n`
 
       groupBindingsText += Util.getBindingText(binding)
 

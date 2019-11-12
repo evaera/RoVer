@@ -7,7 +7,8 @@ class PingCommand extends Command {
       name: 'ping',
       properName: 'Ping',
       description: 'Ping the bot to see API latency',
-      userPermissions: []
+      userPermissions: [],
+      throttling: { usages: 1, duration: 10 } // 1 usage every 10 seconds
     })
   }
 

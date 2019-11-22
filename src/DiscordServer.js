@@ -301,8 +301,8 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   async cleanupRankBindings (lastResortChannel) {
-    let verifiedRole = this.getSetting('verifiedRole')
-    let unverifiedRole = this.getSetting('verifiedRemovedRole')
+    const verifiedRole = this.getSetting('verifiedRole')
+    const unverifiedRole = this.getSetting('verifiedRemovedRole')
 
     if (verifiedRole && !await this.server.roles.fetch(verifiedRole)) {
       this.setSetting('verifiedRole', null)
@@ -314,8 +314,8 @@ class DiscordServer {
       this.announce('Unverified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the unverified role, so unverified users will no longer receive that role.', { important: true, lastResortChannel })
     }
 
-    for (let binding of this.getSetting('groupRankBindings')) {
-      let id = binding.role
+    for (const binding of this.getSetting('groupRankBindings')) {
+      const id = binding.role
       if (!await this.server.roles.fetch(id)) {
         this.deleteGroupRankBinding(id)
 

@@ -240,6 +240,7 @@ class DiscordMember {
     }
 
     // Create a warning to append to any errors. In some permission setups, RoVer is reliant on role positioning (specifically if it has administrator or not)
+    this.server.members.fetch(this.bot.id, true)
     if (!this.member.manageable) {
       errorAppend = "\n\nRoVer's position in the role list is below that of this user. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
     }

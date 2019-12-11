@@ -47,11 +47,11 @@ module.exports = {
     return userProfile.groups.find(g => g.name === 'Top_Contributor') != null
   },
 
-  async DevForumLeadTopContributor (user) {
+  async DevForumLeadTopContributor (user) { // old, left for compatability
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.groups.find(g => g.name === 'Lead_Top_Contributor') != null
+    return userProfile.groups.find(g => g.name === 'Community_Sage') != null
   },
 
   async RobloxStaff (user) {
@@ -169,25 +169,6 @@ module.exports = {
 
   async NBC (user) {
     return module.exports.BuildersClub(user, 'NBC')
-  },
-
-  /**
-   * Returns true if a given user is in a given group's clan
-   * @param {object} user The user to check
-   * @param {number} groupid The group id
-   * @param {DiscordServer} DiscordServer DiscordServer static reference
-   * @returns {boolean} True if user is in the clan
-   */
-  async Clan (user, groupid, DiscordServer) {
-    const userGroups = await DiscordServer.getRobloxMemberGroups(user.id)
-
-    for (const group of userGroups) {
-      if (group.Id === groupid) {
-        return group.IsInClan
-      }
-    }
-
-    return false
   },
 
   /**

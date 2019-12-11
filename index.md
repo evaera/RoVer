@@ -143,6 +143,8 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 - `DevForumNewMember` - DevForum new member
 - `DevForumAccess` - DevForum access (either full membership or new member)
 - `DevForumTopContributor` - DevForum Top Contributor
+- `CommunitySage` - DevForum Community Sage
+- `PostApproval` DevForum Post Approval team member
 - `RobloxStaff` - A Roblox staff member (based on DevForum rank)
 - `GamePass:<gamepass_id>` -  Binds ownership of a game pass, takes the id as an argument
 - `Badge:<badge_id>` - Binds ownership of a badge, takes the id as an argument
@@ -153,7 +155,6 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 - `OBC`
 - `NBC` - No builders club
 - `BuildersClub` - Any form of BC
-- `Clan:<group_id>` - Clan membership
 - `Ally:<group_id>`* - Binds being in a group that is allied to group_id
 - `Enemy:<group_id>`* - Binds being in a group that is an enemy of to group_id
 

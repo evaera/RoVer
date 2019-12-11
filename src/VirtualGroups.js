@@ -47,11 +47,11 @@ module.exports = {
     return userProfile.groups.find(g => g.name === 'Top_Contributor') != null
   },
 
-  async DevForumLeadTopContributor (user) {
+  async DevForumLeadTopContributor (user) { // old, left for compatability
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.groups.find(g => g.name === 'Lead_Top_Contributor') != null
+    return userProfile.groups.find(g => g.name === 'Community_Sage') != null
   },
 
   async RobloxStaff (user) {

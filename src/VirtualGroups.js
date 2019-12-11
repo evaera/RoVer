@@ -172,25 +172,6 @@ module.exports = {
   },
 
   /**
-   * Returns true if a given user is in a given group's clan
-   * @param {object} user The user to check
-   * @param {number} groupid The group id
-   * @param {DiscordServer} DiscordServer DiscordServer static reference
-   * @returns {boolean} True if user is in the clan
-   */
-  async Clan (user, groupid, DiscordServer) {
-    const userGroups = await DiscordServer.getRobloxMemberGroups(user.id)
-
-    for (const group of userGroups) {
-      if (group.Id === groupid) {
-        return group.IsInClan
-      }
-    }
-
-    return false
-  },
-
-  /**
    * Returns true if a given user is an ally or enemy of a given group.
    * @param {object} user The user to check
    * @param {number} groupid The group id

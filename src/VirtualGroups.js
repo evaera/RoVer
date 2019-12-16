@@ -127,20 +127,16 @@ module.exports = {
     let bc = await Cache.get(`bindings.${user.id}`, 'bc')
     if (!bc) {
       const response = await request({
-        uri: `https://www.roblox.com/Thumbs/BCOverlay.ashx?username=${user.username}`,
+        uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(user.id)}/group-membership-status`,
         simple: false,
         resolveWithFullResponse: true
       })
 
-      const url = response.request.uri.href
+      let membershipType = JSON.parse(response.body).membershipType
       bc = 'NBC'
 
-      if (url.includes('overlay_obcOnly')) {
-        bc = 'OBC'
-      } else if (url.includes('overlay_tbcOnly')) {
-        bc = 'TBC'
-      } else if (url.includes('overlay_bcOnly')) {
-        bc = 'BC'
+      if (membershipType === 4) {
+        bc = 'Premium'
       }
 
       Cache.set(`bindings.${user.id}`, 'bc', bc)
@@ -155,16 +151,8 @@ module.exports = {
     return false
   },
 
-  async BC (user) {
-    return module.exports.BuildersClub(user, 'BC')
-  },
-
-  async TBC (user) {
-    return module.exports.BuildersClub(user, 'TBC')
-  },
-
-  async OBC (user) {
-    return module.exports.BuildersClub(user, 'OBC')
+  async Premium (user) {
+    return module.exports.BuildersClub(user, 'Premium')
   },
 
   async NBC (user) {

@@ -93,7 +93,7 @@ class WhoisCommand extends Command {
               resolveWithFullResponse: true
             })
 
-            let membershipType = JSON.parse(response.body).membershipType
+            const membershipType = JSON.parse(response.body).membershipType
             bc = 'NBC'
 
             if (membershipType === 4) {

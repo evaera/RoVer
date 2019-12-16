@@ -155,6 +155,7 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 - `OBC`
 - `NBC` - No builders club
 - `BuildersClub` - Any form of BC
+- `Premium` - Roblox Premium
 - `Ally:<group_id>`* - Binds being in a group that is allied to group_id
 - `Enemy:<group_id>`* - Binds being in a group that is an enemy of to group_id
 

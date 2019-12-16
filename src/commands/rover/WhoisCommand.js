@@ -83,35 +83,26 @@ class WhoisCommand extends Command {
           pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1].substr(0, 1024)
         } catch (e) {}
 
-        // let bc = 'Unknown'
-        // try {
-        //   bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
-        //   if (!bc) {
-        //     let response = await request({
-        //       uri: `https://premiumfeatures.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/subscriptions`,
-        //       simple: false,
-        //       resolveWithFullResponse: true
-        //     })
+        let bc = 'Unknown'
+        try {
+          bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
+          if (!bc) {
+            const response = await request({
+              uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/group-membership-status`,
+              simple: false,
+              resolveWithFullResponse: true
+            })
 
-        //     let bcType = JSON.parse(response.body).subscriptionProductModel.subscriptionTypeName
-        //     let isLifetime = JSON.parse(response.body).subscriptionProductModel.isLifetime
-        //     bc = 'NBC'
+            let membershipType = JSON.parse(response.body).membershipType
+            bc = 'NBC'
 
-        //     if (bcType === 'BC_OutrageousBuildersClub') {
-        //       bc = 'OBC'
-        //     } else if (bcType === 'BC_TurboBuildersClub') {
-        //       bc = 'TBC'
-        //     } else if (bcType === 'BC_ClassicBuildersClub') {
-        //       bc = 'BC'
-        //     } else if (bcType.includes('RobloxPremium')) { // can be numerous things - varies by robux amt & month amt
-        //       bc = 'Premium'
-        //     }
+            if (membershipType === 4) {
+              bc = 'Premium'
+            }
 
-        //     if (isLifetime) bc = `Lifetime ${bc}`
-
-        //     Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
-        //   }
-        // } catch (e) {}
+            Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
+          }
+        } catch (e) {}
 
         // Make sure the data is cached so we don't have to use the API in the future
         Cache.set('users', id, data)
@@ -145,7 +136,7 @@ class WhoisCommand extends Command {
           description: bio,
           fields: [
             { name: 'Join Date', value: joinDate, inline: true },
-            // { name: 'Builders Club', value: bc, inline: true },
+            { name: 'Membership', value: bc, inline: true },
             { name: 'Past Usernames', value: pastNames, inline: true }
           ]
         }

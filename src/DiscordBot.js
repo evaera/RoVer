@@ -33,7 +33,8 @@ class DiscordBot {
       disabledEvents: ['TYPING_START', 'VOICE_STATE_UPDATE', 'PRESENCE_UPDATE', 'MESSAGE_DELETE', 'MESSAGE_UPDATE', 'CHANNEL_PINS_UPDATE', 'MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE', 'MESSAGE_REACTION_REMOVE_ALL', 'CHANNEL_PINS_UPDATE', 'MESSAGE_DELETE_BULK', 'WEBHOOKS_UPDATE'],
       owner: config.owner || '0',
       commandPrefix: config.commandPrefix || '!',
-      unknownCommandResponse: false
+      unknownCommandResponse: false,
+      disableEveryone: true
     })
 
     this.bot.setProvider(new SettingProvider())

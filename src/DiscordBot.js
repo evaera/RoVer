@@ -75,8 +75,8 @@ class DiscordBot {
 
       setInterval(() => {
         const beforePatrons = this.authorizedOwners
-        this.updatePatrons().catch(() => {
-          console.error('Patron update failed!')
+        this.updatePatrons().catch((updateError) => {
+          console.error(`Patron update failed! ${updateError}`)
 
           this.authorizedOwners = beforePatrons
         })

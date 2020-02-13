@@ -209,7 +209,7 @@ class DiscordMember {
     if (!this.discordServer.isAuthorized()) {
       return status({
         status: false,
-        error: "Sorry, this server isn't authorized to use RoVer Plus. Donate at <https://www.patreon.com/erynlynn> or invite the regular RoVer bot at <https://RoVer.link>."
+        error: `Sorry, this server isn't authorized to use RoVer Plus.${this.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''}` // notify sender to donate only if they're an "admin" 
       })
     }
 

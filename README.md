@@ -52,5 +52,5 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "commandPrefix"     : String. Default "!". The prefix for commands.
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing. (Need a process manager if you want it to relaunch)
-	"maxServerBindings" : Integer. Default unlimited. Maximum number of bindings allowed per server
+    "maxServerBindings" : Integer. Default unlimited. Maximum number of bindings allowed per server
 ```

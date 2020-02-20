@@ -111,8 +111,12 @@ module.exports = {
     return module.exports.DevForumAccess(user, x => x >= 2)
   },
 
-  async DevForumNewMember (user) {
+  async DevForumNewMember (user) { // old, left for compatibility
     return module.exports.DevForumAccess(user, x => x === 1)
+  },
+
+  async DevForumRegular (user) {
+    return module.exports.DevForumAccess(user, x => x >= 2)
   },
 
   /**

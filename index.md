@@ -10,7 +10,7 @@ The quickest and easiest way to use RoVer is to [add the hosted version](https:/
 4. Modify your channel permissions so that only those with the role you made can speak or see them.
 5. Run the command `!CreateVerifyChannel`, which will create an instructional channel for new members of your server.
 
-You can also [bind groups](#integrating-with-roblox-groups) or [other resources](#virtual-groups) to roles. Or if you want to see how to customize everything, just keep reading...
+If you have a group, you can run `!CreateGroupRanks <groupid>` to create roles and bind them to the ranks from your group.
 
 # What is it?
 
@@ -22,25 +22,16 @@ RoVer is an open source, drop-in Discord verification bot that will allow your m
 - The verification database is already populated with hundreds of thousands of Discord-Roblox account links, so it's possible users will already be verified when they join your server.
 - The official version of RoVer can handle bigger servers and will automatically be able to update roles the second a user verifies. (If you host RoVer yourself, the user will have to run a command in order for the verification to take place.)
 
-# How does it work?
-
-RoVer is the official Discord bot for the [verify.eryn.io](https://verify.eryn.io) verification registry. RoVer uses its [public API](https://verify.eryn.io/api), so this API is available to you in your own projects as well.
-
-With over 1 million accounts linked already, it's likely many of your users will already be verified and will have to take no new steps. For brand new users, the process looks something like this:
-1. The user signs in with their Discord account.
-2. The user chooses how they want to verify: by joining a Roblox game, or by adding a code to their profile.
-3. The user is verified and can participate in your community.
-
 # Using RoVer
 
 When a user joins your server, the bot will automatically check if they are already in our database, and if so, they will be verified immediately. If they are not already in the database, they will be instructed to go to the verification website to verify themselves. If you are using the hosted version of the bot, then the user will automatically be given the verified state after they verify on the website. **However**, if you are hosting the bot yourself, the user will have to run the `!verify` command in order for the bot to check if they are verified.
 
 You should probably make a read-only channel in the server explaining these processes to your members. (You can do this automatically with the !CreateVerifyChannel command). After you add the bot to your server, you can customize RoVer with the following commands. You must have the `Manage Server` permission or a role named "RoVer Admin" in the Discord server in order to use these commands.
 
-**Please note** that the "RoVer" role must be above any other roles that you want RoVer to act on. Anyone with a role that's above the RoVer role will not be able to be verified. This is just how the Discord permission system works, so please make sure to account for it!
+<span class="warn">**Please note** that the "RoVer" role must be above any other roles that you want RoVer to act on. Anyone with a role that's above the RoVer role will not be able to be verified. This is just how the Discord permission system works, so please make sure to account for it!</span>
 
 ## Commands
-**Note**: &lt;angled brackets&gt; denote *required* arguments, and [square brackets] denote *optional* arguments. They should not be included when you run the command.
+<span class="info">**Note**: &lt;angled brackets&gt; denote *required* arguments, and [square brackets] denote *optional* arguments. They should not be included when you run the command.</span>
 
 You can run any of the commands that have all optional arguments by themselves to set them back to their default state.
 ### Server Configuration
@@ -103,21 +94,21 @@ Group bindings can be created with the `!Bind` command.
      - You can also bind the rank `0` to bind rank for people who are *not* in the group.
   - If the user meets the requirements for *any* of the groups, they will be considered to have the role.
 
-See more examples below:
+### Examples
 
-**Note**: You need to put the Discord role name in quotation marks if it has spaces. If you don't do this you will get unexpected results.
+<span class="warn">**Note**: You need to put the Discord role name in quotation marks if it has spaces. If you don't do this you will get unexpected results.</span>
 
 - Use the following command to set up giving a role to all members of a group:
 
-  `!Bind "Group Member" 372372` where `372372` is your *group id* and `Group Member` is the *Discord role name*
+  `!Bind "Group Member" 372372`
 
 - Use the following command to set up giving a role to members of a certain rank in a group:
 
-  `!Bind "Group Owner" 372372:255` where `372372` is your *group id*, `255` is the *group roleset rank* (the number on the Roblox group configure page, not the role name) and `Group Owner` is the *Discord role name*
+  `!Bind "Group Owner" 372372:255`
 
 - Use the following command to set up giving a role to members of a **certain range** of rank in a group:
 
-  `!Bind "High Rank" 372372:200-254` where `372372` is your *group id*, `200-254` is a range of numbers corresponding to the *group roleset rank* (the number on the Roblox group configure page, not the role name) and `High Rank` is the *Discord role name*
+  `!Bind "High Rank" 372372:200-254` 
 
 - Use the following command to set up giving a role to a specific set of ranks in a group:
 
@@ -130,10 +121,6 @@ See more examples below:
 - Use the following command to unbind a role from a group:
 
   `!Unbind Group Member` where `Group Member` is the *Discord role name*
-
-- Use the following command to unbind all roles from groups in your server:
-
-  `!UnbindAll`
 
 ### Virtual groups
 
@@ -159,11 +146,11 @@ Virtual groups are a way to bind ranks using the group rank binding system for e
 
 To create a role for all members of the dev forum in your server, use the following command:
 
-`!Bind DevForumMember DevForum`, where `DevForum` is the *Virtual Group* and `DevForum Member` is the *Discord role name*
+`!Bind DevForumMember DevForum`
 
 To create a role for all members who own a specific asset, use the following command:
 
-`!Bind Winner Asset:424242`, where `Asset` is the *Virtual Group*, `Winner` is the *Discord role name*, and `424242` is the *asset id*
+`!Bind Winner Asset:424242`
 
 To create a role for all members who own at least one of two assets, use the following command:
 

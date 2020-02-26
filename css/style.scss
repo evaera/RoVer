@@ -93,6 +93,10 @@ section {
         padding: 10px 50px;
     }
 
+    &.plus {
+        background-color: #ff901e
+    }
+
     &.white {
         background: white;
         color: black;
@@ -215,6 +219,32 @@ iframe {
 
     &:hover {
         background: rgba(0, 0, 0, 0.3);
+    }
+}
+
+.plus-button {
+    padding: 12px 22px;
+    border-radius: 2px;
+    background: #ffa216;
+    color: white;
+    font-size: 20px;
+    border: none;
+    transition: box-shadow 100ms;
+
+    &:hover {
+        color: white;
+        box-shadow: 2px 2px 5px rgba(40, 40, 40, 0.2);
+        background-color: #fda92b
+    }
+}
+
+.plus .plus-button {
+    background: white;
+    color: #222;
+
+    &:hover {
+        background-color: #eee;
+        color: #222;
     }
 }
 

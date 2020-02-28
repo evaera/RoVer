@@ -107,11 +107,11 @@ module.exports = {
     return module.exports.DevForumAccess(user, x => x === 1)
   },
 
-  async DevForumMember (user) {
+  async DevForumMember (user) { // old, left for compatibility
     return module.exports.DevForumAccess(user, x => x >= 2)
   },
 
-  async DevForumNewMember (user) { // old, left for compatibility
+  async DevForumNewMember (user) {
     return module.exports.DevForumAccess(user, x => x === 1)
   },
 

@@ -126,19 +126,26 @@ Group bindings can be created with the `!Bind` command.
 
 Virtual groups are a way to bind ranks using the group rank binding system for external services that need not be Roblox groups, such as the developer forum. Currently, these are available by default:
 
-- `DevForumMember` - DevForum full membership (devforum.roblox.com)
-- `DevForumNewMember` - DevForum new member
-- `DevForumAccess` - DevForum access (either full membership or new member)
+#### DevForum (devforum.roblox.com)
+- `DevForumNewMember` - "Member" rank on the DevForum (as of Feb 2020)
+- `DevForumRegular` - "Regular" rank on the DevForum (as of Feb 2020)
+- `DevForumAccess` - DevForum access (either regular or member)
 - `DevForumTopContributor` - DevForum Top Contributor
 - `CommunitySage` - DevForum Community Sage
 - `PostApproval` DevForum Post Approval team member
 - `RobloxStaff` - A Roblox staff member (based on DevForum rank)
+
+#### Assets & Ownership
 - `GamePass:<gamepass_id>` -  Binds ownership of a game pass, takes the id as an argument
 - `Badge:<badge_id>` - Binds ownership of a badge, takes the id as an argument
 - `Asset:<asset_id>` - Binds ownership of an asset, takes the id as an argument
+
+#### Users
 - `Friend:<user_id>` - Binds being a friend to the given user on Roblox
 - `NBC` - No builders club or premium
 - `Premium` - Roblox Premium
+
+#### Group Affiliations
 - `Ally:<group_id>`* - Binds being in a group that is allied to group_id
 - `Enemy:<group_id>`* - Binds being in a group that is an enemy of to group_id
 

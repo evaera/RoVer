@@ -1,4 +1,5 @@
 const Command = require('../Command')
+const request = require('request-promise')
 
 module.exports =
 class NicknameGroupCommand extends Command {

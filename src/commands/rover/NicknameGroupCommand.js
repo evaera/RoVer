@@ -27,7 +27,7 @@ class NicknameGroupCommand extends Command {
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     if (args.groupid) {
       const data = await request({
-        uri: `https://groups.roblox.com/v2/groups?groupIds=${args.groupid}`,
+        uri: `https://groups.roblox.com/v1/groups/${args.groupid}`,
         json: true,
         simple: false
       })

@@ -105,9 +105,9 @@ class DiscordBot {
     return !!config.patreonAccessToken
   }
 
-  async updatePatrons (page) {
+  async updatePatrons (page, newAuthorizedOwners) {
     if (!page) {
-      this.authorizedOwners = []
+      newAuthorizedOwners = []
     }
 
     const transferFilePath = path.join(__dirname, './data/transfers.csv')
@@ -134,10 +134,10 @@ class DiscordBot {
       }
     })
 
-    this.authorizedOwners = [
+    newAuthorizedOwners = [
       config.owner || '0',
       ...(config.patreonOverrideOwners || []),
-      ...this.authorizedOwners,
+      ...newAuthorizedOwners,
       ...(
         response.data.filter(pledge => (
           pledge.attributes.declined_since === null
@@ -153,7 +153,9 @@ class DiscordBot {
     ].map(id => this.patronTransfers[id] || id)
 
     if (response.links && response.links.next) {
-      return this.updatePatrons(response.links.next)
+      return this.updatePatrons(response.links.next, newAuthorizedOwners)
+    } else {
+      this.authorizedOwners = newAuthorizedOwners
     }
   }
 

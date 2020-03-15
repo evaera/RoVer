@@ -3,10 +3,14 @@ const DiscordServer = require('../../DiscordServer')
 const { Role } = require('discord.js')
 const config = require('../../data/client.json')
 
-async function recursiveUpdate (memberArray, server, msg) {
+async function recursiveUpdate (memberArray, server, msg, errors) {
   const nextMember = memberArray.pop()
   if (!nextMember) {
-    return msg.reply(`:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected.`).then(() => {
+    let errorText = ""
+    if (errors.length > 0) {
+      errorText = `\nThere was an error while updating the following members: \`\`\`${errors.join("\n")}\`\`\``
+    }
+    return msg.reply(`:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected.${errorText}`, {split: true}).then(() => {
       server.bulkUpdateCount = 0
       server.ongoingBulkUpdate = false
     })
@@ -15,11 +19,16 @@ async function recursiveUpdate (memberArray, server, msg) {
   if (!nextMember.user.bot) {
     const member = await server.getMember(nextMember.id)
     if (member) {
-      await member.verify({ skipWelcomeMessage: true })
+      try {
+        await member.verify({ skipWelcomeMessage: true })
+      } catch(e) {
+        errors.push(`${member.member.displayName}#${member.user.discriminator}`)
+      }
+      
       server.bulkUpdateCount++
     }
   }
-  return recursiveUpdate(memberArray, server, msg)
+  return recursiveUpdate(memberArray, server, msg, errors)
 }
 
 module.exports =
@@ -71,13 +80,13 @@ class UpdateCommand extends Command {
 
       const limit = config.massUpdateLimit || 0
       if (affectedCount > limit) {
-        return msg.reply(`Sorry, but RoVer only supports updating up to ${limit} members at once. Updating this role would affect ${affectedCount} members.`)
+        return msg.reply(`Sorry, but RoVer only supports updating up to ${limit} members at once. Updating this role would affect approximately ${affectedCount} members.`)
       }
 
       server.ongoingBulkUpdate = true
       msg.reply(`:hourglass_flowing_sand: Updating ${affectedCount} members. We'll let you know when we're done.`)
 
-      recursiveUpdate(roleMembers, server, msg)
+      recursiveUpdate(roleMembers, server, msg, [])
     }
   }
 }

@@ -67,9 +67,9 @@ class DiscordBot {
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg => {
         if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
-         msg.reply(`Sorry, this server isn't authorized to use RoVer Plus.${msg.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''}`) // notify sender to donate only if they're an "admin"
+          msg.reply(`Sorry, this server isn't authorized to use RoVer Plus.${msg.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''}`) // notify sender to donate only if they're an "admin"
 
-         return 'not_premium'
+          return 'not_premium'
         }
       })
 

@@ -6,11 +6,11 @@ const config = require('../../data/client.json')
 async function recursiveUpdate (memberArray, server, msg, errors) {
   const nextMember = memberArray.pop()
   if (!nextMember) {
-    let errorText = ""
+    let errorText = ''
     if (errors.length > 0) {
-      errorText = `\nThere was an error while updating the following members: \`\`\`${errors.join("\n")}\`\`\``
+      errorText = `\nThere was an error while updating the following members: \`\`\`${errors.join('\n')}\`\`\``
     }
-    return msg.reply(`:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected.${errorText}`, {split: true}).then(() => {
+    return msg.reply(`:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected.${errorText}`, { split: true }).then(() => {
       server.bulkUpdateCount = 0
       server.ongoingBulkUpdate = false
     })
@@ -21,10 +21,10 @@ async function recursiveUpdate (memberArray, server, msg, errors) {
     if (member) {
       try {
         await member.verify({ skipWelcomeMessage: true })
-      } catch(e) {
+      } catch (e) {
         errors.push(`${member.member.displayName}#${member.user.discriminator}`)
       }
-      
+
       server.bulkUpdateCount++
     }
   }

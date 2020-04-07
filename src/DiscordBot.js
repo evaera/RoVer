@@ -68,7 +68,7 @@ class DiscordBot {
       this.bot.dispatcher.addInhibitor(msg => {
         if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
           if (this.authorizedOwners.length === 0) {
-            msg.reply("Sorry, the authorized users list is still being downloaded. This occurs when the bot has recently restarted. Please wait a few seconds and try again.")
+            msg.reply('Sorry, the authorized users list is still being downloaded. This occurs when the bot has recently restarted. Please wait a few seconds and try again.')
           } else {
             msg.reply(`Sorry, this server isn't authorized to use RoVer Plus.${msg.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''}`) // notify sender to donate only if they're an "admin"
           }
@@ -251,6 +251,8 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   setActivity (text, activityType) {
+    if (!this.bot || !this.bot.user) return
+
     this.bot.user.setActivity(text || 'http://eryn.io/RoVer', { type: activityType })
   }
 

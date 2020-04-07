@@ -128,7 +128,7 @@ class DiscordMember {
 
     let data = {}
     let freshData = false
-    let errorAppend = ''
+    const errorAppend = ''
 
     if (!this.discordServer.areSettingsLoaded) {
       await this.discordServer.loadSettings()
@@ -232,10 +232,16 @@ class DiscordMember {
       })
     }
 
-    // Create a warning to append to any errors. In some permission setups, RoVer is reliant on role positioning (specifically if it has administrator or not)
-    this.server.members.fetch(this.bot.id, true)
-    if (!this.member.manageable) {
-      errorAppend = "\n\nRoVer's position in the role list is below that of this user. Please have a server admin drag RoVer's role above all other roles in order to fix this problem."
+    await this.server.members.fetch(this.bot.id)
+
+    const botMember = this.server.me
+
+    if (!this.member.manageable || !botMember.hasPermission('MANAGE_ROLES')) {
+      return status({
+        status: false,
+        error: "\n\nRoVer's can't manage this user. Please have a server admin drag RoVer's role above all other roles and ensure RoVer has permission to modify roles in order to fix this problem.",
+        nonFatal: true
+      })
     }
 
     status(':scroll: Checking the verification registry...')
@@ -336,7 +342,8 @@ class DiscordMember {
 
       if (
         this.discordServer.getSetting('nicknameUsers') &&
-        !this.member.roles.find(role => role.name === 'RoVer Nickname Bypass')
+        !this.member.roles.find(role => role.name === 'RoVer Nickname Bypass') &&
+        botMember.hasPermission('MANAGE_NICKNAMES')
       ) {
         const nickname = (await this.getNickname(data)).substring(0, 32)
 

@@ -245,7 +245,7 @@ class DiscordMember {
     if (!this.member.manageable || !botMember.hasPermission('MANAGE_ROLES')) {
       return status({
         status: false,
-        error: this.member.guild.ownerID === this.member.id ? "\n\nYou are the server owner. RoVer cannot make changes to you. This is a Discord restriction. If you want, you can change your own nickname." : "\n\nRoVer's can't manage this user. Please have a server admin drag RoVer's role above all other roles and ensure RoVer has permission to modify roles in order to fix this problem.",
+        error: this.member.guild.ownerID === this.member.id ? '\n\nYou are the server owner. RoVer cannot make changes to you. This is a Discord restriction. If you want, you can change your own nickname.' : "\n\nRoVer's can't manage this user. Please have a server admin drag RoVer's role above all other roles and ensure RoVer has permission to modify roles in order to fix this problem.",
         nonFatal: true
       })
     }

@@ -22,6 +22,10 @@ class CreateGroupRanksCommand extends Command {
   }
 
   async fn (msg, args) {
+    if (!this.discordBot.bot.hasPermission("MANAGE_SERVER")) {
+      return msg.reply("RoVer needs the 'Manage Server' permission in order to do this.")
+    }
+
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     try {
       const { Roles } = await request(`https://api.roblox.com/groups/${args.groupid}`, { json: true })

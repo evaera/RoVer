@@ -419,6 +419,14 @@ class DiscordServer {
 
     return false
   }
+
+  canManageRole (roleResolvable) {
+    const role = this.server.roles.get(roleResolvable)
+
+    if (!role) return false
+
+    return this.server.me.roles.highest.comparePositionTo(role) > 0
+  }
 }
 
 module.exports = DiscordServer

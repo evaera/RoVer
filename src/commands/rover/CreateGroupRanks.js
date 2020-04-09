@@ -22,7 +22,7 @@ class CreateGroupRanksCommand extends Command {
   }
 
   async fn (msg, args) {
-    if (!this.discordBot.bot.hasPermission("MANAGE_SERVER")) {
+    if (!msg.guild.me.hasPermission("MANAGE_SERVER")) {
       return msg.reply("RoVer needs the 'Manage Server' permission in order to do this.")
     }
 

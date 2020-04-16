@@ -27,7 +27,7 @@ class VerifyChannelCommand extends Command {
 
     if (channel) {
       this.server.setSetting('verifyChannel', channel.id)
-      msg.reply(`Set verify channel to ${channel}. Non-verification messages in this channel will be deleted.`)
+      msg.reply(`Set verify channel to ${channel}. Non-verification messages in this channel will be deleted if RoVer can manage messages.`)
     } else {
       this.server.setSetting('verifyChannel', null)
       msg.reply('Removed verification channel. All messages are allowed to be sent in that channel now.')

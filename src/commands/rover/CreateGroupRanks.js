@@ -22,8 +22,8 @@ class CreateGroupRanksCommand extends Command {
   }
 
   async fn (msg, args) {
-    if (!msg.guild.me.hasPermission('MANAGE_SERVER')) {
-      return msg.reply("RoVer needs the 'Manage Server' permission in order to do this.")
+    if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
+      return msg.reply("RoVer needs the 'Manage Roles' permission in order to do this.")
     }
 
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')

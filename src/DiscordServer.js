@@ -421,6 +421,8 @@ class DiscordServer {
   }
 
   canManageRole (roleResolvable) {
+    if (!this.server.me.hasPermission('MANAGE_ROLES')) return false
+
     const role = this.server.roles.get(roleResolvable)
 
     if (!role) return false

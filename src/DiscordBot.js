@@ -201,7 +201,9 @@ class DiscordBot {
 
     // If this is the verify channel, we want to delete the message and just verify the user if they aren't an admin.
     if (server.getSetting('verifyChannel') === message.channel.id && message.cleanContent.toLowerCase() !== message.guild.commandPrefix + 'verify' && !(this.bot.isOwner(message.author) || message.member.hasPermission('MANAGE_GUILD') || message.member.roles.find(role => role.name === 'RoVer Admin'))) {
-      message.delete()
+      if (message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')) {
+        message.delete().catch(console.error)
+      }
       return member.verify({ message })
     }
 

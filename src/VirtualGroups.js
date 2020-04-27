@@ -11,16 +11,16 @@ const request = require('request-promise')
  * Check if the given user is in the Roblox Dev Forum.
  *
  * @param {object} user The user data
- * @returns {object} The DebForum profile data
+ * @returns {object} The DevForum profile data
  */
 async function getDevForumProfile (user) {
-  const username = user.username
+  const userId = user.id
   let userProfile = await Cache.get(`bindings.${user.id}`, 'DevForumProfile')
 
   if (!userProfile) {
     try {
       const devForumData = await request({
-        uri: `https://devforum.roblox.com/users/${username}.json`,
+        uri: `https://devforum.roblox.com/u/by-external/${userId}.json`,
         json: true,
         simple: false
       })

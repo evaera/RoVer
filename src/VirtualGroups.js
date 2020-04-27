@@ -92,7 +92,9 @@ module.exports = {
       return true
     }
 
-    if (!userTrustLevel || !trustLevelCheck(userTrustLevel) || userProfile.suspended_till) {
+    // !userTrustLevel also returns true when it is 0, causing it to return false
+    // this is why we check it with == null, in case it is actually 0
+    if (userTrustLevel == null || !trustLevelCheck(userTrustLevel) || userProfile.suspended_till) {
       return false
     }
 

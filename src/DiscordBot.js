@@ -34,7 +34,9 @@ class DiscordBot {
       owner: config.owner || '0',
       commandPrefix: config.commandPrefix || '!',
       unknownCommandResponse: false,
-      disableEveryone: true
+      disableEveryone: true,
+      messageCacheMaxSize: 0,
+      retryLimit: 0
     })
 
     this.bot.setProvider(new SettingProvider())

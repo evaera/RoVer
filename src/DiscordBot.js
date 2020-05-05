@@ -176,7 +176,7 @@ class DiscordBot {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.array().length} guilds.`)
 
     // Set status message to the default until we get info from master process
-    this.setActivity()
+    // this.setActivity()
   }
 
   /**
@@ -188,6 +188,7 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   async message (message) {
+    return
     // Don't want to do anything if this is a DM or message was sent by the bot itself.
     // Additionally, if the message is !verify, we don't want to run it twice (since it
     // will get picked up by the command anyway)

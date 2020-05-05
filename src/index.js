@@ -56,14 +56,14 @@ request('https://verify.eryn.io/api/count')
     totalUsers = Util.toHumanReadableNumber(count)
   })
 
-setInterval(async () => {
-  if (shardingManager.shards.size === shardingManager.totalShards) {
-    shardingManager.broadcast({
-      action: 'status',
-      argument: await getNextActivity()
-    })
-  }
-}, 15000)
+// setInterval(async () => {
+//   if (shardingManager.shards.size === shardingManager.totalShards) {
+//     shardingManager.broadcast({
+//       action: 'status',
+//       argument: await getNextActivity()
+//     })
+//   }
+// }, 15000)
 
 // If updateServer is defined, start that up as well.
 if (config.updateServer) {

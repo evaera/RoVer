@@ -183,8 +183,8 @@ class DiscordMember {
         // A self-invoking async function so that we can delay the message sending if necessary,
         // but we don't delay the return value.
         ;(async () => {
-          if ((new Date()).getTime() - lastEdit < 1000) {
-            await Util.sleep(1000 - ((new Date()).getTime() - lastEdit))
+          if ((new Date()).getTime() - lastEdit < 5000) {
+            await Util.sleep(5000 - ((new Date()).getTime() - lastEdit))
 
             if (editIndex !== thisIndex) {
               // A new message has been sent since this was called, so ignore it.

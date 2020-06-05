@@ -286,6 +286,7 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   async globallyUpdateMember (args) {
+    return
     const { id, guilds } = args
 
     // Start off by clearing their global cache.

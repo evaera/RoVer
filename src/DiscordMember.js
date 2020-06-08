@@ -250,6 +250,7 @@ class DiscordMember {
       })
     }
 
+    // Possible attempt to fix a rate limiting issue. Read more @ https://discord.com/developers/docs/topics/rate-limits
     // status(':scroll: Checking the verification registry...')
     try {
       // Read user data from memory, or request it if there isn't any cached.

@@ -22,5 +22,11 @@
   "scripts": {
     "test": "standard",
     "start": "node src/index.js"
+  },
+  "standard": {
+    "ignore": [
+      "src/DiscordBot.js",
+      "src/index.js"
+    ]
   }
 }

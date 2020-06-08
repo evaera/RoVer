@@ -250,7 +250,7 @@ class DiscordMember {
       })
     }
 
-    status(':scroll: Checking the verification registry...')
+    // status(':scroll: Checking the verification registry...')
     try {
       // Read user data from memory, or request it if there isn't any cached.
       data = await Cache.get('users', this.id)
@@ -277,7 +277,7 @@ class DiscordMember {
     if (data.status === 'ok') {
       // We only want to update the username if this data isn't from the cache.
       if (freshData) {
-        status(':newspaper: Getting latest profile information...')
+        // status(':newspaper: Getting latest profile information...')
         // Resolve the Roblox username from the user id.
         let apiUserData = {}
         try {
@@ -312,7 +312,7 @@ class DiscordMember {
       // Check if these settings are enabled for this specific server,
       // if so, then put the member in the correct state.
 
-      status(':dividers:️ Updating your nickname and roles...')
+      // status(':dividers:️ Updating your nickname and roles...')
 
       if (this.discordServer.getSetting('verifiedRole')) {
         const role = this.discordServer.getSetting('verifiedRole')
@@ -380,7 +380,7 @@ class DiscordMember {
 
       // Resolve group rank bindings for this member.
       if (this.discordServer.getSetting('groupRankBindings').length > 0) {
-        status(':mag_right: Checking group ranks...')
+        // status(':mag_right: Checking group ranks...')
 
         await DiscordServer.getRobloxMemberGroups(data.robloxId)
 

@@ -59,12 +59,8 @@ class DiscordBot {
     // the class and not the event.
     this.bot.on('ready', this.ready.bind(this))
     this.bot.on('guildMemberAdd', this.guildMemberAdd.bind(this))
+    this.bot.on('message', this.message.bind(this))
     if (config.loud) this.bot.on('error', (message) => console.log(message))
-
-    // Only hook up if lockNicknames mode is enabled.
-    if (config.lockNicknames) {
-      this.bot.on('message', this.message.bind(this))
-    }
 
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg => {
@@ -209,7 +205,7 @@ class DiscordBot {
       return member.verify({ message })
     }
 
-    if (!config.disableAutoUpdate && member.shouldUpdateNickname(message.member.displayName)) {
+    if (!config.disableAutoUpdate && member.shouldUpdateNickname(message.member.displayName) && config.lockNicknames) {
       // As a last resort, we just verify with cache on every message sent.
       await member.verify({
         announce: false,

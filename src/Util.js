@@ -90,7 +90,7 @@ module.exports = {
     // Removes the decimal if it wasn't
     if (placeShift > 0) {
       compressedNumber += numberAbbreviations[placeShift - 1]
-    }else{
+    } else {
       compressedNumber = Math.floor(compressedNumber)
     }
     return compressedNumber

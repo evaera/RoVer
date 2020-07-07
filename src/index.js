@@ -20,7 +20,7 @@ shardingManager.on('shardCreate', shard => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })
 
-shardingManager.spawn(config.totalShards || 'auto', 1000, 30000)
+shardingManager.spawn(config.totalShards || 'auto', 1000, -1)
 
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)

@@ -59,18 +59,17 @@ class DiscordBot {
     // the class and not the event.
     this.bot.on('ready', this.ready.bind(this))
     this.bot.on('guildMemberAdd', this.guildMemberAdd.bind(this))
-    
+
     this.bot.on('invalidated', () => { // This should never happen!
       console.error(`Sesson on shard ${this.bot.shard.ids[0]} invalidated - exiting!`)
       process.exit(0)
     })
-    if (config.loud) { 
+    if (config.loud) {
       this.bot.on('error', (message) => console.log(message))
       process.on('unhandledRejection', (reason, promise) => {
-        console.log('Unhandled rejection at:', promise, 'reason:', reason);
-      });
+        console.log('Unhandled rejection at:', promise, 'reason:', reason)
+      })
     }
-  
 
     // Only hook up if lockNicknames mode is enabled.
     if (config.lockNicknames) {

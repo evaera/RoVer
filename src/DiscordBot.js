@@ -59,7 +59,18 @@ class DiscordBot {
     // the class and not the event.
     this.bot.on('ready', this.ready.bind(this))
     this.bot.on('guildMemberAdd', this.guildMemberAdd.bind(this))
-    if (config.loud) this.bot.on('error', (message) => console.log(message))
+    
+    this.bot.on('invalidated', () => { // This should never happen!
+      console.error(`Sesson on shard ${this.bot.shard.ids[0]} invalidated - exiting!`)
+      process.exit(0)
+    })
+    if (config.loud) { 
+      this.bot.on('error', (message) => console.log(message))
+      process.on('unhandledRejection', (reason, promise) => {
+        console.log('Unhandled rejection at:', promise, 'reason:', reason);
+      });
+    }
+  
 
     // Only hook up if lockNicknames mode is enabled.
     if (config.lockNicknames) {
@@ -173,7 +184,7 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   ready () {
-    console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.array().length} guilds.`)
+    console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
 
     // Set status message to the default until we get info from master process
     this.setActivity()
@@ -297,7 +308,7 @@ class DiscordBot {
       try {
         if (!this.bot.guilds.has(guildId)) continue
 
-        const guild = this.bot.guilds.get(guildId)
+        const guild = this.bot.guilds.resolve(guildId)
         const server = await this.getServer(guild.id)
 
         const member = await server.getMember(id)
@@ -315,7 +326,7 @@ class DiscordBot {
           // It worked, checking if there's a custom welcome message.
           await this.bot.users.fetch(id)
 
-          const guildMember = await this.bot.guilds.get(guild.id).members.fetch(id)
+          const guildMember = await this.bot.guilds.resolve(guild.id).members.fetch(id)
           guildMember.send(server.getWelcomeMessage(action, guildMember)).catch(() => {})
         }
 

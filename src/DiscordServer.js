@@ -36,7 +36,7 @@ class DiscordServer {
     this.discordBot = discordBot
     this.bot = this.discordBot.bot
 
-    this.server = this.bot.guilds.get(id)
+    this.server = this.bot.guilds.resolve(id)
 
     this.verifyCooldowns = new Map()
     this.nicknames = new Map()
@@ -341,7 +341,7 @@ class DiscordServer {
     }
 
     if (this.getSetting('announceChannel')) {
-      const channel = await this.server.channels.get(this.getSetting('announceChannel'))
+      const channel = await this.server.channels.cache.get(this.getSetting('announceChannel'))
 
       if (channel) {
         try {
@@ -423,7 +423,7 @@ class DiscordServer {
   canManageRole (roleResolvable) {
     if (!this.server.me.hasPermission('MANAGE_ROLES')) return false
 
-    const role = this.server.roles.get(roleResolvable)
+    const role = this.server.roles.cache.get(roleResolvable)
 
     if (!role) return false
 

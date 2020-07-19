@@ -6,6 +6,9 @@
     <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="/assets/Add_RoVer.png" alt="Add" /></a>
 </p>
 
+
+[![Run on Repl.it](https://repl.it/badge/github/evaera/RoVer)](https://repl.it/github/evaera/RoVer)
+
 <p align="center">
   <a href="https://www.patreon.com/erynlynn"><img src="http://i.imgur.com/dujYlAK.png" alt="Patreon"></a>
   <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>

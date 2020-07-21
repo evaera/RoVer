@@ -21,6 +21,7 @@ class DiscordBot {
     this.servers = {}
     this.authorizedOwners = []
     this.patronTransfers = {}
+    this.blacklist = {}
   }
 
   /**
@@ -76,6 +77,17 @@ class DiscordBot {
       this.bot.on('message', this.message.bind(this))
     }
 
+    this.bot.dispatcher.addInhibitor(msg => {
+      if (!msg.guild) {
+        return
+      }
+
+      if (this.blacklist[msg.guild.ownerID]) {
+        msg.reply("This server is blacklisted!")
+        return 'blacklisted'
+      }
+    })
+
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg => {
         if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
@@ -117,10 +129,29 @@ class DiscordBot {
 
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
+
+    this.updateBlacklist().catch(console.error)
   }
 
   isPremium () {
     return !!config.patreonAccessToken
+  }
+
+  async updateBlacklist () {
+    if (!config.banServer) {
+      return false
+    }
+
+    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
+      json: true,
+      headers: {
+        Authorization: `Bot ${config.token}`
+      }
+    })
+
+    response.forEach(ban => {
+      this.blacklist[ban.user.id] = true
+    })
   }
 
   async updatePatrons (page, newAuthorizedOwners) {

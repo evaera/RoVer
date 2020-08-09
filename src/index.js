@@ -13,7 +13,8 @@ const Util = require('./Util.js')
 const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
   token: config.token,
   totalShards: config.totalShards || 'auto',
-  shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined
+  shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined,
+  execArgv: ['--trace-warnings']
 })
 
 shardingManager.on('shardCreate', shard => {

@@ -33,7 +33,7 @@ class CreateGroupRanksCommand extends Command {
       const serverBindings = this.server.getSetting('groupRankBindings')
       Roles.reverse()
       for (const role of Roles) {
-        const newRole = (await msg.guild.roles.find(guildRole => guildRole.name === role.Name)) || (await msg.guild.roles.create({
+        const newRole = (await msg.guild.roles.cache.find(guildRole => guildRole.name === role.Name)) || (await msg.guild.roles.create({
           data: {
             name: role.Name,
             permissions: []

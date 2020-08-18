@@ -35,7 +35,7 @@ class DiscordBot {
       owner: config.owner || '0',
       commandPrefix: config.commandPrefix || '!',
       unknownCommandResponse: false,
-      disableEveryone: true,
+      disableMentions: 'everyone',
       messageCacheMaxSize: 0,
       retryLimit: 0
     })

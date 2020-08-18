@@ -9,8 +9,8 @@
 <p align="center">
   <a href="https://www.patreon.com/erynlynn"><img src="http://i.imgur.com/dujYlAK.png" alt="Patreon"></a>
   <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
-  <a href="https://eryn.io/RoVer"><img src="https://img.shields.io/badge/verified%20users-2.7M%2B-brightgreen.svg" alt="Verified Users"></a>
-  <a href="https://eryn.io/RoVer"><img src="https://img.shields.io/badge/total%20servers-77K%2B-brightgreen.svg" alt="Discord Servers"></a>
+  <a href="https://eryn.io/RoVer"><img src="https://img.shields.io/badge/verified%20users-3.2M%2B-brightgreen.svg" alt="Verified Users"></a>
+  <a href="https://eryn.io/RoVer"><img src="https://img.shields.io/badge/total%20servers-101K%2B-brightgreen.svg" alt="Discord Servers"></a>
   <br>
   <a href="https://discord.gg/7yfwrat"><img src="https://img.shields.io/discord/425800792679645204.svg" alt="Discord"></a>
 </p>

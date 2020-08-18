@@ -13,14 +13,15 @@ const Util = require('./Util.js')
 const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
   token: config.token,
   totalShards: config.totalShards || 'auto',
-  shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined
+  shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined,
+  execArgv: ['--trace-warnings']
 })
 
 shardingManager.on('shardCreate', shard => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })
 
-shardingManager.spawn(config.totalShards || 'auto', 1000, 30000)
+shardingManager.spawn(config.totalShards || 'auto', 1000, -1)
 
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)
@@ -41,7 +42,7 @@ async function getNextActivity () {
     case 0:
       return { text: 'https://RoVer.link' }
     case 1: {
-      let totalGuilds = (await shardingManager.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0)
+      let totalGuilds = (await shardingManager.fetchClientValues('guilds.cache.size')).reduce((prev, val) => prev + val, 0)
       totalGuilds = Util.toHumanReadableNumber(totalGuilds)
       return { text: `${totalGuilds} servers`, type: 'WATCHING' }
     } case 2:

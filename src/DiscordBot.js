@@ -61,20 +61,18 @@ class DiscordBot {
     this.bot.on('ready', this.ready.bind(this))
     this.bot.on('guildMemberAdd', this.guildMemberAdd.bind(this))
 
+    this.bot.on('message', this.message.bind(this))
+
     this.bot.on('invalidated', () => { // This should never happen!
       console.error(`Sesson on shard ${this.bot.shard.ids[0]} invalidated - exiting!`)
       process.exit(0)
     })
+    
     if (config.loud) {
       this.bot.on('error', (message) => console.log(message))
       process.on('unhandledRejection', (reason, promise) => {
         console.log('Unhandled rejection at:', promise, 'reason:', reason)
       })
-    }
-
-    // Only hook up if lockNicknames mode is enabled.
-    if (config.lockNicknames) {
-      this.bot.on('message', this.message.bind(this))
     }
 
     this.bot.dispatcher.addInhibitor(msg => {
@@ -250,7 +248,7 @@ class DiscordBot {
       return member.verify({ message })
     }
 
-    if (!config.disableAutoUpdate && member.shouldUpdateNickname(message.member.displayName)) {
+    if (!config.disableAutoUpdate && member.shouldUpdateNickname(message.member.displayName) && config.lockNicknames) {
       // As a last resort, we just verify with cache on every message sent.
       await member.verify({
         announce: false,

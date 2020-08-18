@@ -94,7 +94,7 @@ class WhoisCommand extends Command {
             })
 
             const membershipType = JSON.parse(response.body).membershipType
-            bc = 'NBC'
+            bc = 'Regular'
 
             if (membershipType === 4) {
               bc = 'Premium'

@@ -87,8 +87,11 @@ module.exports = {
     }
 
     // If the number was simplified, put a number abbreviation on the end
+    // Removes the decimal if it wasn't
     if (placeShift > 0) {
       compressedNumber += numberAbbreviations[placeShift - 1]
+    } else {
+      compressedNumber = Math.floor(compressedNumber)
     }
     return compressedNumber
   },

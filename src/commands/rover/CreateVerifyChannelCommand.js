@@ -19,13 +19,13 @@ class CreateVerifyChannelCommand extends Command {
       const overwritesVerify = []
 
       overwritesInstructions.push({
-        id: msg.guild.roles.find(role => role.name === '@everyone'),
+        id: msg.guild.roles.cache.find(role => role.name === '@everyone'),
         allowed: ['READ_MESSAGE_HISTORY', 'VIEW_CHANNEL'],
         denied: ['SEND_MESSAGES', 'ADD_REACTIONS']
       })
 
       overwritesVerify.push({
-        id: msg.guild.roles.find(role => role.name === '@everyone'),
+        id: msg.guild.roles.cache.find(role => role.name === '@everyone'),
         allowed: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
         denied: ['READ_MESSAGE_HISTORY']
       })

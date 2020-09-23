@@ -162,6 +162,12 @@ class DiscordMember {
       cache: false
     })
 
+    // Fetch newest data? Please?
+    this.member = await this.server.members.fetch({
+      user: this.user,
+      cache: false
+    })
+
     // If options.message is provided, we reply to that message with a status update
     // and edit it with new info throughout the verification. It's also called upon
     // this function returning output, so we need a default state for it to be a

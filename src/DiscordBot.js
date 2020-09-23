@@ -69,29 +69,37 @@ class DiscordBot {
     });
     this.bot.on('ready', this.ready.bind(this))
     this.bot.on('guildMemberAdd', this.guildMemberAdd.bind(this))
-    
+
     this.bot.on('invalidated', () => { // This should never happen!
       console.error(`Sesson on shard ${this.bot.shard.ids[0]} invalidated - exiting!`)
       process.exit(0)
     })
+
     //if (config.loud) this.bot.on('error', (message) => console.log(message))
+
+    if (config.loud) {
+      this.bot.on('error', (message) => console.log(message))
+      process.on('unhandledRejection', (reason, promise) => {
+        console.log('Unhandled rejection at:', promise, 'reason:', reason)
+      })
+    }
 
     // Only hook up if lockNicknames mode is enabled.
     if (config.lockNicknames) {
       this.bot.on('message', this.message.bind(this))
     }
-    
+
     this.bot.dispatcher.addInhibitor(msg => {
       if (!msg.guild) {
         return
       }
-      
+
       if (this.blacklist[msg.guild.ownerID]) {
         msg.reply("This server is blacklisted!")
         return 'blacklisted'
       }
     })
-      
+
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg => {
         if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
@@ -133,7 +141,7 @@ class DiscordBot {
 
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
-    
+
     this.updateBlacklist().catch(console.error)
   }
 
@@ -153,6 +161,23 @@ class DiscordBot {
       }
     })
     
+    response.forEach(ban => {
+      this.blacklist[ban.user.id] = true
+    })
+  }
+
+  async updateBlacklist () {
+    if (!config.banServer) {
+      return false
+    }
+
+    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
+      json: true,
+      headers: {
+        Authorization: `Bot ${config.token}`
+      }
+    })
+
     response.forEach(ban => {
       this.blacklist[ban.user.id] = true
     })
@@ -343,7 +368,7 @@ class DiscordBot {
       try {
         if (!this.bot.guilds.has(guildId)) continue
 
-        const guild = this.bot.guilds.get(guildId)
+        const guild = this.bot.guilds.resolve(guildId)
         const server = await this.getServer(guild.id)
 
         const member = await server.getMember(id)
@@ -361,7 +386,7 @@ class DiscordBot {
           // It worked, checking if there's a custom welcome message.
           await this.bot.users.fetch(id)
 
-          const guildMember = await this.bot.guilds.get(guild.id).members.fetch(id)
+          const guildMember = await this.bot.guilds.resolve(guild.id).members.fetch(id)
           guildMember.send(server.getWelcomeMessage(action, guildMember)).catch(() => {})
         }
 

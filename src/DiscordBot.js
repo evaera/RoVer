@@ -143,19 +143,19 @@ class DiscordBot {
   isPremium () {
     return !!config.patreonAccessToken
   }
-  
+
   async updateBlacklist () {
     if (!config.banServer) {
       return false
     }
-    
+
     const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
       json: true,
       headers: {
         Authorization: `Bot ${config.token}`
       }
     })
-    
+
     response.forEach(ban => {
       this.blacklist[ban.user.id] = true
     })
@@ -253,6 +253,7 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   async message (message) {
+    return
     // Don't want to do anything if this is a DM or message was sent by the bot itself.
     // Additionally, if the message is !verify, we don't want to run it twice (since it
     // will get picked up by the command anyway)

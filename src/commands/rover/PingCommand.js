@@ -13,9 +13,6 @@ class PingCommand extends Command {
   }
 
   async fn (msg) {
-    const start = Date.now()
-    msg.channel.send('Pinging...').then(message => {
-      message.edit(`:ping_pong: Pong! Took **${Math.ceil(Date.now() - start)}ms**`)
-    })
+    msg.reply(`:ping_pong: Pong! Latency to Discord: ${this.client.ws.ping}ms.`)
   }
 }

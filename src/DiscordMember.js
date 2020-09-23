@@ -57,8 +57,8 @@ class DiscordMember {
    */
   async prepareMember () {
     try {
-      this.user = await this.bot.users.fetch(this.id, false)
-      this.member = await this.server.members.fetch(this.user, false)
+      this.user = await this.bot.users.fetch(this.id, true)
+      this.member = await this.server.members.fetch(this.user, true)
       return true
     } catch (e) {
       if (config.loud) console.log(`prepareMember: ${e.message}; ${this.id}; ${this.user}`)
@@ -126,12 +126,6 @@ class DiscordMember {
   async verify (options) {
     options = options || {}
 
-    // Fetch newest data? Please?
-    this.member = await this.server.members.fetch({
-      user: this.user,
-      cache: false
-    })
-
     let data = {}
     let freshData = false
     const errorAppend = ''
@@ -161,6 +155,18 @@ class DiscordMember {
       // We only want to clear on manually-invoked verifications.
       await DiscordServer.clearMemberCache(this.id)
     }
+    
+    // Fetch newest data? Please?
+    this.member = await this.server.members.fetch({
+      user: this.user,
+      cache: false
+    })
+
+    // Fetch newest data? Please?
+    this.member = await this.server.members.fetch({
+      user: this.user,
+      cache: false
+    })
 
     // If options.message is provided, we reply to that message with a status update
     // and edit it with new info throughout the verification. It's also called upon
@@ -230,7 +236,7 @@ class DiscordMember {
     }
 
     // Ignore users with this specific role (to give server owners more power)
-    if (this.member.roles.find(role => role.name === 'RoVer Bypass')) {
+    if (this.member.roles.cache.find(role => role.name === 'RoVer Bypass')) {
       return status({
         status: false,
         error: ':octagonal_sign: RoVer cannot act on users with the "RoVer Bypass" role.',
@@ -316,7 +322,7 @@ class DiscordMember {
 
       if (this.discordServer.getSetting('verifiedRole')) {
         const role = this.discordServer.getSetting('verifiedRole')
-        if (!this.member.roles.has(role) && this.server.roles.has(role) && this.discordServer.canManageRole(role)) {
+        if (!this.member.roles.cache.has(role) && this.server.roles.cache.has(role) && this.discordServer.canManageRole(role)) {
           try {
             await this.member.roles.add(role)
           } catch (e) {
@@ -332,7 +338,7 @@ class DiscordMember {
 
       if (this.discordServer.getSetting('verifiedRemovedRole')) {
         const role = this.discordServer.getSetting('verifiedRemovedRole')
-        if (this.member.roles.has(role) && this.server.roles.has(role) && this.discordServer.canManageRole(role)) {
+        if (this.member.roles.cache.has(role) && this.server.roles.cache.has(role) && this.discordServer.canManageRole(role)) {
           try {
             await this.member.roles.remove(role)
           } catch (e) {
@@ -348,7 +354,7 @@ class DiscordMember {
 
       if (
         this.discordServer.getSetting('nicknameUsers') &&
-        !this.member.roles.find(role => role.name === 'RoVer Nickname Bypass') &&
+        !this.member.roles.cache.find(role => role.name === 'RoVer Nickname Bypass') &&
         botMember.hasPermission('MANAGE_NICKNAMES')
       ) {
         const nickname = (await this.getNickname(data)).substring(0, 32)
@@ -389,10 +395,10 @@ class DiscordMember {
           // We use a Promise.then here so that they all execute asynchronously.
           promises.push(DiscordServer.resolveGroupRankBinding(binding, data.robloxId, data.robloxUsername)
             .then((state) => {
-              const hasRole = this.member.roles.get(binding.role) != null
+              const hasRole = this.member.roles.cache.get(binding.role) != null
               if (hasRole === state) return
 
-              if (!this.server.roles.has(binding.role)) return
+              if (!this.server.roles.cache.has(binding.role)) return
 
               if (!this.discordServer.canManageRole(binding.role)) return
 

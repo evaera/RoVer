@@ -21,7 +21,7 @@ shardingManager.on('shardCreate', shard => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })
 
-shardingManager.spawn(config.totalShards || 'auto', 1000, -1)
+shardingManager.spawn(config.totalShards || 'auto', 8000, -1)
 
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)
@@ -57,14 +57,14 @@ request('https://verify.eryn.io/api/count')
     totalUsers = Util.toHumanReadableNumber(count)
   })
 
-setInterval(async () => {
+/*setInterval(async () => {
   if (shardingManager.shards.size === shardingManager.totalShards) {
     shardingManager.broadcast({
       action: 'status',
       argument: await getNextActivity()
     })
   }
-}, 15000)
+}, 15000)*/
 
 // If updateServer is defined, start that up as well.
 if (config.updateServer) {

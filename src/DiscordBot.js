@@ -21,6 +21,7 @@ class DiscordBot {
     this.servers = {}
     this.authorizedOwners = []
     this.patronTransfers = {}
+    this.blacklist = {}
   }
 
   /**
@@ -57,15 +58,40 @@ class DiscordBot {
 
     // We use .bind(this) so that the context remains within
     // the class and not the event.
+    this.bot.on('debug', (info) => { console.log(`[DEBUG SHARD${this.bot.shard.ids[0]}] ${info}`)})
+    this.bot.on('warn', (info) => { console.log(`[WARN SHARD${this.bot.shard.ids[0]}] ${info}`)})
+    this.bot.on('rateLimit', (err) => { console.error(`[RL SHARD${this.bot.shard.ids[0]}] ${JSON.stringify(err)}`)})
+    this.bot.on('error', (err) => { console.error(`[ERR SHARD${this.bot.shard.ids[0]}] `, err)})
+    this.bot.on('shardError', (err, id) => { console.error(`[WS SHARD${id}] ${JSON.stringify(err)}`)})
+    this.bot.on('shardDisconnect', (event, id) => { console.error(`[WS SHARD${id}] ${JSON.stringify(event)}`)})
+    process.on('unhandledRejection', (reason, promise) => {
+      console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+    });
     this.bot.on('ready', this.ready.bind(this))
     this.bot.on('guildMemberAdd', this.guildMemberAdd.bind(this))
-    if (config.loud) this.bot.on('error', (message) => console.log(message))
+    
+    this.bot.on('invalidated', () => { // This should never happen!
+      console.error(`Sesson on shard ${this.bot.shard.ids[0]} invalidated - exiting!`)
+      process.exit(0)
+    })
+    //if (config.loud) this.bot.on('error', (message) => console.log(message))
 
     // Only hook up if lockNicknames mode is enabled.
     if (config.lockNicknames) {
       this.bot.on('message', this.message.bind(this))
     }
-
+    
+    this.bot.dispatcher.addInhibitor(msg => {
+      if (!msg.guild) {
+        return
+      }
+      
+      if (this.blacklist[msg.guild.ownerID]) {
+        msg.reply("This server is blacklisted!")
+        return 'blacklisted'
+      }
+    })
+      
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg => {
         if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
@@ -107,10 +133,29 @@ class DiscordBot {
 
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
+    
+    this.updateBlacklist().catch(console.error)
   }
 
   isPremium () {
     return !!config.patreonAccessToken
+  }
+  
+  async updateBlacklist () {
+    if (!config.banServer) {
+      return false
+    }
+    
+    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
+      json: true,
+      headers: {
+        Authorization: `Bot ${config.token}`
+      }
+    })
+    
+    response.forEach(ban => {
+      this.blacklist[ban.user.id] = true
+    })
   }
 
   async updatePatrons (page, newAuthorizedOwners) {
@@ -173,10 +218,10 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   ready () {
-    console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.array().length} guilds.`)
+    console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
 
     // Set status message to the default until we get info from master process
-    this.setActivity()
+    this.bot.user.setActivity('rover.link', { type: "LISTENING" })
   }
 
   /**
@@ -202,7 +247,7 @@ class DiscordBot {
     if (!member) return
 
     // If this is the verify channel, we want to delete the message and just verify the user if they aren't an admin.
-    if (server.getSetting('verifyChannel') === message.channel.id && message.cleanContent.toLowerCase() !== message.guild.commandPrefix + 'verify' && !(this.bot.isOwner(message.author) || message.member.hasPermission('MANAGE_GUILD') || message.member.roles.find(role => role.name === 'RoVer Admin'))) {
+    if (server.getSetting('verifyChannel') === message.channel.id && message.cleanContent.toLowerCase() !== message.guild.commandPrefix + 'verify' && !(this.bot.isOwner(message.author) || message.member.hasPermission('MANAGE_GUILD') || message.member.roles.cache.find(role => role.name === 'RoVer Admin'))) {
       if (message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')) {
         message.delete().catch(console.error)
       }
@@ -285,6 +330,7 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   async globallyUpdateMember (args) {
+    return
     const { id, guilds } = args
 
     // Start off by clearing their global cache.

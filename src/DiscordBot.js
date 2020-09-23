@@ -58,7 +58,7 @@ class DiscordBot {
 
     // We use .bind(this) so that the context remains within
     // the class and not the event.
-    this.bot.on('debug', (info) => { console.log(`[DEBUG SHARD${this.bot.shard.ids[0]}] ${info}`)})
+    // this.bot.on('debug', (info) => { console.log(`[DEBUG SHARD${this.bot.shard.ids[0]}] ${info}`)})
     this.bot.on('warn', (info) => { console.log(`[WARN SHARD${this.bot.shard.ids[0]}] ${info}`)})
     this.bot.on('rateLimit', (err) => { console.error(`[RL SHARD${this.bot.shard.ids[0]}] ${JSON.stringify(err)}`)})
     this.bot.on('error', (err) => { console.error(`[ERR SHARD${this.bot.shard.ids[0]}] `, err)})

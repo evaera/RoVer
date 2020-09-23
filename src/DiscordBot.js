@@ -253,7 +253,6 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   async message (message) {
-    return
     // Don't want to do anything if this is a DM or message was sent by the bot itself.
     // Additionally, if the message is !verify, we don't want to run it twice (since it
     // will get picked up by the command anyway)
@@ -351,7 +350,6 @@ class DiscordBot {
    * @memberof DiscordBot
    */
   async globallyUpdateMember (args) {
-    return
     const { id, guilds } = args
 
     // Start off by clearing their global cache.

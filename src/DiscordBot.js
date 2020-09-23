@@ -143,19 +143,19 @@ class DiscordBot {
   isPremium () {
     return !!config.patreonAccessToken
   }
-  
+
   async updateBlacklist () {
     if (!config.banServer) {
       return false
     }
-    
+
     const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
       json: true,
       headers: {
         Authorization: `Bot ${config.token}`
       }
     })
-    
+
     response.forEach(ban => {
       this.blacklist[ban.user.id] = true
     })
@@ -241,11 +241,7 @@ class DiscordBot {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
 
     // Set status message to the default until we get info from master process
-<<<<<<< HEAD
-    // this.setActivity()
-=======
     this.bot.user.setActivity('rover.link', { type: "LISTENING" })
->>>>>>> d87dc59db960468dde2691109a05ab30491877e5
   }
 
   /**

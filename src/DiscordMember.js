@@ -176,7 +176,7 @@ class DiscordMember {
 
     if (options.message) {
       // Create the status message and save initial information.
-      const statusMessage = await options.message.reply(':bulb: Working...')
+      const statusMessage = await options.message.reply(':thought_balloon: Checking permissions...')
 
       // We don't want to edit the message too quickly, otherwise Discord will throttle us. T
       // This limits edits to one per second but keeps it up to date after at least 1 second passes.

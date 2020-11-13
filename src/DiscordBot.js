@@ -37,7 +37,10 @@ class DiscordBot {
       unknownCommandResponse: false,
       disableMentions: 'everyone',
       messageCacheMaxSize: 0,
-      retryLimit: 0
+      retryLimit: 0,
+      ws: {
+        intents: ["GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES"],
+      },
     })
 
     this.bot.setProvider(new SettingProvider())

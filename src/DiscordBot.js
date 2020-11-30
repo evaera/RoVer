@@ -306,11 +306,8 @@ class DiscordBot {
 
     // Check the guild's verification level
     const securityLevel = member.guild.verificationLevel
-    try {
-      const messageIntro = `Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Due to this server's security settings,`
-      if (securityLevel === 'MEDIUM' && (member.joinedTimestamp - member.user.createdTimestamp < 300000)) member.send(`${messageIntro} you must wait until your account is at least 5 minutes old to verify. Once the time is up, run \`${member.guild.commandPrefix}verify\` in the server to verify.`).catch(() => {})
-    }
-    catch (e) {}
+    const messageIntro = `Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Due to this server's security settings,`
+    if (securityLevel === 'MEDIUM' && (member.joinedTimestamp - member.user.createdTimestamp < 300000)) member.send(`${messageIntro} you must wait until your account is at least 5 minutes old to verify. Once the time is up, run \`${member.guild.commandPrefix}verify\` in the server to verify.`).catch(() => {})
 
     const action = await discordMember.verify()
 

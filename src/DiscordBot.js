@@ -310,12 +310,10 @@ class DiscordBot {
     if (securityLevel === 'MEDIUM' && (member.joinedTimestamp - member.user.createdTimestamp < 300000)) {
       member.send(`${securityMessageIntro} you must wait until your account is at least 5 minutes old to verify. Once the time is up, run \`${member.guild.commandPrefix}verify\` in the server to verify.`).catch(() => {})
       return
-    }
-    else if (securityLevel === 'HIGH') {
+    } else if (securityLevel === 'HIGH') {
       member.send(`${securityMessageIntro} you must wait 10 minutes to verify if you do not have a phone number linked to your Discord account. If you do have a linked phone number, you may immediately run \`${member.guild.commandPrefix}verify\` in the server.`).catch(() => {})
       return
-    }
-    else if (securityLevel === 'VERY_HIGH') {
+    } else if (securityLevel === 'VERY_HIGH') {
       member.send(`${securityMessageIntro} you must link your phone number to your Discord account. If you have already done so, you may run \`${member.guild.commandPrefix}verify\` in the server.`).catch(() => {})
       return
     }

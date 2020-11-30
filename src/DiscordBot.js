@@ -303,6 +303,14 @@ class DiscordBot {
 
     const discordMember = await server.getMember(member.id)
     if (!member) return
+
+    // Check the guild's verification level
+    const securityLevel = member.guild.verificationLevel
+    try {
+      const messageIntro = `Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Due to this server's security settings,`
+    }
+    catch (e) {}
+
     const action = await discordMember.verify()
 
     try {

@@ -312,6 +312,10 @@ class DiscordBot {
       member.send(`${messageIntro} you must wait 10 minutes to verify if you do not have a phone number linked to your Discord account. If you do have a linked phone number, you may immediately run \`${member.guild.commandPrefix}verify\` in the server.`).catch(() => {})
       return
     }
+    else if (securityLevel === 'VERY_HIGH') {
+      member.send(`${messageIntro} you must link your phone number to your Discord account. If you have already done so, you may run \`${member.guild.commandPrefix}verify\` in the server.`).catch(() => {})
+      return
+    }
     const action = await discordMember.verify()
 
     try {

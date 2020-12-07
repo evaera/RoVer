@@ -31,6 +31,15 @@ async function recursiveUpdate (memberArray, server, msg, errors) {
   return recursiveUpdate(memberArray, server, msg, errors)
 }
 
+async function returnMembersOfRole(role) {
+  return new Promise(resolve => {
+    role.guild.members.fetch().then(collection => {
+      let roledMembers = collection.filter(member => member.roles.cache.has(role.id));
+      resolve(collection.array());
+    });
+  });
+}
+
 module.exports =
 class UpdateCommand extends Command {
   constructor (client) {
@@ -70,7 +79,7 @@ class UpdateCommand extends Command {
     } else if (!this.discordBot.isPremium()) {
       return msg.reply('Sorry, updating more than one user is only available with RoVer Plus: <https://www.patreon.com/erynlynn>.')
     } else { // They want to update a whole role (premium feature)
-      const roleMembers = target.members.array()
+      const roleMembers = returnMembersOfRole(target)
       const affectedCount = roleMembers.length // # of affected users
       const server = await this.discordBot.getServer(msg.guild.id)
 

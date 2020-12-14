@@ -363,7 +363,7 @@ class DiscordBot {
     // Iterate through all of the guilds the bot is in.
     for (const guildId of guilds) {
       try {
-        if (!this.bot.guilds.has(guildId)) continue
+        if (!this.bot.guilds.cache.has(guildId)) continue
 
         const guild = this.bot.guilds.resolve(guildId)
         const server = await this.getServer(guild.id)

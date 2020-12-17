@@ -82,8 +82,8 @@ class BindGroupCommand extends Command {
           const rangeMatch = rank.match(/(\d+)-(\d+)/)
           
           if (rangeMatch) {
-            const start = Util.clamp(parseInt(rangeMatch[1], 10), 1, 255)
-            const stop = Util.clamp(parseInt(rangeMatch[2], 10), 1, 255)
+            const start = Util.clamp(parseInt(rangeMatch[1], 10), 0, 255)
+            const stop = Util.clamp(parseInt(rangeMatch[2], 10), 0, 255)
 
             if (start && stop) {
               for (let i = start; i <= stop; i++) {
@@ -91,7 +91,7 @@ class BindGroupCommand extends Command {
               }
             }
           } else if (rank.match(/[\d]+/)) {
-            const rankNumber = Util.clamp(parseInt(rank), 1, 255)
+            const rankNumber = Util.clamp(parseInt(rank), 0, 255)
             if (!existingRanks[rank]) group.ranks.push(rankNumber)
           } else {
             return msg.reply(`:no_entry_sign: You have attempted to bind an invalid rank (\`${rank}\`) for group (\`${groupId}\`). Ranks should be a whole number.`)

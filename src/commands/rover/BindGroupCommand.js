@@ -47,7 +47,7 @@ class BindGroupCommand extends Command {
 
     const serverBindings = this.server.getSetting('groupRankBindings')
 
-    const existingIndex = serverBindings.findIndex(binding => binding.role === args.role.id);
+    const existingIndex = serverBindings.findIndex(binding => binding.role === args.role.id)
     const binding = existingIndex !== -1 ? serverBindings[existingIndex] : {
       role: args.role.id,
       groups: []
@@ -55,7 +55,7 @@ class BindGroupCommand extends Command {
 
     for (const groupString of args.groups) {
       const [groupId, ranksString] = groupString.split(':')
-      const existingGroupIndex = binding.groups.findIndex(group => group.id === groupId);
+      const existingGroupIndex = binding.groups.findIndex(group => group.id === groupId)
       const group = existingGroupIndex !== -1 ? binding.groups[existingGroupIndex] : {
         id: groupId,
         ranks: []
@@ -74,7 +74,7 @@ class BindGroupCommand extends Command {
       }
 
       // Converts the ranks into an object for quick lookup for existence
-      const existingRanks = group.ranks.reduce((obj, item) => (obj[item] = true, obj), {});
+      const existingRanks = group.ranks.reduce((obj, item) => (obj[item] = true, obj), {})
 
       if (ranksString !== undefined) {
         const unparsedRanks = ranksString.split(',')
@@ -90,7 +90,7 @@ class BindGroupCommand extends Command {
                 if (!existingRanks[i]) group.ranks.push(i)
               }
             }
-          } else if (rank.match((/[\d]+/))) {
+          } else if (rank.match(/[\d]+/)) {
             const rankNumber = Util.clamp(parseInt(rank), 1, 255)
             if (!existingRanks[rank]) group.ranks.push(rankNumber)
           } else {

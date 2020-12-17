@@ -35,11 +35,9 @@ class BindGroupCommand extends Command {
       return msg.reply('This server has exceeded the maximum amount of allowed role bindings.\n\nTo bind an unlimited number of roles, please consider a $6 monthly donation for RoVer Plus:\n <https://www.patreon.com/erynlynn>.\n\n*Please be aware that this is a temporary restriction as part of an effort to reduce resource consumption. In the future, more role bindings will be available for free.*')
     }
 
-    const binding = {}
-
-    if (this.server.isRoleInUse(args.role.id)) {
+    if (this.server.getSetting('verifiedRole') === args.role.id || this.server.getSetting('verifiedRemovedRole') === args.role.id) {
       msg.reply(
-        oneLine`:no_entry_sign: That role is already in use. (verified role, not verified role, or from a group binding).
+        oneLine`:no_entry_sign: That role is already in use. (verified role or not verified role).
         Run \`${msg.guild.commandPrefix}bindings\` to see all role bindings.`
       )
       return
@@ -47,12 +45,21 @@ class BindGroupCommand extends Command {
 
     if (args.role.name === '@everyone' || args.role.name === '@here') return msg.reply('You are unable to bind this role.')
 
-    binding.role = args.role.id
-    binding.groups = []
+    const serverBindings = this.server.getSetting('groupRankBindings')
+
+    const existingIndex = serverBindings.findIndex(binding => binding.role === args.role.id);
+    const binding = existingIndex !== -1 ? serverBindings[existingIndex] : {
+      role: args.role.id,
+      groups: []
+    }
 
     for (const groupString of args.groups) {
       const [groupId, ranksString] = groupString.split(':')
-      const group = { id: groupId }
+      const existingGroupIndex = binding.groups.findIndex(group => group.id === groupId);
+      const group = existingGroupIndex !== -1 ? binding.groups[existingGroupIndex] : {
+        id: groupId,
+        ranks: []
+      }
 
       if (groupId.match(/[^\d]/) && !VirtualGroups[groupId]) {
         return msg.reply(
@@ -66,45 +73,51 @@ class BindGroupCommand extends Command {
         )
       }
 
-      if (ranksString != null) {
-        const ranks = []
+      // Converts the ranks into an object for quick lookup for existence
+      const existingRanks = group.ranks.reduce((obj, item) => (obj[item] = true, obj), {});
+
+      if (ranksString !== undefined) {
         const unparsedRanks = ranksString.split(',')
         for (const rank of unparsedRanks) {
           const rangeMatch = rank.match(/(\d+)-(\d+)/)
-          const rankNumber = parseInt(rank, 10)
-
+          
           if (rangeMatch) {
-            const start = parseInt(rangeMatch[1], 10)
-            const stop = parseInt(rangeMatch[2], 10)
+            const start = Util.clamp(parseInt(rangeMatch[1], 10), 1, 255)
+            const stop = Util.clamp(parseInt(rangeMatch[2], 10), 1, 255)
 
             if (start && stop) {
               for (let i = start; i <= stop; i++) {
-                ranks.push(i)
+                if (!existingRanks[i]) group.ranks.push(i)
               }
             }
-          } else if (rankNumber != null) {
-            ranks.push(rankNumber)
+          } else if (rank.match((/[\d]+/))) {
+            const rankNumber = Util.clamp(parseInt(rank), 1, 255)
+            if (!existingRanks[rank]) group.ranks.push(rankNumber)
+          } else {
+            return msg.reply(`:no_entry_sign: You have attempted to bind an invalid rank (\`${rank}\`) for group (\`${groupId}\`). Ranks should be a whole number.`)
           }
         }
-        group.ranks = ranks
       } else if (!groupId.match(/[a-z]/i)) {
-        group.ranks = []
         for (let i = 1; i <= 255; i++) {
-          group.ranks.push(i)
+          if (!existingRanks[i]) group.ranks.push(i)
         }
-      } else {
-        group.ranks = []
       }
 
-      binding.groups.push(group)
+      if (existingGroupIndex !== -1) {
+        group.ranks.sort((a, b) => a - b)
+        binding.groups[existingGroupIndex] = group
+      } else {
+        binding.groups.push(group)
+      }
+
     }
 
-    // Delete any previous binding with that role.
-    this.server.deleteGroupRankBinding(binding.role)
-
     // Add the new binding.
-    const serverBindings = this.server.getSetting('groupRankBindings')
-    serverBindings.push(binding)
+    if (existingIndex !== -1) {
+      serverBindings[existingIndex] = binding
+    } else {
+      serverBindings.push(binding)
+    }
     this.server.setSetting('groupRankBindings', serverBindings)
 
     let bindingSuccessMessage = `:white_check_mark: Successfully bound role "${args.role.name}".\`\`\`markdown\n`

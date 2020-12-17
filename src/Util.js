@@ -146,5 +146,17 @@ module.exports = {
    */
   getVerifyLink (guild) {
     return 'https://verify.eryn.io' // /?from=${guild.id}`
+  },
+
+  /**
+   * Clamps a number between the given min and max
+   * num: 5, min: 1, max: 3 --> 3
+   * @param {number} num The number to clamp.
+   * @param {number} min The minimum number in the range.
+   * @param {number} max The maximum number in the range.
+   * @returns {number} The clamped number
+   */
+  clamp (num, min, max) {
+    return Math.max(min, Math.min(num, max))
   }
 }

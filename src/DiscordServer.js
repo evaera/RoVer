@@ -416,7 +416,7 @@ class DiscordServer {
     for (const binding of this.getSetting('groupRankBindings')) {
       if (binding.role === id) return true
     }
-
+    
     return false
   }
 

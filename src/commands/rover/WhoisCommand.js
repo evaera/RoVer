@@ -127,7 +127,7 @@ class WhoisCommand extends Command {
         bio = bio.replace('@', '@ ')
 
         // Double quotes appear as &#34; so fix that
-        bio = bio.replace('&#34;','"')
+        bio = bio.replace(/(&#34;)/g,'"')
         const embed = {
           title: 'View Profile',
           url: profileLink,

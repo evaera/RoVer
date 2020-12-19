@@ -124,7 +124,7 @@ class WhoisCommand extends Command {
         }
 
         // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
-        bio = bio.replace(/(@)/g, '@ ')
+        bio = bio.replace(/(@)/gm, '@ ')
 
         // Double quotes appear as &#34; so fix that
         bio = bio.replace(/(&#34;)/g,'"')

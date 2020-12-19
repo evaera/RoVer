@@ -39,7 +39,7 @@ class WhoisCommand extends Command {
       const editMessage = await msg.reply(`:mag: Looking up ${member.displayName.replace(/@/g, '')}`)
 
       if (member.user.bot) {
-        return msg.reply(':robot: RoVer cannot look up bots.')
+        return editMessage.edit(':robot: RoVer cannot look up bots.')
       }
       const id = member.user.id
       try {

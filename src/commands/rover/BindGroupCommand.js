@@ -86,8 +86,8 @@ class BindGroupCommand extends Command {
             let stop = parseInt(rangeMatch[2], 10)
 
             if (!VirtualGroups[groupId]) {
-              start = Util.clamp(start, 1, 255)
-              stop = Util.clamp(stop, 1, 255)
+              start = Util.clamp(start, 0, 255)
+              stop = Util.clamp(stop, 0, 255)
             }
 
             if (start && stop) {
@@ -97,7 +97,7 @@ class BindGroupCommand extends Command {
             }
           } else if (rank.match(/[\d]+/)) {
             let rankNumber = parseInt(rank, 10)
-            if (!VirtualGroups[groupId]) rankNumber = Util.clamp(rankNumber, 1, 255)
+            if (!VirtualGroups[groupId]) rankNumber = Util.clamp(rankNumber, 0, 255)
             if (!existingRanks[rank]) group.ranks.push(rankNumber)
           } else {
             return msg.reply(`:no_entry_sign: You have attempted to bind an invalid rank (\`${rank}\`) for group (\`${groupId}\`). Ranks should be a whole number.`)

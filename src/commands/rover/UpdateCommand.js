@@ -76,7 +76,7 @@ class UpdateCommand extends Command {
       }
 
       member.verify({ message: msg, skipWelcomeMessage: true })
-    } else if (!this.discordBot.isPremium()) {
+    } else if (this.discordBot.isPremium()) {
       return msg.reply('Sorry, updating more than one user is only available with RoVer Plus: <https://www.patreon.com/erynlynn>.')
     } else { // They want to update a whole role (premium feature)
       const roleMembers = await returnMembersOfRole(target)
@@ -87,7 +87,7 @@ class UpdateCommand extends Command {
         return msg.reply('There is already an ongoing bulk update in this server.')
       }
 
-      const limit = config.massUpdateLimit || 0
+      const limit = config.massUpdateLimit || 2500
       if (affectedCount > limit) {
         return msg.reply(`Sorry, but RoVer only supports updating up to ${limit} members at once. Updating this role would affect approximately ${affectedCount} members.`)
       }

@@ -159,7 +159,7 @@ class WhoisCommand extends Command {
           })
         }
 
-        if (Contributors[id]) embed.fields.push({ name: 'User Tag', value: `${Contributors[id]}`, inline: true })
+        if (Contributors[id]) embed.fields.push({ name: 'Accolades', value: `${Contributors[id]}`, inline: true })
 
         editMessage.edit({ embed: embed }).catch(console.error)
       } else {

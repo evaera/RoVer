@@ -4,7 +4,7 @@ const DiscordServer = require('../../DiscordServer')
 const VirtualGroups = require('../../VirtualGroups')
 const request = require('request-promise')
 
-const Contributors = require('../../Contributors.json')
+const Contributors = require('../../Accolades.json')
 
 module.exports =
 class WhoisCommand extends Command {
@@ -159,7 +159,7 @@ class WhoisCommand extends Command {
           })
         }
 
-        if (Contributors[id]) embed.fields.push({ name: 'User Tags', value: `RoVer ${Contributors[id]}`, inline: true })
+        if (Contributors[id]) embed.fields.push({ name: 'User Tag', value: `${Contributors[id]}`, inline: true })
 
         editMessage.edit({ embed: embed }).catch(console.error)
       } else {

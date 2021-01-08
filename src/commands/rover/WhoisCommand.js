@@ -56,7 +56,7 @@ class WhoisCommand extends Command {
         let apiUserData = {}
         try {
           apiUserData = await request({
-            uri: `http://api.roblox.com/users/${data.robloxId}`,
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}`,
             json: true,
             simple: false
           })
@@ -64,23 +64,33 @@ class WhoisCommand extends Command {
           return editMessage.edit("An error occured while fetching that user's data.")
         }
 
-        if (apiUserData.Username) {
-          data.robloxUsername = apiUserData.Username
+        if (apiUserData.name) {
+          data.robloxUsername = apiUserData.name
         }
         const profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
-        const avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${encodeURIComponent(data.robloxUsername)}`
-
-        let bio = 'Bio failed to load'
-        let joinDate = 'Unknown'
-        let pastNames = 'Unknown'
+        let avatarURLdata = {}
         try {
-          const profileSource = await request({
-            uri: profileLink
+          avatarURLdata = await request({
+            uri: `https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.robloxId}&size=720x720&format=png&isCircular=false`,
+            json: true
           })
-
-          joinDate = profileSource.match(/Join Date<p class=text-lead>(.*?)<li/)[1]
-          bio = profileSource.match(/<meta name=description content=".*? is one of the millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ?((?:.|\n)*?)"/m)[1]
-          pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1].substr(0, 1024)
+        } catch (e) {
+          return editMessage.edit("An error occured while fetching that user's data.")
+        }
+        const avatarURL = avatarURLdata.data[0].imageUrl
+        let bio = 'Bio failed to load'
+        if (apiUserData.description) bio = apiUserData.description
+        let joinDate = new Date(apiUserData.created)
+        joinDate = `${joinDate.getMonth() + 1}/${joinDate.getDate()}/${joinDate.getFullYear()}`
+        let pastNames = ''
+        try {
+          const pastNamesData = await request({
+            uri: `https://users.roblox.com/v1/${data.robloxId}/username-history?limit=50&sortOrder=Desc`,
+            json: true,
+            simple: false
+          })
+          pastNamesData.data.forEach(name => pastNames += `, ${name}`)
+          if (pastNames) pastNames = pastNames.replace(', ', '')
         } catch (e) {}
 
         let bc = 'Unknown'
@@ -118,9 +128,6 @@ class WhoisCommand extends Command {
           bio = bio.substr(0, 500) + '...'
         }
 
-        // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
-        bio = bio.replace('@', '@ ')
-
         const embed = {
           title: 'View Profile',
           url: profileLink,
@@ -141,7 +148,7 @@ class WhoisCommand extends Command {
         }
 
         // Edit so past names don't show unless you actually have some!
-        if (pastNames !== 'Unknown') {
+        if (pastNames) {
           embed.fields.push({
             name: 'Past Usernames',
             value: pastNames,

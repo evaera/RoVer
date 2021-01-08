@@ -85,11 +85,11 @@ class WhoisCommand extends Command {
         let pastNames = ''
         try {
           const pastNamesData = await request({
-            uri: `https://users.roblox.com/v1/${data.robloxId}/username-history?limit=50&sortOrder=Desc`,
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}/username-history?limit=50&sortOrder=Desc`,
             json: true,
             simple: false
           })
-          pastNamesData.data.forEach(name => pastNames += `, ${name}`)
+          pastNamesData.data.forEach(oldname => pastNames += `, ${oldname.name}`)
           if (pastNames) pastNames = pastNames.replace(', ', '')
         } catch (e) {}
 

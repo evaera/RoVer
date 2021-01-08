@@ -148,7 +148,7 @@ class WhoisCommand extends Command {
         }
 
         // Edit so past names don't show unless you actually have some!
-        if (pastNames) {
+        if (pastNames && pastNames !== []) {
           embed.fields.push({
             name: 'Past Usernames',
             value: pastNames,

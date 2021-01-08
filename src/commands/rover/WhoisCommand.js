@@ -4,7 +4,7 @@ const DiscordServer = require('../../DiscordServer')
 const VirtualGroups = require('../../VirtualGroups')
 const request = require('request-promise')
 
-const Contributors = require('../../Contributors.json')
+const Accolades = require('../../Accolades.json')
 
 module.exports =
 class WhoisCommand extends Command {
@@ -59,7 +59,7 @@ class WhoisCommand extends Command {
         let apiUserData = {}
         try {
           apiUserData = await request({
-            uri: `http://api.roblox.com/users/${data.robloxId}`,
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}`,
             json: true,
             simple: false
           })
@@ -67,23 +67,33 @@ class WhoisCommand extends Command {
           return editMessage.edit("An error occured while fetching that user's data.")
         }
 
-        if (apiUserData.Username) {
-          data.robloxUsername = apiUserData.Username
+        if (apiUserData.name) {
+          data.robloxUsername = apiUserData.name
         }
         const profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
-        const avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${encodeURIComponent(data.robloxUsername)}`
-
-        let bio = 'Bio failed to load'
-        let joinDate = 'Unknown'
-        let pastNames = 'Unknown'
+        let avatarURLdata = {}
         try {
-          const profileSource = await request({
-            uri: profileLink
+          avatarURLdata = await request({
+            uri: `https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.robloxId}&size=720x720&format=png&isCircular=false`,
+            json: true
           })
-
-          joinDate = profileSource.match(/Join Date<p class=text-lead>(.*?)<li/)[1]
-          bio = profileSource.match(/<meta name=description content=".*? is one of the millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ?((?:.|\n)*?)"/m)[1]
-          pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1].substr(0, 1024)
+        } catch (e) {
+          return editMessage.edit("An error occured while fetching that user's data.")
+        }
+        const avatarURL = avatarURLdata.data[0].imageUrl
+        let bio = 'Bio failed to load'
+        if (apiUserData.description) bio = apiUserData.description
+        let joinDate = new Date(apiUserData.created)
+        joinDate = `${joinDate.getMonth() + 1}/${joinDate.getDate()}/${joinDate.getFullYear()}`
+        let pastNames = ''
+        try {
+          const pastNamesData = await request({
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}/username-history?limit=50&sortOrder=Desc`,
+            json: true,
+            simple: false
+          })
+          pastNamesData.data.forEach(oldname => pastNames += `, ${oldname.name}`)
+          if (pastNames) pastNames = pastNames.replace(', ', '')
         } catch (e) {}
 
         let bc = 'Unknown'
@@ -121,11 +131,6 @@ class WhoisCommand extends Command {
           bio = bio.substr(0, 500) + '...'
         }
 
-        // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
-        bio = bio.replace(/(@)/gm, '@ ')
-
-        // Double quotes appear as &#34; so fix that
-        bio = bio.replace(/(&#34;)/gm,'"')
         const embed = {
           title: 'View Profile',
           url: profileLink,
@@ -141,11 +146,19 @@ class WhoisCommand extends Command {
           description: bio,
           fields: [
             { name: 'Join Date', value: joinDate, inline: true },
-            { name: 'Membership', value: bc, inline: true },
-            { name: 'Past Usernames', value: pastNames, inline: true }
+            { name: 'Membership', value: bc, inline: true }
           ]
         }
 
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames && pastNames !== []) {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastNames,
+            inline: true
+          })
+        }
+        
         // Nickname Group rank display
         const nicknameGroup = this.server.getSetting('nicknameGroup')
         if (nicknameGroup) {
@@ -164,7 +177,7 @@ class WhoisCommand extends Command {
           })
         }
 
-        if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'RoVer Contributor', inline: true })
+        if (Accolades[id]) embed.fields.push({ name: 'Accolades', value: `${Accolades[id]}`, inline: true })
 
         editMessage.edit({ embed: embed }).catch(console.error)
       } else {

@@ -4,7 +4,7 @@ const DiscordServer = require('../../DiscordServer')
 const VirtualGroups = require('../../VirtualGroups')
 const request = require('request-promise')
 
-const Contributors = require('../../Contributors.json')
+const Accolades = require('../../Accolades.json')
 
 module.exports =
 class WhoisCommand extends Command {
@@ -136,11 +136,19 @@ class WhoisCommand extends Command {
           description: bio,
           fields: [
             { name: 'Join Date', value: joinDate, inline: true },
-            { name: 'Membership', value: bc, inline: true },
-            { name: 'Past Usernames', value: pastNames, inline: true }
+            { name: 'Membership', value: bc, inline: true }
           ]
         }
 
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames !== 'Unknown') {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastName,
+            inline: true
+          })
+        }
+        
         // Nickname Group rank display
         const nicknameGroup = this.server.getSetting('nicknameGroup')
         if (nicknameGroup) {
@@ -159,7 +167,7 @@ class WhoisCommand extends Command {
           })
         }
 
-        if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'RoVer Contributor', inline: true })
+        if (Accolades[id]) embed.fields.push({ name: 'Accolades', value: `${Accolades[id]}`, inline: true })
 
         editMessage.edit({ embed: embed }).catch(console.error)
       } else {

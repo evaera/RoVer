@@ -144,7 +144,7 @@ class WhoisCommand extends Command {
         if (pastNames !== 'Unknown') {
           embed.fields.push({
             name: 'Past Usernames',
-            value: pastName,
+            value: pastNames,
             inline: true
           })
         }

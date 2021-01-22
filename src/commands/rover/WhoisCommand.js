@@ -215,8 +215,10 @@ class WhoisCommand extends Command {
             simple: false,
             resolveWithFullResponse: true
           })
-          scriptingHelpers = JSON.parse(response.body)
-          Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', scriptingHelpers)
+          if (response.statusCode !== 404) {
+            scriptingHelpers = JSON.parse(response.body)
+            Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', scriptingHelpers)
+          }
         } catch(e) {}
         
         let devforumData = await getDevForumProfile({id: data.robloxId})

@@ -231,7 +231,7 @@ class WhoisCommand extends Command {
         
         if (devforumData !== false) {
           edited = true
-          bio = devforumData.bio_raw
+          bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
           // Remove excess new lines in the bio
           while ((bio.match(/\n/mg) || []).length > 3) {
             const lastN = bio.lastIndexOf('\n')

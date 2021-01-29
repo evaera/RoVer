@@ -156,7 +156,7 @@ class WhoisCommand extends Command {
             inline: true
           })
         }
-        if (bc) {
+        if (bc && bc !== null) {
           embed.fields.push({
             name: 'Membership',
             value: bc,

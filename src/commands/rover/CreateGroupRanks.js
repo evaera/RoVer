@@ -28,14 +28,14 @@ class CreateGroupRanksCommand extends Command {
 
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     try {
-      const { Roles } = await request(`https://api.roblox.com/groups/${args.groupid}`, { json: true })
+      const { Roles } = await request(`https://groups.roblox.com/v1/groups/${args.groupid}/roles`, { json: true })
 
       const serverBindings = this.server.getSetting('groupRankBindings')
       Roles.reverse()
       for (const role of Roles) {
-        const newRole = (await msg.guild.roles.cache.find(guildRole => guildRole.name === role.Name)) || (await msg.guild.roles.create({
+        const newRole = (await msg.guild.roles.cache.find(guildRole => guildRole.name === role.name)) || (await msg.guild.roles.create({
           data: {
-            name: role.Name,
+            name: role.name,
             permissions: []
           },
           reason: `${msg.member.displayName} ran CreateGroupRanks command`

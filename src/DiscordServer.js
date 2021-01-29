@@ -202,7 +202,7 @@ class DiscordServer {
     let groups = await Cache.get(`bindings.${userid}`, '__groups')
     if (!groups) {
       groups = await request({
-        uri: `http://api.roblox.com/users/${userid}/groups`,
+        uri: `https://groups.roblox.com/v2/users/${userid}/groups/roles`,
         json: true
       })
 
@@ -210,9 +210,8 @@ class DiscordServer {
         throw new Error('Group rank HTTP request is malformed or in unknown format')
       }
 
-      Cache.set(`bindings.${userid}`, '__groups', groups)
+      Cache.set(`bindings.${userid}`, '__groups', groups.data)
     }
-
     return groups
   }
 
@@ -253,8 +252,8 @@ class DiscordServer {
 
         let rank = 0
         for (const groupObj of groups) {
-          if (groupObj.Id.toString() === group.id) {
-            rank = groupObj.Rank
+          if (groupObj.group.id.toString() === group.id) {
+            rank = groupObj.role.rank
             break
           }
         }

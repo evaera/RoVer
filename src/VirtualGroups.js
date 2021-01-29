@@ -135,18 +135,21 @@ module.exports = {
    * @todo this won't actually ever cache because they are all requesting. (only if more than one BC bound)
    */
   async BuildersClub (user, bcType) {
+    const { cookie } = require('./data/client.json')
+    if (!cookie) return false
     let bc = await Cache.get(`bindings.${user.id}`, 'bc')
     if (!bc) {
       const response = await request({
-        uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(user.id)}/group-membership-status`,
+        uri: `https://premiumfeatures.roblox.com/v1/users/${user.id}/validate-membership`,
         simple: false,
-        resolveWithFullResponse: true
+        json: true,
+        resolveWithFullResponse: true,
+        headers: {
+          cookie: `.ROBLOSECURITY=${cookie}` // Send cookie as a header to avoid using another dependency to insert the cookie
+        }
       })
-
-      const membershipType = JSON.parse(response.body).membershipType
       bc = 'NBC'
-
-      if (membershipType === 4) {
+      if (response) {
         bc = 'Premium'
       }
 

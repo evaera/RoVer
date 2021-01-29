@@ -98,9 +98,9 @@ class DiscordMember {
       const apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
 
       for (const groups of apiRank) {
-        if (parseInt(groups.Id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
-          const rankMatch = groups.Role.match(/(.+(?:\]|\)|\}|\|))/)
-          nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.Role}]`
+        if (parseInt(groups.group.id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
+          const rankMatch = groups.role.name.match(/(.+(?:\]|\)|\}|\|))/)
+          nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.role.name}]`
           break
         }
       }

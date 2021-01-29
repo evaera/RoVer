@@ -101,7 +101,10 @@ class WhoisCommand extends Command {
               uri: `https://premiumfeatures.roblox.com/v1/users/${data.robloxId}/validate-membership`,
               simple: false,
               json: true,
-              resolveWithFullResponse: true
+              resolveWithFullResponse: true,
+              headers: {
+                cookie: `.ROBLOSECURITY=${cookie}`
+              }
             })
             bc = 'Regular'
             if (response && !response.errors) {

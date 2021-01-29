@@ -212,7 +212,8 @@ class DiscordServer {
 
       Cache.set(`bindings.${userid}`, '__groups', groups.data)
     }
-    return groups
+
+    return groups.data
   }
 
   /**

@@ -189,11 +189,12 @@ module.exports = {
     let allies = await Cache.get(`groups.${groupid}`, relation)
     if (allies == null) {
       allies = []
+
       // Roblox ally/enemy APIs must specify an amount. Only grab 60 relationships
       const content = await request(`https://groups.roblox.com/v1/groups/${groupid}/relationships/${relation}?model.startRowIndex=0&model.maxRows=60`, {
         json: true
       })
-      
+
       for (const group of content.relatedGroups) {
         allies.push(group.id)
       }

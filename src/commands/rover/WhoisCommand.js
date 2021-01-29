@@ -143,8 +143,7 @@ class WhoisCommand extends Command {
           },
           description: bio,
           fields: [
-            { name: 'Join Date', value: joinDate, inline: true },
-            { name: 'Membership', value: bc, inline: true }
+            { name: 'Join Date', value: joinDate, inline: true }
           ]
         }
 
@@ -156,7 +155,7 @@ class WhoisCommand extends Command {
             inline: true
           })
         }
-        if (bc && bc !== null) {
+        if (bc) {
           embed.fields.push({
             name: 'Membership',
             value: bc,

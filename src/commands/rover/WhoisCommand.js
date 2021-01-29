@@ -112,7 +112,7 @@ class WhoisCommand extends Command {
             }
 
             Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
-          } else bc = 'Unknown'
+          }
         } catch (e) {}
 
         // Make sure the data is cached so we don't have to use the API in the future
@@ -153,6 +153,13 @@ class WhoisCommand extends Command {
           embed.fields.push({
             name: 'Past Usernames',
             value: pastNames,
+            inline: true
+          })
+        }
+        if (bc) {
+          embed.fields.push({
+            name: 'Membership',
+            value: bc,
             inline: true
           })
         }

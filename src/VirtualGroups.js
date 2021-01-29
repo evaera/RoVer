@@ -149,7 +149,7 @@ module.exports = {
         }
       })
       bc = 'NBC'
-      if (response) {
+      if (response && !response.errors) {
         bc = 'Premium'
       }
 

@@ -52,6 +52,6 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "commandPrefix"     : String. Default "!". The prefix for commands.
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing. (Need a process manager if you want it to relaunch)
-    "cookie"            : String. The .ROBLOSECURITY cookie of the bot account used to fetch premium information of a user. (Not required if you're not using the premium virtualgroup)
+    "cookie"            : String. The .ROBLOSECURITY cookie of the bot account used to fetch premium information of a user. (Not required if you're not using the premium virtualgroup, but whois will not report premium information correctly)
     "maxServerBindings" : Integer. Default unlimited. Maximum number of bindings allowed per server
 ```

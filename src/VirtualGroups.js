@@ -149,7 +149,7 @@ module.exports = {
         }
       })
       bc = 'NBC'
-      if (response && !response.errors) {
+      if (response.body && response.statusCode === 200) {
         bc = 'Premium'
       }
 

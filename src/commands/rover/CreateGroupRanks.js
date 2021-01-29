@@ -47,7 +47,7 @@ class CreateGroupRanksCommand extends Command {
           role: newRole.id,
           groups: [{
             id: args.groupid.toString(),
-            ranks: [role.Rank]
+            ranks: [role.rank]
           }]
         })
       }

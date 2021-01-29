@@ -189,29 +189,20 @@ module.exports = {
     let allies = await Cache.get(`groups.${groupid}`, relation)
     if (allies == null) {
       allies = []
-      // Roblox ally/enemy APIs are paginated, only get a max of 10 pages
-      let page = 1
-      while (page < 10) {
-        const content = await request(`https://api.roblox.com/groups/${groupid}/${relation}?page=${page}`, {
-          json: true
-        })
-
-        for (const group of content.Groups) {
-          allies.push(group.Id)
-        }
-
-        if (content.FinalPage) {
-          break
-        } else {
-          page++
-        }
+      // Roblox ally/enemy APIs must specify an amount. Only grab 60 relationships
+      const content = await request(`https://groups.roblox.com/v1/groups/${groupid}/relationships/${relation}?model.startRowIndex=0&model.maxRows=60`, {
+        json: true
+      })
+      
+      for (const group of content.relatedGroups) {
+        allies.push(group.id)
       }
 
       Cache.set(`groups.${groupid}`, relation, allies)
     }
 
     for (const group of userGroups) {
-      if (allies.includes(group.Id)) {
+      if (allies.includes(group.group.id)) {
         return true
       }
     }

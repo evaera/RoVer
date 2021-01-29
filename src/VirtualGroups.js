@@ -55,10 +55,15 @@ module.exports = {
   },
 
   async RobloxStaff (user) {
-    const userProfile = await getDevForumProfile(user)
-    if (!userProfile) return
-
-    return userProfile.groups.find(g => g.name === 'Roblox_Staff') != null
+    const groupdata = await request(`https://groups.roblox.com/v2/users/${user.id}/groups/roles`, {
+      json: true
+    })
+    if (groupdata.data.length === 0) return
+    const groups = []
+    for (const groupinfo of groupdata.data) {
+      groups.push(groupinfo.group.id)
+    }
+    return groups.includes(1200769)
   },
 
   async CommunitySage (user) {

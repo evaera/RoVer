@@ -254,7 +254,7 @@ class DiscordServer {
         let rank = 0
         for (const groupObj of groups) {
           if (groupObj.group.id.toString() === group.id) {
-            rank = groupObj.Rank
+            rank = groupObj.role.rank
             break
           }
         }

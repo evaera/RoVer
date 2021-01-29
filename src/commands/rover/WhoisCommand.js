@@ -89,29 +89,27 @@ class WhoisCommand extends Command {
             json: true,
             simple: false
           })
-          pastNamesData.data.forEach(oldname => pastNames += `, ${oldname.name}`)
+          pastNamesData.data.forEach(oldname => { pastNames += `, ${oldname.name}` })
           if (pastNames) pastNames = pastNames.replace(', ', '')
         } catch (e) {}
-
-        let bc = 'Unknown'
+        const { cookie } = require('../../data/client.json')
+        let bc
         try {
           bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
-          if (!bc) {
+          if (!bc && cookie) {
             const response = await request({
-              uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/group-membership-status`,
+              uri: `https://premiumfeatures.roblox.com/v1/users/${data.robloxId}/validate-membership`,
               simple: false,
+              json: true,
               resolveWithFullResponse: true
             })
-
-            const membershipType = JSON.parse(response.body).membershipType
             bc = 'Regular'
-
-            if (membershipType === 4) {
+            if (response && !response.errors) {
               bc = 'Premium'
             }
 
             Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
-          }
+          } else bc = 'Unknown'
         } catch (e) {}
 
         // Make sure the data is cached so we don't have to use the API in the future
@@ -155,7 +153,7 @@ class WhoisCommand extends Command {
             inline: true
           })
         }
-        
+
         // Nickname Group rank display
         const nicknameGroup = this.server.getSetting('nicknameGroup')
         if (nicknameGroup) {

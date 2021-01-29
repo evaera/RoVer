@@ -28,11 +28,11 @@ class CreateGroupRanksCommand extends Command {
 
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
     try {
-      const { Roles } = await request(`https://groups.roblox.com/v1/groups/${args.groupid}/roles`, { json: true })
+      const { roles } = await request(`https://groups.roblox.com/v1/groups/${args.groupid}/roles`, { json: true })
 
       const serverBindings = this.server.getSetting('groupRankBindings')
-      Roles.reverse()
-      for (const role of Roles) {
+      roles.reverse()
+      for (const role of roles) {
         const newRole = (await msg.guild.roles.cache.find(guildRole => guildRole.name === role.name)) || (await msg.guild.roles.create({
           data: {
             name: role.name,
@@ -53,7 +53,7 @@ class CreateGroupRanksCommand extends Command {
       }
       this.server.setSetting('groupRankBindings', serverBindings)
 
-      msg.reply(`Created ${Roles.length} role bindings successfully (and created the roles if necessary).`)
+      msg.reply(`Created ${roles.length} role bindings successfully (and created the roles if necessary).`)
     } catch (e) {
       msg.reply(':no_entry_sign: Something went wrong. Maybe the group doesn\'t exist, or maybe RoVer doesn\'t have permission to create roles in this server.')
     }

@@ -107,7 +107,7 @@ class WhoisCommand extends Command {
               }
             })
             bc = 'Regular'
-            if (response && !response.errors) {
+            if (response.body && response.statusCode === 200) {
               bc = 'Premium'
             }
 

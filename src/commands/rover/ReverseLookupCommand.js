@@ -10,7 +10,6 @@ class LookupCommand extends Command {
       properName: 'Reverse Lookup',
       aliases: ['rlookup', 'rlook'],
       description: "`<user id>` Get a Roblox User's Discord username if they are in your server.",
-
       args: [
         {
           key: 'id',
@@ -20,6 +19,10 @@ class LookupCommand extends Command {
         }
       ]
     })
+  }
+
+  hasPermission (msg) {
+    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.cache.find(role => role.name === 'RoVer Admin') || msg.member.roles.cache.find(role => role.name === 'RoVer Reverse Lookup')
   }
 
   async fn (msg, args) {

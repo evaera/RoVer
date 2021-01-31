@@ -89,24 +89,25 @@ class WhoisCommand extends Command {
             json: true,
             simple: false
           })
-          pastNamesData.data.forEach(oldname => pastNames += `, ${oldname.name}`)
+          pastNamesData.data.forEach(oldname => { pastNames += `, ${oldname.name}` })
           if (pastNames) pastNames = pastNames.replace(', ', '')
         } catch (e) {}
-
-        let bc = 'Unknown'
+        const { cookie } = require('../../data/client.json')
+        let bc
         try {
           bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
-          if (!bc) {
+          if (!bc && cookie) {
             const response = await request({
-              uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/group-membership-status`,
+              uri: `https://premiumfeatures.roblox.com/v1/users/${data.robloxId}/validate-membership`,
               simple: false,
-              resolveWithFullResponse: true
+              json: true,
+              resolveWithFullResponse: true,
+              headers: {
+                cookie: `.ROBLOSECURITY=${cookie}`
+              }
             })
-
-            const membershipType = JSON.parse(response.body).membershipType
             bc = 'Regular'
-
-            if (membershipType === 4) {
+            if (response.body && response.statusCode === 200) {
               bc = 'Premium'
             }
 
@@ -142,8 +143,7 @@ class WhoisCommand extends Command {
           },
           description: bio,
           fields: [
-            { name: 'Join Date', value: joinDate, inline: true },
-            { name: 'Membership', value: bc, inline: true }
+            { name: 'Join Date', value: joinDate, inline: true }
           ]
         }
 
@@ -155,7 +155,14 @@ class WhoisCommand extends Command {
             inline: true
           })
         }
-        
+        if (bc) {
+          embed.fields.push({
+            name: 'Membership',
+            value: bc,
+            inline: true
+          })
+        }
+
         // Nickname Group rank display
         const nicknameGroup = this.server.getSetting('nicknameGroup')
         if (nicknameGroup) {

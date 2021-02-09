@@ -98,9 +98,9 @@ class DiscordMember {
       const apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
 
       for (const groups of apiRank) {
-        if (parseInt(groups.Id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
-          const rankMatch = groups.Role.match(/(.+(?:\]|\)|\}|\|))/)
-          nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.Role}]`
+        if (parseInt(groups.group.id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
+          const rankMatch = groups.role.name.match(/(.+(?:\]|\)|\}|\|))/)
+          nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.role.name}]`
           break
         }
       }
@@ -291,7 +291,7 @@ class DiscordMember {
         let apiUserData = {}
         try {
           apiUserData = await request({
-            uri: `http://api.roblox.com/users/${data.robloxId}`,
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}`,
             json: true,
             simple: false
           })
@@ -310,8 +310,8 @@ class DiscordMember {
           })
         }
 
-        if (apiUserData.Username) {
-          data.robloxUsername = apiUserData.Username
+        if (apiUserData.name) {
+          data.robloxUsername = apiUserData.name
         }
 
         // Cache data again

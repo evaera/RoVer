@@ -28,7 +28,7 @@ class VerifiedRoleCommand extends Command {
       if (role.name === '@everyone' || role.name === '@here') return msg.reply('You are unable to use this role.')
       let botmember = this.server.server.me
       if (!botmember) botmember = this.server.server.members.fetch(msg.client.user.id)
-      if (this.server.server.me.roles.highest.comparePositionTo(role) < 0) return msg.reply('You have attempted to bind a role above the RoVer role, please move `RoVer` up in your role list and try again.')
+      if (botmember.roles.highest.comparePositionTo(role) < 0) return msg.reply('You have attempted to bind a role above the RoVer role, please move `RoVer` up in your role list and try again.')
       if (this.server.isRoleInUse(role.id)) {
         msg.reply(`That role is already in use. (verified role, not verified role, or from a group binding). Run \`${msg.guild.commandPrefix}bindings\` to see all role bindings.`)
       } else {

@@ -47,8 +47,8 @@ class BindGroupCommand extends Command {
 
     if (args.role.name === '@everyone' || args.role.name === '@here') return msg.reply('You are unable to bind this role.')
 
-    if (this.server.server.me.roles.highest.comparePositionTo(args.role) < 0) return msg.reply('You have attempted to bind a role above the RoVer role, please move `RoVer` up in your role list and try again.')
-    
+    if (this.me.roles.highest.comparePositionTo(args.role) < 0) return msg.reply('You have attempted to bind a role above the RoVer role, please move `RoVer` up in your role list and try again.')
+
     binding.role = args.role.id
     binding.groups = []
 

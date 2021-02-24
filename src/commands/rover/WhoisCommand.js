@@ -184,7 +184,8 @@ class WhoisCommand extends Command {
             inline: true
           })
         }
-        if (bc) {
+        
+        if (bc && cookie) {
           embed.fields.push({
             name: 'Membership',
             value: bc,

@@ -215,7 +215,6 @@ class WhoisCommand extends Command {
         editMessage.edit({ embed: embed }).catch(console.error)
         
         let edited = false
-        let scriptingHelpers = ""
         try {
           const response = await request({
             uri: `https://scriptinghelpers.org/resources/get_profile_by_roblox_id/${encodeURIComponent(data.robloxId)}`,
@@ -223,8 +222,14 @@ class WhoisCommand extends Command {
             resolveWithFullResponse: true
           })
           if (response.statusCode !== 404) {
-            scriptingHelpers = JSON.parse(response.body)
-            Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', scriptingHelpers)
+            let shData = JSON.parse(response.body)
+            Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', shData)
+            edited = true
+            embed.fields.push({
+              name: "Scripting Helpers",
+              value: `[Profile Link](https://scriptinghelpers.org/user/${shData.roblox_username}) \nReputation: ${shData.reputation} \nRank: ${shData.rank}`,
+              inline: true
+            })
           }
         } catch(e) {}
         
@@ -255,15 +260,6 @@ class WhoisCommand extends Command {
           embed.fields.push({
             name: "DevForum",
             value: `[Profile Link](https://devforum.roblox.com/u/${devforumData.username}) \nLevel: ${trustLevels[devforumData.trust_level]} \n${devforumData.title ? "Title: " + devforumData.title : ""}`,
-            inline: true
-          })
-        }
-        
-        if (scriptingHelpers !== "" && scriptingHelpers !== []) {
-          edited = true
-          embed.fields.push({
-            name: "Scripting Helpers",
-            value: `[Profile Link](https://scriptinghelpers.org/user/${scriptingHelpers.roblox_username}) \nReputation: ${scriptingHelpers.reputation} \nRank: ${scriptingHelpers.rank}`,
             inline: true
           })
         }

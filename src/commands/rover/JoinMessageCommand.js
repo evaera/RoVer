@@ -7,7 +7,7 @@ class JoinMessageCommand extends Command {
       name: 'joindm',
       properName: 'JoinDM',
       aliases: ['roverjoindm'],
-      description: '`<on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default on',
+      description: '`<on|off>` Set whether or not new users will be automatically direct messaged when joining this server. Default on. (This also affects whether or not users are automatically verified on joining.)',
 
       args: [
         {

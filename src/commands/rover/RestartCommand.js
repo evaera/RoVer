@@ -13,7 +13,7 @@ class RestartCommand extends Command {
   }
 
   hasPermission (msg) {
-    return this.client.isOwner(msg.author) || Accolades[msg.author.id].match('Support Staff')
+    return this.client.isOwner(msg.author) || (Accolades[msg.author.id] && Accolades[msg.author.id].match('Support Staff'))
   }
 
   async fn (msg) {

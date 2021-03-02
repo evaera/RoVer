@@ -244,7 +244,7 @@ class WhoisCommand extends Command {
           0: "Visitor",
         }
         
-        if (devforumData !== false) {
+        if (devforumData !== false && devforumData) { // Users getting error that username cant be read.
           edited = true
           bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
           // Remove excess new lines in the bio
@@ -258,11 +258,13 @@ class WhoisCommand extends Command {
             bio = bio.substr(0, 500) + '...'
           }
           embed.description = bio
+          
           embed.fields.push({
             name: "DevForum",
             value: `[Profile Link](https://devforum.roblox.com/u/${devforumData.username}) \nLevel: ${trustLevels[devforumData.trust_level]} \n${devforumData.title ? "Title: " + devforumData.title : ""}`,
             inline: true
           })
+           
         }
         
         if (edited == true) {

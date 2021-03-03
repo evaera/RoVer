@@ -6,6 +6,35 @@ const request = require('request-promise')
 
 const Accolades = require('../../Accolades.json')
 
+/**
+ * Check if the given user is in the Roblox Dev Forum.
+ *
+ * @param {object} user The user data
+ * @returns {object} The DevForum profile data
+ */
+async function getDevForumProfile (user) {
+  const userId = user.id
+  let userProfile = await Cache.get(`bindings.${user.id}`, 'DevForumProfile')
+
+  if (!userProfile) {
+    try {
+      const devForumData = await request({
+        uri: `https://devforum.roblox.com/u/by-external/${userId}.json`,
+        json: true,
+        simple: false
+      })
+
+      userProfile = devForumData.user
+
+      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile)
+    } catch (e) {
+      return false
+    }
+  }
+
+  return userProfile
+}
+
 module.exports =
 class WhoisCommand extends Command {
   constructor (client) {
@@ -158,7 +187,8 @@ class WhoisCommand extends Command {
             inline: true
           })
         }
-        if (bc) {
+        
+        if (bc && cookie) {
           embed.fields.push({
             name: 'Membership',
             value: bc,
@@ -187,6 +217,60 @@ class WhoisCommand extends Command {
         if (Accolades[id]) embed.fields.push({ name: 'Accolades', value: `${Accolades[id]}`, inline: true })
 
         editMessage.edit({ embed: embed }).catch(console.error)
+        
+        let edited = false
+        try {
+          const response = await request({
+            uri: `https://scriptinghelpers.org/resources/get_profile_by_roblox_id/${encodeURIComponent(data.robloxId)}`,
+            simple: false,
+            resolveWithFullResponse: true
+          })
+          if (response.statusCode !== 404) {
+            let shData = JSON.parse(response.body)
+            Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', shData)
+            edited = true
+            embed.fields.push({
+              name: "Scripting Helpers",
+              value: `[Profile Link](https://scriptinghelpers.org/user/${shData.roblox_username}) \nReputation: ${shData.reputation} \nRank: ${shData.rank}`,
+              inline: true
+            })
+          }
+        } catch(e) {}
+        
+        let devforumData = await getDevForumProfile({id: data.robloxId})
+        
+        let trustLevels = {
+          4: "Roblox Staff",
+          3: "Community Editor",
+          2: "Regular",
+          1: "Member",
+          0: "Visitor",
+        }
+        
+        if (devforumData) {
+          edited = true
+          bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
+          // Remove excess new lines in the bio
+          while ((bio.match(/\n/mg) || []).length > 3) {
+            const lastN = bio.lastIndexOf('\n')
+            bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
+          }
+
+          // Truncate bio if it's too long
+          if (bio.length > 500) {
+            bio = bio.substr(0, 500) + '...'
+          }
+          embed.description = bio
+          embed.fields.push({
+            name: "DevForum",
+            value: `[Profile Link](https://devforum.roblox.com/u/${devforumData.username}) \nLevel: ${trustLevels[devforumData.trust_level]} \n${devforumData.title ? "Title: " + devforumData.title : ""}`,
+            inline: true
+          })
+        }
+        
+        if (edited == true) {
+          editMessage.edit({ embed: embed }).catch(console.error)
+        }
       } else {
         editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
       }

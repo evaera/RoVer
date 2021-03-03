@@ -2,7 +2,7 @@
 layout: home
 ---
 # Jump Start Guide
-The quickest and easiest way to use RoVer is to [add the hosted version](https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264) to your server. These are all optional:
+The quickest and easiest way to use RoVer is to [add the hosted version](https://discord.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264) to your server. These are all optional:
 
 1. Create a role&mdash;it can be called anything, but most name it "Verified"&mdash;that will be given to all verified users.
 2. Drag the "RoVer" role above your role and any roles you would like RoVer to manage.
@@ -19,7 +19,7 @@ RoVer is an open source, drop-in Discord verification bot that will allow your m
 - Speak with confidence, because everyone is who their name says they are.
 - Adding an extra step between trolls & spammers and your server will drastically reduce unwanted activity.
 - Integrate closely with Roblox groups, showing ranks and giving roles based on group membership.
-- The verification database is already populated with hundreds of thousands of Discord-Roblox account links, so it's possible users will already be verified when they join your server.
+- The verification database is already populated with millions of Discord-Roblox account links, so it's possible users will already be verified when they join your server.
 - The official version of RoVer can handle bigger servers and will automatically be able to update roles the second a user verifies. (If you host RoVer yourself, the user will have to run a command in order for the verification to take place.)
 
 # Using RoVer
@@ -79,6 +79,7 @@ Magic roles are special role names that can give specific users in your server s
 - `RoVer Nickname Bypass` - The same as RoVer Bypass, except it only bypasses nicknames. Roles will still be given.
 - `RoVer Admin` - RoVer will allow anyone with a role called "RoVer Admin" to run any of the server commands, even if they don't have Manage Server.
 - `RoVer Updater` - You can also give users a role called "RoVer Updater", which will let the holder of that role run !update on others, but no other admin commands.
+- `RoVer Reverse Lookup` - RoVer will allow anyone with a role called "RoVer Reverse Lookup" to run !reverselookup, but no other admin commands.
 
 ## Integrating with Roblox Groups
 Group bindings can be created to keep Discord roles up to date with Roblox group ranks. RoVer does not support or plan to support changing group ranks or shouts on Roblox.com, and you should be wary of any bots that offer this functionality, as this introduces a major security risk.

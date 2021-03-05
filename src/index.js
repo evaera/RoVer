@@ -102,6 +102,8 @@ if (config.mainLifeTime) {
     "commandPrefix"     : String. Default "!". The prefix for commands.
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing.
+    "cookie"            : String. The .ROBLOSECURITY cookie of the bot account used to fetch premium information of a user.
+                          (Not required if you're not using the premium virtualgroup, but whois will not report premium information correctly)
     "invite"            : String. The bot invite link.
     "disableAutoUpdate" : Boolean. Disables auto update feature.
 */

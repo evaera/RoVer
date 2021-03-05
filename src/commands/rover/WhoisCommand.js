@@ -4,7 +4,36 @@ const DiscordServer = require('../../DiscordServer')
 const VirtualGroups = require('../../VirtualGroups')
 const request = require('request-promise')
 
-const Contributors = require('../../Contributors.json')
+const Accolades = require('../../Accolades.json')
+
+/**
+ * Check if the given user is in the Roblox Dev Forum.
+ *
+ * @param {object} user The user data
+ * @returns {object} The DevForum profile data
+ */
+async function getDevForumProfile (user) {
+  const userId = user.id
+  let userProfile = await Cache.get(`bindings.${user.id}`, 'DevForumProfile')
+
+  if (!userProfile) {
+    try {
+      const devForumData = await request({
+        uri: `https://devforum.roblox.com/u/by-external/${userId}.json`,
+        json: true,
+        simple: false
+      })
+
+      userProfile = devForumData.user
+
+      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile)
+    } catch (e) {
+      return false
+    }
+  }
+
+  return userProfile
+}
 
 module.exports =
 class WhoisCommand extends Command {
@@ -56,7 +85,7 @@ class WhoisCommand extends Command {
         let apiUserData = {}
         try {
           apiUserData = await request({
-            uri: `http://api.roblox.com/users/${data.robloxId}`,
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}`,
             json: true,
             simple: false
           })
@@ -64,39 +93,50 @@ class WhoisCommand extends Command {
           return editMessage.edit("An error occured while fetching that user's data.")
         }
 
-        if (apiUserData.Username) {
-          data.robloxUsername = apiUserData.Username
+        if (apiUserData.name) {
+          data.robloxUsername = apiUserData.name
         }
         const profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
-        const avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${encodeURIComponent(data.robloxUsername)}`
-
-        let bio = 'Bio failed to load'
-        let joinDate = 'Unknown'
-        let pastNames = 'Unknown'
+        let avatarURLdata = {}
         try {
-          const profileSource = await request({
-            uri: profileLink
+          avatarURLdata = await request({
+            uri: `https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.robloxId}&size=720x720&format=png&isCircular=false`,
+            json: true
           })
-
-          joinDate = profileSource.match(/Join Date<p class=text-lead>(.*?)<li/)[1]
-          bio = profileSource.match(/<meta name=description content=".*? is one of the millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ?((?:.|\n)*?)"/m)[1]
-          pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1].substr(0, 1024)
+        } catch (e) {
+          return editMessage.edit("An error occured while fetching that user's data.")
+        }
+        const avatarURL = avatarURLdata.data[0].imageUrl
+        let bio = 'Bio failed to load'
+        if (apiUserData.description) bio = apiUserData.description
+        let joinDate = new Date(apiUserData.created)
+        joinDate = `${joinDate.getMonth() + 1}/${joinDate.getDate()}/${joinDate.getFullYear()}`
+        let pastNames = ''
+        try {
+          const pastNamesData = await request({
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}/username-history?limit=50&sortOrder=Desc`,
+            json: true,
+            simple: false
+          })
+          pastNamesData.data.forEach(oldname => { pastNames += `, ${oldname.name}` })
+          if (pastNames) pastNames = pastNames.replace(', ', '')
         } catch (e) {}
-
-        let bc = 'Unknown'
+        const { cookie } = require('../../data/client.json')
+        let bc
         try {
           bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
-          if (!bc) {
+          if (!bc && cookie) {
             const response = await request({
-              uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/group-membership-status`,
+              uri: `https://premiumfeatures.roblox.com/v1/users/${data.robloxId}/validate-membership`,
               simple: false,
-              resolveWithFullResponse: true
+              json: true,
+              resolveWithFullResponse: true,
+              headers: {
+                cookie: `.ROBLOSECURITY=${cookie}`
+              }
             })
-
-            const membershipType = JSON.parse(response.body).membershipType
             bc = 'Regular'
-
-            if (membershipType === 4) {
+            if (response.body && response.statusCode === 200) {
               bc = 'Premium'
             }
 
@@ -118,9 +158,6 @@ class WhoisCommand extends Command {
           bio = bio.substr(0, 500) + '...'
         }
 
-        // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
-        bio = bio.replace('@', '@ ')
-
         const embed = {
           title: 'View Profile',
           url: profileLink,
@@ -135,10 +172,25 @@ class WhoisCommand extends Command {
           },
           description: bio,
           fields: [
-            { name: 'Join Date', value: joinDate, inline: true },
-            { name: 'Membership', value: bc, inline: true },
-            { name: 'Past Usernames', value: pastNames, inline: true }
+            { name: 'Join Date', value: joinDate, inline: true }
           ]
+        }
+
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames && pastNames !== []) {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastNames,
+            inline: true
+          })
+        }
+        
+        if (bc && cookie) {
+          embed.fields.push({
+            name: 'Membership',
+            value: bc,
+            inline: true
+          })
         }
 
         // Nickname Group rank display
@@ -146,7 +198,7 @@ class WhoisCommand extends Command {
         if (nicknameGroup) {
           const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
 
-          const serverGroup = userGroups.find(group => group.Id === parseInt(nicknameGroup))
+          const serverGroup = userGroups.find(group => group.group.id === parseInt(nicknameGroup))
 
           let isAlly = false
           if (!serverGroup) {
@@ -155,13 +207,67 @@ class WhoisCommand extends Command {
 
           embed.fields.push({
             name: 'Group Rank',
-            value: isAlly ? 'Ally' : (serverGroup ? serverGroup.Role : 'Guest')
+            value: isAlly ? 'Ally' : (serverGroup ? serverGroup.role.name : 'Guest')
           })
         }
 
-        if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'RoVer Contributor', inline: true })
+        if (Accolades[id]) embed.fields.push({ name: 'Accolades', value: `${Accolades[id]}`, inline: true })
 
         editMessage.edit({ embed: embed }).catch(console.error)
+        
+        let edited = false
+        try {
+          const response = await request({
+            uri: `https://scriptinghelpers.org/resources/get_profile_by_roblox_id/${encodeURIComponent(data.robloxId)}`,
+            simple: false,
+            resolveWithFullResponse: true
+          })
+          if (response.statusCode !== 404) {
+            let shData = JSON.parse(response.body)
+            Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', shData)
+            edited = true
+            embed.fields.push({
+              name: "Scripting Helpers",
+              value: `[Profile Link](https://scriptinghelpers.org/user/${shData.roblox_username}) \nReputation: ${shData.reputation} \nRank: ${shData.rank}`,
+              inline: true
+            })
+          }
+        } catch(e) {}
+        
+        let devforumData = await getDevForumProfile({id: data.robloxId})
+        
+        let trustLevels = {
+          4: "Roblox Staff",
+          3: "Community Editor",
+          2: "Regular",
+          1: "Member",
+          0: "Visitor",
+        }
+        
+        if (devforumData) {
+          edited = true
+          bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
+          // Remove excess new lines in the bio
+          while ((bio.match(/\n/mg) || []).length > 3) {
+            const lastN = bio.lastIndexOf('\n')
+            bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
+          }
+
+          // Truncate bio if it's too long
+          if (bio.length > 500) {
+            bio = bio.substr(0, 500) + '...'
+          }
+          embed.description = bio
+          embed.fields.push({
+            name: "DevForum",
+            value: `[Profile Link](https://devforum.roblox.com/u/${devforumData.username}) \nLevel: ${trustLevels[devforumData.trust_level]} \n${devforumData.title ? "Title: " + devforumData.title : ""}`,
+            inline: true
+          })
+        }
+        
+        if (edited == true) {
+          editMessage.edit({ embed: embed }).catch(console.error)
+        }
       } else {
         editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
       }

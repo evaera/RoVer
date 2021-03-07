@@ -67,6 +67,14 @@ class BindGroupCommand extends Command {
           - You may have attempted to bind an invalid group id. Group IDs must be a whole number or be a valid VirtualGroup name.`
         )
       }
+      
+      if (groupId.match(/[^\d]/) && groupId.toLowerCase() == "premium") {
+        if (!config.cookie) {
+          return msg.reply(
+            oneLine`:no_entry_sign: Unfortunately, due to Roblox API changes, an authorisation cookie needs to be set in the configuration for this VirtualGroup to work.`
+          )
+        }
+      }
 
       if (ranksString != null) {
         const ranks = []

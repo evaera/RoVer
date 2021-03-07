@@ -175,21 +175,21 @@ class WhoisCommand extends Command {
             { name: 'Join Date', value: joinDate, inline: true }
           ]
         }
-
-        // Edit so past names don't show unless you actually have some!
-        if (pastNames && pastNames !== []) {
-          embed.fields.push({
-            name: 'Past Usernames',
-            value: pastNames,
-            inline: true
-          })
-        }
         
         if (bc && cookie) {
           embed.fields.push({
             name: 'Membership',
             value: bc,
             inline: true
+          })
+        }
+
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames && pastNames !== []) {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastNames,
+            inline: false
           })
         }
 

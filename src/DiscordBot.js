@@ -148,7 +148,7 @@ class DiscordBot {
 
   async updateBlacklist () {
     if (!config.banServer) return
-    let blacklists = global.Cache.get('blacklists', 'data')
+    let blacklists = await global.Cache.get('blacklists', 'data')
     if (!blacklists) {
       blacklists = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { json: true, headers: { Authorization: `Bot ${config.token}` } })
       global.Cache.set('blacklists', 'data', blacklists)

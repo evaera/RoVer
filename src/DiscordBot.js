@@ -56,7 +56,6 @@ class DiscordBot {
     // Set a reference to this instance inside of the client
     // for use in Commando modules. Is this bad? Probably.
     this.bot.discordBot = this
-
     // Events
 
     // We use .bind(this) so that the context remains within
@@ -148,37 +147,13 @@ class DiscordBot {
   }
 
   async updateBlacklist () {
-    if (!config.banServer) {
-      return false
+    if (!config.banServer) return
+    let blacklists = global.Cache.get('blacklists', 'data')
+    if (!blacklists) {
+      blacklists = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { json: true, headers: { Authorization: `Bot ${config.token}` } })
+      global.Cache.set('blacklists', 'data', blacklists)
     }
-
-    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
-      json: true,
-      headers: {
-        Authorization: `Bot ${config.token}`
-      }
-    })
-
-    response.forEach(ban => {
-      this.blacklist[ban.user.id] = true
-    })
-  }
-
-  async updateBlacklist () {
-    if (!config.banServer) {
-      return false
-    }
-
-    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
-      json: true,
-      headers: {
-        Authorization: `Bot ${config.token}`
-      }
-    })
-
-    response.forEach(ban => {
-      this.blacklist[ban.user.id] = true
-    })
+    blacklists.forEach(ban => { this.blacklist[ban.user.id] = true })
   }
 
   async updatePatrons (page, newAuthorizedOwners) {

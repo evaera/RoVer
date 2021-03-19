@@ -8,6 +8,16 @@ const config = require('./data/client.json')
 const updateServer = require('./UpdateServer.js')
 const Util = require('./Util.js')
 
+async function updateBlacklists () {
+  const response = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { json: true, headers: { Authorization: `Bot ${config.token}` } })
+  let bans = {}
+  response.forEach(ban => { bans[ban.user.id] = true })
+  return bans
+}
+
+const blacklists = Promise.resolve(updateBlacklists())
+module.exports = blacklists
+
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards.
 const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {

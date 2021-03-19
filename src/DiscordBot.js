@@ -21,7 +21,7 @@ class DiscordBot {
     this.servers = {}
     this.authorizedOwners = []
     this.patronTransfers = {}
-    this.blacklist = {}
+    this.blacklist = require('./index')
   }
 
   /**
@@ -144,16 +144,6 @@ class DiscordBot {
 
   isPremium () {
     return !!config.patreonAccessToken
-  }
-
-  async updateBlacklist () {
-    if (!config.banServer) return
-    let blacklists = await global.Cache.get('blacklists', 'data')
-    if (!blacklists) {
-      blacklists = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { json: true, headers: { Authorization: `Bot ${config.token}` } })
-      global.Cache.set('blacklists', 'data', blacklists)
-    }
-    blacklists.forEach(ban => { this.blacklist[ban.user.id] = true })
   }
 
   async updatePatrons (page, newAuthorizedOwners) {

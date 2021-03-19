@@ -9,9 +9,9 @@ const updateServer = require('./UpdateServer.js')
 const Util = require('./Util.js')
 
 async function updateBlacklists () {
-  const response = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { json: true, headers: { Authorization: `Bot ${config.token}` } })
+  const response = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { json: true, headers: { Authorization: `Bot ${config.token}` }, resolveWithFullResponse: true, simple: false })
   let bans = {}
-  response.forEach(ban => { bans[ban.user.id] = true })
+  if (response.statusCode === 200) response.body.forEach(ban => { bans[ban.user.id] = true })
   return bans
 }
 

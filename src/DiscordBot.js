@@ -21,7 +21,7 @@ class DiscordBot {
     this.servers = {}
     this.authorizedOwners = []
     this.patronTransfers = {}
-    this.blacklist = require('./index')
+    this.blacklist = {}
   }
 
   /**
@@ -138,12 +138,15 @@ class DiscordBot {
 
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
-
-    this.updateBlacklist().catch(console.error)
   }
 
   isPremium () {
     return !!config.patreonAccessToken
+  }
+
+  async updateBlacklist () {
+    const blacklists = await global.Cache.get('blacklists', 'data')
+    blacklists.forEach(b => { this.blacklist[b.user.id] = true })
   }
 
   async updatePatrons (page, newAuthorizedOwners) {
@@ -207,6 +210,7 @@ class DiscordBot {
    */
   ready () {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
+    this.updateBlacklist()
 
     // Set status message to the default until we get info from master process
     this.bot.user.setActivity('rover.link', { type: "LISTENING" })

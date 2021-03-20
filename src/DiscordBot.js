@@ -144,11 +144,6 @@ class DiscordBot {
     return !!config.patreonAccessToken
   }
 
-  async updateBlacklist () {
-    const blacklists = await global.Cache.get('blacklists', 'data')
-    blacklists.forEach(b => { this.blacklist[b.user.id] = true })
-  }
-
   async updatePatrons (page, newAuthorizedOwners) {
     if (!page) {
       newAuthorizedOwners = []
@@ -210,10 +205,16 @@ class DiscordBot {
    */
   ready () {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
-    this.updateBlacklist()
-
     // Set status message to the default until we get info from master process
     this.bot.user.setActivity('rover.link', { type: "LISTENING" })
+    if (config.banServer) {
+      try {
+        const data = JSON.parse(fs.readFileSync(path.join(__dirname, './data/blacklists.json'), 'utf-8'))
+        data.forEach(item => { this.blacklist[item.user.id] = true })
+      } catch (e) {
+        console.error(e)
+      }
+    }
   }
 
   /**

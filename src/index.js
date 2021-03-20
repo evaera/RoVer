@@ -8,16 +8,6 @@ const config = require('./data/client.json')
 const updateServer = require('./UpdateServer.js')
 const Util = require('./Util.js')
 
-async function updateBlacklists () {
-  const response = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { json: true, headers: { Authorization: `Bot ${config.token}` }, resolveWithFullResponse: true, simple: false })
-  let bans = {}
-  if (response.statusCode === 200) response.body.forEach(ban => { bans[ban.user.id] = true })
-  return bans
-}
-
-const blacklists = Promise.resolve(updateBlacklists())
-module.exports = blacklists
-
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards.
 const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
@@ -27,14 +17,17 @@ const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.
   execArgv: ['--trace-warnings']
 })
 
+// Instantiate a GlobalCache, which will cache information from the shards.
+global.GlobalCache = new GlobalCache(shardingManager)
+;(async function () {
+  const response = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { headers: { Authorization: `Bot ${config.token}` }, json: true, simple: false, resolveWithFullResponse: true })
+  if (response.statusCode === 200) global.GlobalCache.set(false, { collection: 'blacklists', key: 'data', value: response.body })
+}())
 shardingManager.on('shardCreate', shard => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })
 
 shardingManager.spawn(config.totalShards || 'auto', 8000, -1)
-
-// Instantiate a GlobalCache, which will cache information from the shards.
-global.GlobalCache = new GlobalCache(shardingManager)
 
 // Set bot status messages
 let currentActivity = 0

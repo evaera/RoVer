@@ -104,14 +104,12 @@ class GlobalCache {
     const collection = this.getCollection(message.collection)
     collection[message.key] = message.value
 
-    if (shard) { // Check if a shard is even passed as this is called without a shard when caching blacklists
-      shard.send({
-        action: 'setReply',
-        id: message.id,
-        collection: message.collection,
-        key: message.key
-      })
-    }
+    shard.send({
+      action: 'setReply',
+      id: message.id,
+      collection: message.collection,
+      key: message.key
+    })
   }
 }
 

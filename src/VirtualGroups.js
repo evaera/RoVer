@@ -27,7 +27,7 @@ async function getDevForumProfile (user) {
 
       userProfile = devForumData.user
 
-      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile)
+      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile, 120000)
     } catch (e) {
       return false
     }
@@ -153,7 +153,7 @@ module.exports = {
         bc = 'Premium'
       }
 
-      Cache.set(`bindings.${user.id}`, 'bc', bc)
+      Cache.set(`bindings.${user.id}`, 'bc', bc, 120000)
     }
 
     if (bcType && bcType === bc) {
@@ -202,7 +202,7 @@ module.exports = {
         allies.push(group.id)
       }
 
-      Cache.set(`groups.${groupid}`, relation, allies)
+      Cache.set(`groups.${groupid}`, relation, allies, 3600000)
     }
 
     for (const group of userGroups) {
@@ -236,7 +236,7 @@ module.exports = {
           json: true
         })).data
 
-        Cache.set(`bindings.${user.id}`, 'friends', friends)
+        Cache.set(`bindings.${user.id}`, 'friends', friends, 120000)
       }
 
       return friends.find(user => user.id.toString() === friendid.toString()) != null
@@ -266,7 +266,7 @@ module.exports = {
         })
 
         doesHaveAsset = responseData.data.length > 0
-        Cache.set(`bindings.${user.id}`, `${itemType}.${itemId}`, doesHaveAsset)
+        Cache.set(`bindings.${user.id}`, `${itemType}.${itemId}`, doesHaveAsset, 120000)
       }
 
       return doesHaveAsset

@@ -18,11 +18,11 @@ class GlobalCache {
     shardingManager.on('shardCreate', shard => shard.on('message', this.onMessage.bind(this, shard)))
     shardingManager.shards.forEach(shard => shard.on('message', this.onMessage.bind(this, shard)))
 
+    // Expiry only overrides the default "up to 60 seconds", although you can just use Infinity if you want it to be permanently cached
     setInterval(() => {
-      this.collections = {}
-    }, 30000)
+      Object.keys(this.collections).forEach(col => { if (this.collections[col].expiry <= Date.now() || !this.collections[col]['expiry']) this.collections[col] = {} })
+    }, 60000)
   }
-
   /**
    * Fires when a message from a child shard is sent
    * @listens ShardingManager#message
@@ -54,7 +54,7 @@ class GlobalCache {
     if (typeof this.collections[name] === 'undefined') {
       this.collections[name] = {}
     }
-
+    if (this.collections[name]['expiry'] >= Date.now()) this.collections[name] = {}
     return this.collections[name]
   }
 
@@ -103,6 +103,7 @@ class GlobalCache {
   set (shard, message) {
     const collection = this.getCollection(message.collection)
     collection[message.key] = message.value
+    message.expiry ? collection['expiry'] = Date.now() + message.expiry : collection['expiry'] = false
 
     shard.send({
       action: 'setReply',
@@ -209,7 +210,7 @@ class Cache {
    * @returns {Promise<any>} Returns the value when it is set
    * @memberof Cache
    */
-  set (collection, key, value) {
+  set (collection, key, value, expiry) {
     const id = this.getNextIndex()
 
     this.shardClientUtil.send({
@@ -217,6 +218,7 @@ class Cache {
       collection,
       key,
       value,
+      expiry,
       id
     })
 

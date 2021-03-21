@@ -54,7 +54,6 @@ class GlobalCache {
     if (typeof this.collections[name] === 'undefined') {
       this.collections[name] = {}
     }
-    if (this.collections[name]['expiry'] >= Date.now()) this.collections[name] = {}
     return this.collections[name]
   }
 

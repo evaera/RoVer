@@ -1,4 +1,5 @@
 const Discord = require('discord.js')
+const cacheTTLs = { blacklists: Infinity, bindings: 120000, groups: 360000, users: 45000 }
 
 /**
  * The GlobalCache is a singleton that holds an in-memory cache that will hold information
@@ -18,9 +19,11 @@ class GlobalCache {
     shardingManager.on('shardCreate', shard => shard.on('message', this.onMessage.bind(this, shard)))
     shardingManager.shards.forEach(shard => shard.on('message', this.onMessage.bind(this, shard)))
 
-    // Expiry only overrides the default "up to 60 seconds", although you can just use Infinity if you want it to be permanently cached
     setInterval(() => {
-      Object.keys(this.collections).forEach(col => { if (this.collections[col].expiry <= Date.now() || !this.collections[col]['expiry']) this.collections[col] = {} })
+      Object.keys(this.collections).forEach(col => {
+        const ttl = this.getTTL(col)
+        if (this.collections[col]['created'] + ttl <= Date.now()) delete this.collections[col]
+      })
     }, 60000)
   }
   /**
@@ -55,6 +58,11 @@ class GlobalCache {
       this.collections[name] = {}
     }
     return this.collections[name]
+  }
+
+  getTTL (name) {
+    const abbrevName = name.replace(/\.\d*/, '')
+    return cacheTTLs[abbrevName]
   }
 
   /**
@@ -102,7 +110,7 @@ class GlobalCache {
   set (shard, message) {
     const collection = this.getCollection(message.collection)
     collection[message.key] = message.value
-    message.expiry ? collection['expiry'] = Date.now() + message.expiry : collection['expiry'] = false
+    if (!collection['created']) collection['created'] = Date.now()
 
     shard.send({
       action: 'setReply',
@@ -217,7 +225,6 @@ class Cache {
       collection,
       key,
       value,
-      expiry,
       id
     })
 

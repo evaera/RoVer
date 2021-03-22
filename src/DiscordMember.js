@@ -272,7 +272,7 @@ class DiscordMember {
         freshData = true
 
         // Cache the data for future use.
-        await Cache.set('users', this.id, data, false)
+        await Cache.set('users', this.id, data)
       }
     } catch (e) {
       if (config.loud) console.log(e)
@@ -315,7 +315,7 @@ class DiscordMember {
         }
 
         // Cache data again
-        Cache.set('users', this.id, data, false)
+        Cache.set('users', this.id, data)
       }
 
       // Check if these settings are enabled for this specific server,

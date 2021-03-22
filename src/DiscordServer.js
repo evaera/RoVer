@@ -106,7 +106,7 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   static async clearMemberCache (id) {
-    await Cache.set('users', id, null, false)
+    await Cache.set('users', id, null)
   }
 
   /**
@@ -210,7 +210,7 @@ class DiscordServer {
         throw new Error('Group rank HTTP request is malformed or in unknown format')
       }
 
-      Cache.set(`bindings.${userid}`, '__groups', groups, 120000)
+      Cache.set(`bindings.${userid}`, '__groups', groups)
     }
 
     return groups.data
@@ -266,7 +266,7 @@ class DiscordServer {
     }
 
     // Cache the return value in memory.
-    Cache.set(`bindings.${userid}`, bindingHash, returnValue, 120000)
+    Cache.set(`bindings.${userid}`, bindingHash, returnValue)
 
     return returnValue
   }

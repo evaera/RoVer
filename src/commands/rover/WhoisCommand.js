@@ -26,7 +26,7 @@ async function getDevForumProfile (user) {
 
       userProfile = devForumData.user
 
-      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile, 120000)
+      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile)
     } catch (e) {
       return false
     }
@@ -140,12 +140,12 @@ class WhoisCommand extends Command {
               bc = 'Premium'
             }
 
-            Cache.set(`bindings.${data.robloxId}`, 'bc', bc, 120000)
+            Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
           }
         } catch (e) {}
 
         // Make sure the data is cached so we don't have to use the API in the future
-        Cache.set('users', id, data, false)
+        Cache.set('users', id, data)
 
         // Remove excess new lines in the bio
         while ((bio.match(/\n/mg) || []).length > 3) {
@@ -224,7 +224,7 @@ class WhoisCommand extends Command {
           })
           if (response.statusCode !== 404) {
             let shData = JSON.parse(response.body)
-            Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', shData, 120000)
+            Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', shData)
             edited = true
             embed.fields.push({
               name: "Scripting Helpers",

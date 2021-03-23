@@ -1,5 +1,10 @@
 const Discord = require('discord.js')
-const cacheTTLs = { blacklists: Infinity, bindings: 120000, groups: 360000, users: 45000 }
+const cacheTTLs = {
+  blacklists: Infinity,
+  bindings: 120000,
+  groups: 360000,
+  users: 45000
+}
 
 /**
  * The GlobalCache is a singleton that holds an in-memory cache that will hold information
@@ -22,7 +27,9 @@ class GlobalCache {
     setInterval(() => {
       Object.keys(this.collections).forEach(col => {
         const ttl = this.getTTL(col)
-        if (this.collections[col]['created'] + ttl <= Date.now()) delete this.collections[col]
+        if (this.collections[col]['created'] + ttl <= Date.now()) {
+          delete this.collections[col]
+        }
       })
     }, 60000)
   }

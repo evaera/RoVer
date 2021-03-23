@@ -27,7 +27,7 @@ class GlobalCache {
     setInterval(() => {
       Object.keys(this.collections).forEach(col => {
         const ttl = this.getTTL(col)
-        if (this.collections[col]['created'] + ttl <= Date.now()) {
+        if (this.collections[col].created + ttl <= Date.now()) {
           delete this.collections[col]
         }
       })
@@ -117,7 +117,7 @@ class GlobalCache {
   set (shard, message) {
     const collection = this.getCollection(message.collection)
     collection[message.key] = message.value
-    if (!collection['created']) collection['created'] = Date.now()
+    if (!collection.created) collection.created = Date.now()
 
     shard.send({
       action: 'setReply',

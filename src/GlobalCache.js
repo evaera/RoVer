@@ -62,7 +62,7 @@ class GlobalCache {
 
   getTTL (name) {
     const abbrevName = name.replace(/\.\d*/, '')
-    return cacheTTLs[abbrevName]
+    return cacheTTLs[abbrevName] || 60000
   }
 
   /**

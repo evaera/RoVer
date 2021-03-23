@@ -217,7 +217,7 @@ class Cache {
    * @returns {Promise<any>} Returns the value when it is set
    * @memberof Cache
    */
-  set (collection, key, value, expiry) {
+  set (collection, key, value) {
     const id = this.getNextIndex()
 
     this.shardClientUtil.send({

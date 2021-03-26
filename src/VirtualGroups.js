@@ -48,38 +48,23 @@ module.exports = {
   },
 
   async DevForumTopContributor (user) {
-    const userProfile = await getDevForumProfile(user)
-    if (!userProfile) return
-
-    return userProfile.groups.find(g => g.name === 'Top_Contributor') != null
+    return module.exports.DevForumGroup(user, "Top_Contributor")
   },
 
   async DevForumLeadTopContributor (user) { // old, left for compatability
-    const userProfile = await getDevForumProfile(user)
-    if (!userProfile) return
-
-    return userProfile.groups.find(g => g.name === 'Community_Sage') != null
+    return module.exports.DevForumGroup(user, "Community_Sage")
   },
 
   async RobloxStaff (user) {
-    const userProfile = await getDevForumProfile(user)
-    if (!userProfile) return
-
-    return userProfile.groups.find(g => g.name === 'Roblox_Staff') != null
+    return module.exports.DevForumGroup(user, "Roblox_Staff")
   },
 
   async CommunitySage (user) {
-    const userProfile = await getDevForumProfile(user)
-    if (!userProfile) return
-
-    return userProfile.groups.find(g => g.name === 'Community_Sage') != null
+    return module.exports.DevForumGroup(user, "Community_Sage")
   },
 
   async PostApproval (user) {
-    const userProfile = await getDevForumProfile(user)
-    if (!userProfile) return
-
-    return userProfile.groups.find(g => g.name === 'Post_Approval') != null
+    return module.exports.DevForumGroup(user, "Post_Approval")
   },
 
   /**

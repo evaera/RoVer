@@ -40,6 +40,13 @@ async function getDevForumProfile (user) {
  * @module VirtualGroups
  */
 module.exports = {
+  async DevForumGroup (user, group) {
+    const userProfile = await getDevForumProfile(user)
+    if (!userProfile) return
+
+    return userProfile.groups.find(g => g.name === group) != null
+  },
+
   async DevForumTopContributor (user) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return

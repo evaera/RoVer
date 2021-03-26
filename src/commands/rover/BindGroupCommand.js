@@ -85,7 +85,11 @@ class BindGroupCommand extends Command {
               }
             }
           } else if (rankNumber != null) {
-            ranks.push(rankNumber)
+            if (VirtualGroups[groupId]) {
+              ranks.push(rank)
+            } else if (!isNaN(rankNumber)) {
+              ranks.push(rankNumber)
+            }
           }
         }
         group.ranks = ranks

@@ -60,11 +60,14 @@ class WhoisCommand extends Command {
   // This is probably the worst file in the entire project, so prepare yourself.
   // TODO: DRY this up and make the method that gets user data a method in DiscordMember
   async fn (msg, args) {
-    const member = args.member
+    let member = args.member
+    // If no member is specified the member is the message author
+    if (!member) member = msg.member
     let data = {}
     if (member) { // If the member specified exists,
+      if (member.user.bot) return
       const editMessage = await msg.reply(`:mag: Looking up ${member.displayName.replace(/@/g, '')}`)
-
+      
       const id = member.user.id
       try {
         // Read user data from memory, or request it if there isn't any cached.
@@ -166,7 +169,7 @@ class WhoisCommand extends Command {
             url: profileLink,
             icon_url: avatarURL
           },
-          color: args.member.displayColor,
+          color: member.displayColor,
           thumbnail: {
             url: avatarURL
           },
@@ -244,7 +247,7 @@ class WhoisCommand extends Command {
           0: "Visitor",
         }
         
-        if (devforumData !== false) {
+        if (devforumData) {
           edited = true
           bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
           // Remove excess new lines in the bio

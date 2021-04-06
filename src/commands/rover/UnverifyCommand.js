@@ -12,7 +12,7 @@ class UnverifyCommand extends Command {
   }
 
   async fn (msg) {
-    msg.author.send('To unverify, please contact a moderator or above at our support server:').then(() => {
+    msg.author.send('To unverify, please contact a moderator or above at our support server: https://discord.gg/7yfwrat').then(() => {
       msg.reply('Sent you a DM with information.')
     }).catch(() => {
       msg.reply('I can\'t seem to message you - please make sure your DMs are enabled!')

@@ -380,7 +380,11 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   getWelcomeMessage (data, member) {
-    return Util.formatDataString(this.getSetting('welcomeMessage'), data, member)
+    if (this.hasCustomWelcomeMessage()) {
+      return Util.formatDataString(`Welcome to **%DISCORDNAME%**! \n\n${this.getSetting('welcomeMessage')}`, data, member)
+    } else {
+      return Util.formatDataString(this.getSetting('welcomeMessage'), data, member)
+    }
   }
 
   /**

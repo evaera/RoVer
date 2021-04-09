@@ -1,4 +1,10 @@
 const Discord = require('discord.js')
+const cacheTTLs = {
+  blacklists: Infinity,
+  bindings: 120000,
+  groups: 360000,
+  users: 45000
+}
 
 /**
  * The GlobalCache is a singleton that holds an in-memory cache that will hold information
@@ -19,10 +25,14 @@ class GlobalCache {
     shardingManager.shards.forEach(shard => shard.on('message', this.onMessage.bind(this, shard)))
 
     setInterval(() => {
-      this.collections = {}
-    }, 30000)
+      Object.keys(this.collections).forEach(col => {
+        const ttl = this.getTTL(col)
+        if (this.collections[col].created + ttl <= Date.now()) {
+          delete this.collections[col]
+        }
+      })
+    }, 60000)
   }
-
   /**
    * Fires when a message from a child shard is sent
    * @listens ShardingManager#message
@@ -54,8 +64,12 @@ class GlobalCache {
     if (typeof this.collections[name] === 'undefined') {
       this.collections[name] = {}
     }
-
     return this.collections[name]
+  }
+
+  getTTL (name) {
+    const abbrevName = name.replace(/\.\d*/, '')
+    return cacheTTLs[abbrevName] || 60000
   }
 
   /**
@@ -103,6 +117,7 @@ class GlobalCache {
   set (shard, message) {
     const collection = this.getCollection(message.collection)
     collection[message.key] = message.value
+    if (!collection.created) collection.created = Date.now()
 
     shard.send({
       action: 'setReply',

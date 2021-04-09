@@ -91,7 +91,8 @@ class DiscordMember {
       robloxUsername: data.robloxUsername,
       robloxId: data.robloxId,
       discordId: data.discordId,
-      discordName: data.discordName
+      discordName: data.discordName,
+      robloxDisplayName: data.robloxDisplayName
     }
 
     if (this.discordServer.getSetting('nicknameGroup')) {
@@ -314,6 +315,10 @@ class DiscordMember {
           data.robloxUsername = apiUserData.name
         }
 
+        if (apiUserData.displayname) {
+          data.robloxDisplayName = apiUserData.displayname
+        }
+
         // Cache data again
         Cache.set('users', this.id, data)
       }
@@ -434,7 +439,8 @@ class DiscordMember {
         robloxUsername: data.robloxUsername,
         robloxId: data.robloxId,
         discordId: this.member.id,
-        discordName: this.member.user.username
+        discordName: this.member.user.username,
+        robloxDisplayName: data.robloxDisplayName
       })
     } else {
       // Status was not "ok".

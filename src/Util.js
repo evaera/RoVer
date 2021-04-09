@@ -18,7 +18,9 @@ module.exports = {
       '%USERID%': data.robloxId,
       '%RANK%': data.groupRank || '',
       '%DISCORDNAME%': data.discordName || '',
-      '%DISCORDID%': data.discordId || ''
+      '%DISCORDID%': data.discordId || '',
+      '%DISPLAYNAME%': data.robloxDisplayName || data.robloxUsername,
+      '%SMARTNAME%': `${data.robloxDisplayName ? (data.robloxDisplayName + " (" + data.robloxUsername + ")") : data.robloxUsername}`
     }
 
     if (member != null) {

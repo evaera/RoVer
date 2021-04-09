@@ -20,7 +20,7 @@ module.exports = {
       '%DISCORDNAME%': data.discordName || '',
       '%DISCORDID%': data.discordId || '',
       '%DISPLAYNAME%': data.robloxDisplayName || data.robloxUsername,
-      '%SMARTNAME%': `${data.robloxDisplayName ? (data.robloxDisplayName + " (" + data.robloxUsername + ")") : data.robloxUsername}`
+      '%SMARTNAME%': `${data.robloxDisplayName !== data.robloxUsername ? (data.robloxDisplayName + " (" + data.robloxUsername + ")") : data.robloxUsername}`
     }
 
     if (member != null) {

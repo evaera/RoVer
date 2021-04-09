@@ -179,6 +179,14 @@ class WhoisCommand extends Command {
           ]
         }
 
+        if (data.robloxUsername !== apiUserData.displayname) {
+          embed.fields.push({
+            name: "Display Name",
+            value: apiUserData.displayname,
+            inline: true
+          })
+        }
+
         // Edit so past names don't show unless you actually have some!
         if (pastNames && pastNames !== []) {
           embed.fields.push({

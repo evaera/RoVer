@@ -9,14 +9,6 @@ const updateServer = require('./UpdateServer.js')
 const Util = require('./Util.js')
 const fs = require('mz/fs')
 
-;(async function () {
-  if (!config.banServer) return
-  const response = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, { headers: { Authorization: `Bot ${config.token}` }, simple: false, resolveWithFullResponse: true })
-  let data
-  response.statusCode === 200 ? data = response.body : data = []
-  await fs.writeFile(path.join(__dirname, './data/blacklists.json'), `${data}`, {encoding: 'utf-8'}).catch(e => console.error(e))
-}())
-
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards.
 const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
@@ -28,6 +20,23 @@ const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.
 
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)
+
+if (config.banServer) {
+  request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, {
+    headers: {
+      Authorization: `Bot ${config.token}`
+    },
+    resolveWithFullResponse: true,
+    simple: false
+  }).then(res => {
+    if (res.statusCode === 200) {
+      global.GlobalCache.setBlacklist(res.body))
+    }
+  }).catch(e => {
+    console.error(e.body)
+  })
+}
+
 shardingManager.on('shardCreate', shard => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })

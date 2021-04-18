@@ -126,6 +126,17 @@ class GlobalCache {
       key: message.key
     })
   }
+
+  /**
+   * Caches blacklists, does not require a shard as it's done by master process
+   * @param {Array} blacklists The array of blacklists
+   * @memberof GlobalCache
+   */
+  setBlacklist (blacklists) {
+    const collection = this.getCollection('blacklists')
+    collection.data = blacklists
+    collection.created = Date.now()
+  }
 }
 
 /**

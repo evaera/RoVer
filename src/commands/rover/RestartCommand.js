@@ -1,6 +1,6 @@
 const Accolades = require('../../Accolades.json')
 const Command = require('../Command')
-const Discord = require('discord.js')
+const { ShardClientUtil } = require('discord.js')
 
 module.exports =
 class RestartCommand extends Command {

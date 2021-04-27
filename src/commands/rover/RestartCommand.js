@@ -32,7 +32,7 @@ class RestartCommand extends Command {
       process.exit()
     }
     if(isNaN(args.server)) return msg.reply("An invalid server id was given!")
-    const shard = Discord.ShardClientUtil.shardIDForGuildID(args.server, msg.client.shard.count)
+    const shard = ShardClientUtil.shardIDForGuildID(args.server, msg.client.shard.count)
     // Zero is falsy so we don't want that to prevent restarts from working
     if (!shard && shard !== 0) return
     await msg.reply(`Restarting shard ${shard}!`)

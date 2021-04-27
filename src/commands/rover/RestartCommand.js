@@ -1,5 +1,6 @@
 const Accolades = require('../../Accolades.json')
 const Command = require('../Command')
+const Discord = require('discord.js')
 
 module.exports =
 class RestartCommand extends Command {
@@ -30,9 +31,8 @@ class RestartCommand extends Command {
       await msg.reply('Restarting...')
       process.exit()
     }
-    const shard = msg.client.shard.shardIDForGuildID(msg.guild.id, msg.client.shard.count).catch(() => {
-      msg.reply('An invalid server id was given!')
-    })
+    if(isNaN(args.server)) return msg.reply("An invalid server id was given!")
+    const shard = Discord.ShardClientUtil.shardIDForGuildID(args.server, msg.client.shard.count)
     // Zero is falsy so we don't want that to prevent restarts from working
     if (!shard && shard !== 0) return
     await msg.reply(`Restarting shard ${shard}!`)

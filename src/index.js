@@ -21,31 +21,29 @@ const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)
 
-if (config.banServer) {
-  request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, {
-    headers: {
-      Authorization: `Bot ${config.token}`
-    },
-    resolveWithFullResponse: true,
-    simple: false
-  }).then(res => {
-    if (res.statusCode === 200) {
-      global.GlobalCache.setBlacklist(res.body))
-    }
-  }).catch(e => {
-    console.error(e.body)
-  })
-}
-
 shardingManager.on('shardCreate', shard => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })
 
-shardingManager.spawn(config.totalShards || 'auto', 8000, -1)
-
 // Set bot status messages
 let currentActivity = 0
 let totalUsers = null
+
+// Shove everything into an async IIFE so that the shards aren't spawned before blacklists are set
+;(async () => {
+  if (config.banServer) {
+    const res = await request(`https://discord.com/api/v8/guilds/${config.banServer}/bans`, {
+      headers: {
+        Authorization: `Bot ${config.token}`
+      },
+      json: true,
+      resolveWithFullResponse: true,
+      simple: false
+    }).catch(e => console.error(e))
+    if (res && res.statusCode === 200) global.GlobalCache.setBlacklist(res.body)
+  }
+  await shardingManager.spawn()
+})()
 
 async function getNextActivity () {
   currentActivity++

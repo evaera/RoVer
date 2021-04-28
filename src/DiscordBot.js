@@ -97,6 +97,13 @@ class DiscordBot {
       }
     })
 
+    if (config.banServer) {
+      ;(async () => {
+        const blacklists = await global.Cache.get('blacklists', 'data')
+        blacklists.forEach(bl => this.blacklist[bl.user.id] = true)
+      })()
+    }
+
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor(msg => {
         if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
@@ -207,7 +214,6 @@ class DiscordBot {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
     // Set status message to the default until we get info from master process
     this.bot.user.setActivity('rover.link', { type: "LISTENING" })
-    this.blacklist = Cache.get('blacklists', 'data')
   }
 
   /**

@@ -151,9 +151,9 @@ class WhoisCommand extends Command {
         Cache.set('users', id, data)
 
         // Remove excess new lines in the bio
-        while ((bio.match(/\n/mg) || []).length > 3) {
-          const lastN = bio.lastIndexOf('\n')
-          bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
+        while ((bio.match(/\n\n/mg) || []).length > 3) {
+          const lastN = bio.lastIndexOf('\n\n')
+          bio = bio.slice(0, lastN) + bio.slice(lastN + 2)
         }
 
         // Truncate bio if it's too long
@@ -247,9 +247,9 @@ class WhoisCommand extends Command {
         if (devforumData) {
           bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
           // Remove excess new lines in the bio
-          while ((bio.match(/\n/mg) || []).length > 3) {
-            const lastN = bio.lastIndexOf('\n')
-            bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
+          while ((bio.match(/\n\n/mg) || []).length > 3) {
+            const lastN = bio.lastIndexOf('\n\n')
+            bio = bio.slice(0, lastN) + bio.slice(lastN + 2)
           }
 
           // Truncate bio if it's too long

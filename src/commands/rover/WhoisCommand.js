@@ -179,6 +179,14 @@ class WhoisCommand extends Command {
           ]
         }
         
+        if (apiUserData.displayName !== apiUserData.name) {
+          embed.fields.push({
+            name: 'Display Name',
+            value: apiUserData.displayName,
+            inline: true
+          })
+        }
+        
         if (bc && cookie) {
           embed.fields.push({
             name: 'Membership',

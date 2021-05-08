@@ -81,7 +81,7 @@ class BindGroupCommand extends Command {
       if (ranksString !== undefined) {
         const unparsedRanks = ranksString.split(',')
         for (const rank of unparsedRanks) {
-          const rangeMatch = rank.match(/(\d+)-(\d+)/)
+          const rangeMatch = rank.match(/^(\d+)-(\d+)$/)
           
           if (rangeMatch) {
             let start = parseInt(rangeMatch[1], 10)
@@ -94,13 +94,19 @@ class BindGroupCommand extends Command {
 
             if (start && stop) {
               for (let i = start; i <= stop; i++) {
-                if (!existingRanks[i]) group.ranks.push(i)
+                if (!existingRanks[i]) {
+                  group.ranks.push(i)
+                  existingRanks[i] = true
+                }
               }
             }
-          } else if (rank.match(/[\d]+/)) {
+          } else if (rank.match(/^[\d]+$/)) {
             let rankNumber = parseInt(rank, 10)
             if (!VirtualGroups[groupId]) rankNumber = Util.clamp(rankNumber, 0, 255)
-            if (!existingRanks[rank]) group.ranks.push(rankNumber)
+            if (!existingRanks[rank]) {
+              group.ranks.push(rankNumber)
+              existingRanks[rank] = true
+            }
           } else {
             return msg.reply(`:no_entry_sign: You have attempted to bind an invalid rank (\`${rank}\`) for group (\`${groupId}\`). Ranks should be a whole number.`)
           }

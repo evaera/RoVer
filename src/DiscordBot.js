@@ -104,7 +104,7 @@ class DiscordBot {
           if (this.authorizedOwners.length === 0) {
             msg.reply('Sorry, the authorized users list is still being downloaded. This occurs when the bot has recently restarted. Please wait a few seconds and try again.')
           } else {
-            msg.reply(`Sorry, this server isn't authorized to use RoVer Plus.${msg.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''}`) // notify sender to donate only if they're an "admin"
+            msg.reply(`Sorry, this server isn't authorized to use RoVer Plus.${msg.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''} If you are a patron encountering this issue, try running '${this.bot.commandPrefix}transferplus ${msg.guild.ownerID}'`) // notify sender to donate only if they're an "admin"
           }
 
           return 'not_premium'
@@ -303,6 +303,20 @@ class DiscordBot {
 
     const discordMember = await server.getMember(member.id)
     if (!member) return
+
+    // Check the guild's verification level
+    const securityLevel = member.guild.verificationLevel
+    const securityMessageIntro = `Welcome to ${member.guild.name}! This Discord server uses a Roblox account verification system to keep our community safe. Due to this server's security settings,`
+    if (securityLevel === 'MEDIUM' && (member.joinedTimestamp - member.user.createdTimestamp < 300000)) {
+      member.send(`${securityMessageIntro} you must wait until your account is at least 5 minutes old to verify. Once the time is up, run \`${member.guild.commandPrefix}verify\` in the server to verify.`).catch(() => {})
+      return
+    } else if (securityLevel === 'HIGH') {
+      member.send(`${securityMessageIntro} you must wait 10 minutes to verify if you do not have a phone number linked to your Discord account. If you do have a linked phone number, you may immediately run \`${member.guild.commandPrefix}verify\` in the server.`).catch(() => {})
+      return
+    } else if (securityLevel === 'VERY_HIGH') {
+      member.send(`${securityMessageIntro} you must link your phone number to your Discord account. If you have already done so, you may run \`${member.guild.commandPrefix}verify\` in the server.`).catch(() => {})
+      return
+    }
     const action = await discordMember.verify()
 
     try {

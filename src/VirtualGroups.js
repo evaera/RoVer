@@ -135,18 +135,21 @@ module.exports = {
    * @todo this won't actually ever cache because they are all requesting. (only if more than one BC bound)
    */
   async BuildersClub (user, bcType) {
+    const { cookie } = require('./data/client.json')
+    if (!cookie) return false
     let bc = await Cache.get(`bindings.${user.id}`, 'bc')
     if (!bc) {
       const response = await request({
-        uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(user.id)}/group-membership-status`,
+        uri: `https://premiumfeatures.roblox.com/v1/users/${user.id}/validate-membership`,
         simple: false,
-        resolveWithFullResponse: true
+        json: true,
+        resolveWithFullResponse: true,
+        headers: {
+          cookie: `.ROBLOSECURITY=${cookie}` // Send cookie as a header to avoid using another dependency to insert the cookie
+        }
       })
-
-      const membershipType = JSON.parse(response.body).membershipType
       bc = 'NBC'
-
-      if (membershipType === 4) {
+      if (response.body && response.statusCode === 200) {
         bc = 'Premium'
       }
 
@@ -189,29 +192,21 @@ module.exports = {
     let allies = await Cache.get(`groups.${groupid}`, relation)
     if (allies == null) {
       allies = []
-      // Roblox ally/enemy APIs are paginated, only get a max of 10 pages
-      let page = 1
-      while (page < 10) {
-        const content = await request(`https://api.roblox.com/groups/${groupid}/${relation}?page=${page}`, {
-          json: true
-        })
 
-        for (const group of content.Groups) {
-          allies.push(group.Id)
-        }
+      // Roblox ally/enemy APIs must specify an amount. Only grab 60 relationships
+      const content = await request(`https://groups.roblox.com/v1/groups/${groupid}/relationships/${relation}?model.startRowIndex=0&model.maxRows=60`, {
+        json: true
+      })
 
-        if (content.FinalPage) {
-          break
-        } else {
-          page++
-        }
+      for (const group of content.relatedGroups) {
+        allies.push(group.id)
       }
 
       Cache.set(`groups.${groupid}`, relation, allies)
     }
 
     for (const group of userGroups) {
-      if (allies.includes(group.Id)) {
+      if (allies.includes(group.group.id)) {
         return true
       }
     }

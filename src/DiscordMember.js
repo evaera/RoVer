@@ -98,9 +98,9 @@ class DiscordMember {
       const apiRank = await DiscordServer.getRobloxMemberGroups(nicknameData.robloxId)
 
       for (const groups of apiRank) {
-        if (parseInt(groups.Id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
-          const rankMatch = groups.Role.match(/(.+(?:\]|\)|\}|\|))/)
-          nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.Role}]`
+        if (parseInt(groups.group.id) === parseInt(this.discordServer.getSetting('nicknameGroup'))) {
+          const rankMatch = groups.role.name.match(/(.+(?:\]|\)|\}|\|))/)
+          nicknameData.groupRank = rankMatch ? rankMatch[1] : `[${groups.role.name}]`
           break
         }
       }
@@ -253,7 +253,7 @@ class DiscordMember {
     if (!this.member.manageable || !botMember.hasPermission('MANAGE_ROLES')) {
       return status({
         status: false,
-        error: this.member.guild.ownerID === this.member.id ? '\n\nYou are the server owner. RoVer cannot make changes to you. This is a Discord restriction. If you want, you can change your own nickname.' : "\n\nRoVer's can't manage this user. Please have a server admin drag RoVer's role above all other roles and ensure RoVer has permission to modify roles in order to fix this problem.",
+        error: this.member.guild.ownerID === this.member.id ? '\n\nYou are the server owner. RoVer cannot make changes to you. This is a Discord restriction. If you want, you can change your own nickname.' : "\n\nRoVer can't manage this user. Please have a server admin drag RoVer's role above all other roles and ensure RoVer has permission to modify roles in order to fix this problem.",
         nonFatal: true
       })
     }
@@ -291,7 +291,7 @@ class DiscordMember {
         let apiUserData = {}
         try {
           apiUserData = await request({
-            uri: `http://api.roblox.com/users/${data.robloxId}`,
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}`,
             json: true,
             simple: false
           })
@@ -310,8 +310,8 @@ class DiscordMember {
           })
         }
 
-        if (apiUserData.Username) {
-          data.robloxUsername = apiUserData.Username
+        if (apiUserData.name) {
+          data.robloxUsername = apiUserData.name
         }
 
         // Cache data again

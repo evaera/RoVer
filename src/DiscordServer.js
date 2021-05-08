@@ -202,7 +202,7 @@ class DiscordServer {
     let groups = await Cache.get(`bindings.${userid}`, '__groups')
     if (!groups) {
       groups = await request({
-        uri: `http://api.roblox.com/users/${userid}/groups`,
+        uri: `https://groups.roblox.com/v2/users/${userid}/groups/roles`,
         json: true
       })
 
@@ -213,7 +213,7 @@ class DiscordServer {
       Cache.set(`bindings.${userid}`, '__groups', groups)
     }
 
-    return groups
+    return groups.data
   }
 
   /**
@@ -253,8 +253,8 @@ class DiscordServer {
 
         let rank = 0
         for (const groupObj of groups) {
-          if (groupObj.Id.toString() === group.id) {
-            rank = groupObj.Rank
+          if (groupObj.group.id.toString() === group.id) {
+            rank = groupObj.role.rank
             break
           }
         }
@@ -380,7 +380,11 @@ class DiscordServer {
    * @memberof DiscordServer
    */
   getWelcomeMessage (data, member) {
-    return Util.formatDataString(this.getSetting('welcomeMessage'), data, member)
+    if (this.hasCustomWelcomeMessage()) {
+      return Util.formatDataString(`You joined ${this.server.name}! Here's a message from the server owners: ${this.getSetting('welcomeMessage')}`, data, member)
+    } else {
+      return Util.formatDataString(this.getSetting('welcomeMessage'), data, member)
+    }
   }
 
   /**

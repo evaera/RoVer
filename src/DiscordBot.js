@@ -121,20 +121,6 @@ class DiscordBot {
       }, 5 * 60 * 1000)
     }
 
-    // Register commands
-    this.bot.registry
-      .registerGroup('rover', 'RoVer')
-      .registerDefaultTypes()
-      .registerDefaultGroups()
-      .registerDefaultCommands({
-        ping: false,
-        commandState: false,
-        prefix: true,
-        help: true,
-        unknownCommand: false
-      })
-      .registerCommandsIn(path.join(__dirname, 'commands'))
-
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
 

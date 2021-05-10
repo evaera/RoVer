@@ -2,7 +2,7 @@
   "dependencies": {
     "bufferutil": "^4.0.1",
     "common-tags": "^1.7.2",
-    "discord.js": "^12.5.1",
+    "discord.js": "git://github.com/discordjs/disocrd.js.git#d455cb65a6188e7d7b6720848b5ce37dbf8b5dff",
     "discord.js-commando": "git://github.com/discordjs/Commando.git#bdbd84e2a978322f3af12c21e729eb7b7cd4a3dc",
     "erlpack": "discordapp/erlpack",
     "express": "^4.15.2",
@@ -14,6 +14,9 @@
     "utf-8-validate": "^5.0.2",
     "uws": "^10.148.0",
     "zlib-sync": "^0.1.7"
+  },
+  "engine": {
+    "node": "14.x"
   },
   "name": "rover",
   "version": "1.0.0",

@@ -31,6 +31,7 @@ class DiscordBot {
   initialize () {
     this.bot = new Discord.Client({
       apiRequestMethod: config.apiRequestMethod || 'sequential',
+      intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
       disabledEvents: ['TYPING_START', 'VOICE_STATE_UPDATE', 'PRESENCE_UPDATE', 'MESSAGE_DELETE', 'MESSAGE_UPDATE', 'CHANNEL_PINS_UPDATE', 'MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE', 'MESSAGE_REACTION_REMOVE_ALL', 'CHANNEL_PINS_UPDATE', 'MESSAGE_DELETE_BULK', 'WEBHOOKS_UPDATE'],
       owner: config.owner || '0',
       commandPrefix: config.commandPrefix || '!',
@@ -38,9 +39,6 @@ class DiscordBot {
       disableMentions: 'everyone',
       messageCacheMaxSize: 0,
       retryLimit: 0,
-      ws: {
-        intents: ["GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES"],
-      },
     })
 
     this.bot.setProvider(new SettingProvider())
@@ -245,6 +243,8 @@ class DiscordBot {
 
     // Set status message to the default until we get info from master process
     this.bot.user.setActivity('rover.link', { type: "LISTENING" })
+    // Starts the ClientApplication used for Slash Commands.
+    this.bot.application.fetch()
   }
 
   /**

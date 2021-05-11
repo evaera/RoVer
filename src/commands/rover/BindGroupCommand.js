@@ -71,7 +71,7 @@ class BindGroupCommand extends Command {
       if (groupId.match(/[^\d]/) && groupId.toLowerCase() == "premium") {
         if (!config.cookie) {
           return msg.reply(
-            oneLine`:no_entry_sign: Unfortunately, due to Roblox API changes, an authorisation cookie needs to be set in the configuration for this VirtualGroup to work.`
+            oneLine`:no_entry_sign: Unfortunately, due to Roblox API changes, an authorization cookie needs to be set in the configuration for this VirtualGroup to work.`
           )
         }
       }

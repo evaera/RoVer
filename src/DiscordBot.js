@@ -384,6 +384,11 @@ class DiscordBot {
 
         const member = await server.getMember(id)
         if (!member) continue
+        if (
+          guild.verificationLevel === 'MEDIUM' && member.user.createdTimestamp < Date.now() - 300000 ||
+          guild.verificationLevel === 'HIGH' && member.joinedTimestamp < Date.now() - 600000 ||
+          guild.verificationLevel === 'VERY_HIGH'
+        ) continue
         const action = await member.verify({
           // We want to clear the group rank bindings cache because
           // this is the first iteration.

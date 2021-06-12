@@ -151,9 +151,9 @@ class WhoisCommand extends Command {
         Cache.set('users', id, data)
 
         // Remove excess new lines in the bio
-        while ((bio.match(/\n/mg) || []).length > 3) {
-          const lastN = bio.lastIndexOf('\n')
-          bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
+        while ((bio.match(/\n\n/mg) || []).length > 3) {
+          const lastN = bio.lastIndexOf('\n\n')
+          bio = bio.slice(0, lastN) + bio.slice(lastN + 2)
         }
 
         // Truncate bio if it's too long
@@ -178,12 +178,11 @@ class WhoisCommand extends Command {
             { name: 'Join Date', value: joinDate, inline: true }
           ]
         }
-
-        // Edit so past names don't show unless you actually have some!
-        if (pastNames && pastNames !== []) {
+        
+        if (apiUserData.displayName !== apiUserData.name) {
           embed.fields.push({
-            name: 'Past Usernames',
-            value: pastNames,
+            name: 'Display Name',
+            value: apiUserData.displayName,
             inline: true
           })
         }
@@ -218,7 +217,6 @@ class WhoisCommand extends Command {
 
         editMessage.edit({ embed: embed }).catch(console.error)
         
-        let edited = false
         try {
           const response = await request({
             uri: `https://scriptinghelpers.org/resources/get_profile_by_roblox_id/${encodeURIComponent(data.robloxId)}`,
@@ -228,7 +226,6 @@ class WhoisCommand extends Command {
           if (response.statusCode !== 404) {
             let shData = JSON.parse(response.body)
             Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', shData)
-            edited = true
             embed.fields.push({
               name: "Scripting Helpers",
               value: `[Profile Link](https://scriptinghelpers.org/user/${shData.roblox_username}) \nReputation: ${shData.reputation} \nRank: ${shData.rank}`,
@@ -248,12 +245,11 @@ class WhoisCommand extends Command {
         }
         
         if (devforumData) {
-          edited = true
           bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
           // Remove excess new lines in the bio
-          while ((bio.match(/\n/mg) || []).length > 3) {
-            const lastN = bio.lastIndexOf('\n')
-            bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
+          while ((bio.match(/\n\n/mg) || []).length > 3) {
+            const lastN = bio.lastIndexOf('\n\n')
+            bio = bio.slice(0, lastN) + bio.slice(lastN + 2)
           }
 
           // Truncate bio if it's too long
@@ -268,9 +264,15 @@ class WhoisCommand extends Command {
           })
         }
         
-        if (edited == true) {
-          editMessage.edit({ embed: embed }).catch(console.error)
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames && pastNames !== []) {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastNames,
+            inline: false
+          })
         }
+        editMessage.edit({ embed: embed }).catch(console.error)
       } else {
         editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
       }

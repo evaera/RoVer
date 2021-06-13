@@ -315,8 +315,8 @@ class DiscordMember {
           data.robloxUsername = apiUserData.name
         }
 
-        if (apiUserData.displayname) {
-          data.robloxDisplayName = apiUserData.displayname
+        if (apiUserData.displayName) {
+          data.robloxDisplayName = apiUserData.displayName
         }
 
         // Cache data again

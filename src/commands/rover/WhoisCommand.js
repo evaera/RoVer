@@ -182,7 +182,7 @@ class WhoisCommand extends Command {
         if (data.robloxUsername !== apiUserData.displayName) {
           embed.fields.push({
             name: "Display Name",
-            value: apiUserData.displayname,
+            value: apiUserData.displayName,
             inline: true
           })
         }

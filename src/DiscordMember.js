@@ -309,7 +309,7 @@ class DiscordMember {
           })
         }
 
-        if (apiUserData.errors && apiUserData.errors[0] && apiUserData.errors[0].code === 0) {
+        if (apiUserData.errors && apiUserData.errors[0]) {
           userRequestSucceeded = false
         }
 

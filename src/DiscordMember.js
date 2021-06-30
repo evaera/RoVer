@@ -172,6 +172,8 @@ class DiscordMember {
       cache: false
     })
 
+    let userRequestSucceeded = true
+
     // If options.message is provided, we reply to that message with a status update
     // and edit it with new info throughout the verification. It's also called upon
     // this function returning output, so we need a default state for it to be a
@@ -212,6 +214,10 @@ class DiscordMember {
             let welcomeMessage = this.discordServer.getWelcomeMessage(action, this.member)
             if (options.skipWelcomeMessage) {
               welcomeMessage = `${this.member.displayName} has been verified.`
+            }
+
+            if (!userRequestSucceeded) {
+              welcomeMessage += `\n\n**Warning: An error occured when fetching the latest information from Roblox, ${options.skipWelcomeMessage ? 'their' : 'your' } nickname may not be up-to-date!**`
             }
 
             statusMessage.edit(`${options.message.author}, :white_check_mark: ${welcomeMessage}`)
@@ -303,11 +309,8 @@ class DiscordMember {
           })
         }
 
-        if (apiUserData.errors && apiUserData.errors[0] && apiUserData.errors[0].code === 0) {
-          return status({
-            status: false,
-            error: 'Roblox is currently undergoing maintenance. Please try again later.'
-          })
+        if (apiUserData.errors && apiUserData.errors[0]) {
+          userRequestSucceeded = false
         }
 
         if (apiUserData.name) {

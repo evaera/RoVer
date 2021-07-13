@@ -322,6 +322,7 @@ class DiscordMember {
           data.robloxDisplayName = apiUserData.displayName
         } else {
           data.robloxDisplayName = data.robloxUsername
+        }
 
         // Cache data again
         Cache.set('users', this.id, data)

@@ -320,8 +320,6 @@ class DiscordMember {
 
         if (apiUserData.displayName) {
           data.robloxDisplayName = apiUserData.displayName
-        } else {
-          data.robloxDisplayName = data.robloxUsername
         }
 
         // Cache data again

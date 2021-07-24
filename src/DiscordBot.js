@@ -152,12 +152,7 @@ class DiscordBot {
       return false
     }
 
-    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
-      json: true,
-      headers: {
-        Authorization: `Bot ${config.token}`
-      }
-    })
+    const response = await global.Cache.get('blacklists', 'data')
 
     response.forEach(ban => {
       this.blacklist[ban.user.id] = true

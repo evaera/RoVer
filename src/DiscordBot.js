@@ -164,23 +164,6 @@ class DiscordBot {
     })
   }
 
-  async updateBlacklist () {
-    if (!config.banServer) {
-      return false
-    }
-
-    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
-      json: true,
-      headers: {
-        Authorization: `Bot ${config.token}`
-      }
-    })
-
-    response.forEach(ban => {
-      this.blacklist[ban.user.id] = true
-    })
-  }
-
   async updatePatrons (page, newAuthorizedOwners) {
     if (!page) {
       newAuthorizedOwners = []

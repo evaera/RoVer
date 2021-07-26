@@ -126,6 +126,17 @@ class GlobalCache {
       key: message.key
     })
   }
+  
+  /**
+   * Takes an array of ban objects
+   * @param {Array} bans The array of ban objects
+   * @memberof GlobalCache
+   */
+  setBlacklist (blacklists) {
+    const collection = this.getCollection('blacklists')
+    collection.data = blacklists
+    collection.created = Date.now()
+  }
 }
 
 /**

@@ -26,7 +26,7 @@ global.GlobalCache = new GlobalCache(shardingManager)
 
 ;(async () => {
   if (config.banServer) {
-    const banData = await request(`https://discord.com/api/v9/guilds/${config.banServer}/bans`, {
+    const res = await request(`https://discord.com/api/v9/guilds/${config.banServer}/bans`, {
       headers: {
         authorization: `Bot ${config.token}`
       },

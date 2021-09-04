@@ -39,7 +39,7 @@ class DiscordBot {
       messageCacheMaxSize: 0,
       retryLimit: 0,
       ws: {
-        intents: ["GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES"],
+        intents: ["GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
       },
     })
 

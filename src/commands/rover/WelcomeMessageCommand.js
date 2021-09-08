@@ -7,7 +7,7 @@ class WelcomeMessageCommand extends Command {
       name: 'welcomemessage',
       properName: 'WelcomeMessage',
       aliases: ['roverwelcomemessage'],
-      description: '`<Message>` Set the message the user gets when they join your server. This is only shown to verified members. Available replacements are %USERNAME%, %USERID%, %SERVER%, %DISCORDNAME%, and %DISCORDID%. Default: Welcome to %SERVER%, %USERNAME%!.',
+      description: '`<Message>` Set the message the user gets when they join your server. This is only shown to verified members. Available replacements are %SMARTNAME%, %USERNAME%, %DISPLAYNAME%, %USERID%, %SERVER%, %DISCORDNAME%, and %DISCORDID%. Default: Welcome to %SERVER%, %USERNAME%!.',
 
       args: [
         {

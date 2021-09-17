@@ -54,14 +54,22 @@ class UpdateCommand extends Command {
         {
           key: 'user',
           prompt: 'User to update',
-          type: 'user|role'
+          type: 'user|role',
+          default: false
         }
       ]
     })
   }
 
   hasPermission (msg) {
-    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.cache.find(role => role.name === 'RoVer Admin') || msg.member.roles.cache.find(role => role.name === 'RoVer Updater')
+    const msgArgs = msg.parseArgs()
+    return this.client.isOwner(msg.author) ||
+    msg.member.hasPermission(this.userPermissions) ||
+    msg.member.roles.cache.find(role => role.name === 'RoVer Admin') ||
+    msg.member.roles.cache.find(role => role.name === 'RoVer Updater') ||
+    !msgArgs ||
+    !msgArgs.match(/\S/) || // Don't match anything that is not whitespace
+    msgArgs.match(new RegExp(`^<?@?!?${msg.author.id}>?$`))
   }
 
   async fn (msg, args) {
@@ -69,13 +77,13 @@ class UpdateCommand extends Command {
     DiscordServer.clearMemberCache(target.id)
 
     const server = await this.discordBot.getServer(msg.guild.id)
-    if (!(target instanceof Role)) { // They want to update a specific user (roles have .hoist, users do not)
-      const member = await server.getMember(target.id)
+    if (!target || !(target instanceof Role)) { // They want to update a specific user (roles have .hoist, users do not), or no user was specified (self-update)
+      const member = target ? await server.getMember(target.id) : await server.getMember(msg.author.id)
       if (!member) {
         return msg.reply('User not in guild.')
       }
 
-      member.verify({ message: msg, skipWelcomeMessage: true })
+      member.verify({ message: msg, skipWelcomeMessage: member.id === msg.author.id })
     } else if (!this.discordBot.isPremium()) {
       return msg.reply('Sorry, updating more than one user is only available with RoVer Plus: <https://www.patreon.com/erynlynn>.')
     } else { // They want to update a whole role (premium feature)

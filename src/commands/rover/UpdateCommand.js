@@ -55,7 +55,7 @@ class UpdateCommand extends Command {
           key: 'user',
           prompt: 'User to update',
           type: 'user|role',
-          default: false
+          default: ''
         }
       ]
     })

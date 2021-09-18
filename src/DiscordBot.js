@@ -30,8 +30,6 @@ class DiscordBot {
    */
   initialize () {
     this.bot = new Discord.Client({
-      apiRequestMethod: config.apiRequestMethod || 'sequential',
-      disabledEvents: ['TYPING_START', 'VOICE_STATE_UPDATE', 'PRESENCE_UPDATE', 'MESSAGE_DELETE', 'MESSAGE_UPDATE', 'CHANNEL_PINS_UPDATE', 'MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE', 'MESSAGE_REACTION_REMOVE_ALL', 'CHANNEL_PINS_UPDATE', 'MESSAGE_DELETE_BULK', 'WEBHOOKS_UPDATE'],
       owner: config.owner || '0',
       commandPrefix: config.commandPrefix || '!',
       unknownCommandResponse: false,
@@ -39,7 +37,7 @@ class DiscordBot {
       messageCacheMaxSize: 0,
       retryLimit: 0,
       ws: {
-        intents: ["GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES"],
+        intents: ["GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES"],
       },
     })
 
@@ -152,29 +150,7 @@ class DiscordBot {
       return false
     }
 
-    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
-      json: true,
-      headers: {
-        Authorization: `Bot ${config.token}`
-      }
-    })
-
-    response.forEach(ban => {
-      this.blacklist[ban.user.id] = true
-    })
-  }
-
-  async updateBlacklist () {
-    if (!config.banServer) {
-      return false
-    }
-
-    const response = await request(`https://discord.com/api/v6/guilds/${config.banServer}/bans`, {
-      json: true,
-      headers: {
-        Authorization: `Bot ${config.token}`
-      }
-    })
+    const response = await global.Cache.get('blacklists', 'data')
 
     response.forEach(ban => {
       this.blacklist[ban.user.id] = true
@@ -384,6 +360,11 @@ class DiscordBot {
 
         const member = await server.getMember(id)
         if (!member) continue
+        if (
+          guild.verificationLevel === 'MEDIUM' && member.user.createdTimestamp < Date.now() - 300000 ||
+          guild.verificationLevel === 'HIGH' && member.joinedTimestamp < Date.now() - 600000 ||
+          guild.verificationLevel === 'VERY_HIGH'
+        ) continue
         const action = await member.verify({
           // We want to clear the group rank bindings cache because
           // this is the first iteration.

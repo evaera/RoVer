@@ -83,7 +83,7 @@ class UpdateCommand extends Command {
         return msg.reply('User not in guild.')
       }
 
-      member.verify({ message: msg, skipWelcomeMessage: member.id === msg.author.id })
+      member.verify({ message: msg, skipWelcomeMessage: member.id !== msg.author.id })
     } else if (!this.discordBot.isPremium()) {
       return msg.reply('Sorry, updating more than one user is only available with RoVer Plus: <https://www.patreon.com/erynlynn>.')
     } else { // They want to update a whole role (premium feature)

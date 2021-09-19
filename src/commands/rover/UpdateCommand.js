@@ -68,7 +68,6 @@ class UpdateCommand extends Command {
     msg.member.roles.cache.find(role => role.name === 'RoVer Admin') ||
     msg.member.roles.cache.find(role => role.name === 'RoVer Updater') ||
     !msgArgs ||
-    !msgArgs.match(/\S/) || // Don't match anything that is not whitespace
     msgArgs.match(new RegExp(`^<?@?!?${msg.author.id}>?$`))
   }
 

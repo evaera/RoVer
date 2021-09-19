@@ -76,7 +76,7 @@ class UpdateCommand extends Command {
     DiscordServer.clearMemberCache(target.id)
 
     const server = await this.discordBot.getServer(msg.guild.id)
-    if (!target || !(target instanceof Role)) { // They want to update a specific user (roles have .hoist, users do not), or no user was specified (self-update)
+    if (!target || !(target instanceof Role)) { // They want to update a specific user (not an instance of a Role), or no user was specified (self-update)
       const member = target ? await server.getMember(target.id) : await server.getMember(msg.author.id)
       if (!member) {
         return msg.reply('User not in guild.')

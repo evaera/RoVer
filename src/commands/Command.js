@@ -21,9 +21,11 @@ class Command extends Commando.Command {
 
   async run (msg, args, pattern) {
     this.server = msg.guild && await this.discordBot.getServer(msg.guild.id)
-    this.me = msg.guild.me
-    // Fetch the bot member in the case that .me is null
-    if (!this.me) this.me = await msg.guild.members.fetch(msg.client.user.id)
+    if (msg.channel.type !== 'dm') {
+      this.me = msg.guild.me
+      // Fetch the bot member in the case that .me is null
+      if (!this.me) this.me = await msg.guild.members.fetch(msg.client.user.id)
+    }
     return this.fn(msg, args, pattern)
   }
 }

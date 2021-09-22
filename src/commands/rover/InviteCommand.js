@@ -14,7 +14,7 @@ class InviteCommand extends Command {
   }
 
   async fn (msg) {
-    msg.author.send(this.discordBot.isPremium() ? 'Visit https://www.patreon.com/posts/rover-plus-28480174 to invite RoVer Plus' : `Use the following link to invite RoVer: <${config.invite}>`).then(() => {
+    msg.author.send(this.discordBot.isPremium() ? 'Visit https://www.patreon.com/posts/rover-plus-28480174 to invite RoVer Plus' : `${config.invite ? `Use the following link to invite RoVer: <${config.invite}>` : 'Visit https://rover.link to invite RoVer'}`).then(() => {
       msg.reply('Sent you a DM with information.')
     }).catch(() => {
       msg.reply('I can\'t seem to message you - please make sure your DMs are enabled!')

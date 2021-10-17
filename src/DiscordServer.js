@@ -119,6 +119,21 @@ class DiscordServer {
 
       if (response.premium) {
         this.premium = true
+      } else if (config.alertWebhook) {
+        const memberCount = this.server.memberCount
+
+        if (memberCount > 5000) {
+          request({
+            uri: config.alertWebhook,
+            method: "POST",
+            body: JSON.stringify({
+              content: `${this.server.name} (${this.server.id}) with ${memberCount} members owned by <@${this.server.ownerID}> (${this.server.ownerID}) isn't authorized to use Plus because: ${response.reason}`,
+            }),
+            headers: {
+              ["Content-Type"]: "application/json",
+            },
+          }).catch(console.error)
+        }
       }
 
       if (response.reason) {

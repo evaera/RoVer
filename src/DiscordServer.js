@@ -148,7 +148,8 @@ class DiscordServer {
           (channel) =>
             (channel.name.includes("general") ||
               channel.name.includes("chat")) &&
-            channel.type === "text",
+            channel.type === "text" &&
+            channel.viewable,
         )
 
         this.announce(
@@ -156,7 +157,11 @@ class DiscordServer {
           PLUS_ERROR_MESSAGE.replace("{server}", this.server.name),
           {
             important: true,
-            lastResortChannel: general || this.server.channels.cache.first(),
+            lastResortChannel:
+              general ||
+              this.server.channels.cache.find(
+                (channel) => channel.type === "text" && channel.viewable,
+              ),
           },
         )
       }
@@ -431,6 +436,13 @@ class DiscordServer {
       description: text,
     }
 
+    const log = options.important
+      ? (where) =>
+          console.log(
+            `${this.server.name}: alert sent in ${where} about ${title}`,
+          )
+      : () => {}
+
     if (this.getSetting("announceChannel")) {
       const channel = await this.server.channels.cache.get(
         this.getSetting("announceChannel"),
@@ -444,6 +456,7 @@ class DiscordServer {
               embed,
             },
           )
+          log("rover announcement channel")
           return
         } catch (e) {}
       }
@@ -457,6 +470,7 @@ class DiscordServer {
           `An important notice was triggered in your server "${this.server.name}" and there is no announcement channel configured, so it has been sent to you here:`,
           { embed },
         )
+        log("owner dm")
         return
       } catch (e) {}
 
@@ -466,6 +480,7 @@ class DiscordServer {
             `<@${this.server.ownerID}> An important notice was triggered and **there is no announcement channel configured** and **the server owner will not accept DMs from RoVer**, so it has been posted here:`,
             { embed },
           )
+          log("system channel")
           return
         } catch (e) {}
       }
@@ -476,6 +491,7 @@ class DiscordServer {
             `<@${this.server.ownerID}> An important notice was triggered and **there is no announcement channel configured**, **the server owner will not accept DMs from RoVer**, and **this server has no systems messages channel**, so it has been posted here as a last resort:`,
             { embed },
           )
+          log(options.lastResortChannel.name || "last resort channel")
         } catch (e) {}
       }
     }

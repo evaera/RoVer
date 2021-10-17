@@ -102,7 +102,7 @@ module.exports = class UpdateCommand extends Command {
       })
     } else if (!this.discordBot.isPremium()) {
       return msg.reply(
-        "Sorry, updating more than one user is only available with RoVer Plus: <https://www.patreon.com/erynlynn>.",
+        "Sorry, updating more than one user is only available with RoVer Plus: <https://rover.link/plus>.",
       )
     } else {
       // They want to update a whole role (premium feature)

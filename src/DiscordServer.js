@@ -6,6 +6,7 @@ const request = require("request-promise")
 const VirtualGroups = require("./VirtualGroups.js")
 const DiscordMember = require("./DiscordMember")
 const Util = require("./Util")
+const config = require("./data/client.json")
 
 // The default settings for DiscordServer.
 const DefaultSettings = {
@@ -43,6 +44,7 @@ class DiscordServer {
 
     this.ongoingBulkUpdate = false
     this.bulkUpdateCount = 0
+    this.premium = false
 
     setInterval(() => {
       this.verifyCooldowns = new Map()
@@ -61,10 +63,7 @@ class DiscordServer {
   }
 
   isAuthorized() {
-    return (
-      !this.discordBot.isPremium() ||
-      this.discordBot.authorizedOwners.includes(this.server.ownerID)
-    )
+    return !this.discordBot.isPremium() || this.premium
   }
 
   /**
@@ -100,6 +99,24 @@ class DiscordServer {
       this.settings.commando.prefix != null
     ) {
       this.server._commandPrefix = this.settings.commando.prefix
+    }
+
+    if (this.discordBot.isPremium()) {
+      const response = await request({
+        uri: `https://registry.rover.link/is-premium/${this.server.ownerID}`,
+        json: true,
+        headers: {
+          Authorization: `Bearer ${config.internalApiKey}`,
+        },
+      })
+
+      if (response.premium) {
+        this.premium = true
+      }
+
+      if (response.reason) {
+        this.premiumReason = response.reason
+      }
     }
 
     this.cleanupRankBindings()

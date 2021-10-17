@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+const crypto = require("crypto")
 
 /**
  * @module Util
@@ -25,17 +25,17 @@ module.exports = {
           ? data.robloxDisplayName + " (" + data.robloxUsername + ")"
           : data.robloxUsername
       }`,
-    };
+    }
 
     if (member != null) {
-      replacements["%DISCORDNAME%"] = member.user.username;
-      replacements["%DISCORDID%"] = member.id;
-      replacements["%SERVER%"] = member.guild.name;
+      replacements["%DISCORDNAME%"] = member.user.username
+      replacements["%DISCORDID%"] = member.id
+      replacements["%SERVER%"] = member.guild.name
     }
 
     return formatString.replace(/%\w+%/g, (all) => {
-      return typeof replacements[all] !== "undefined" ? replacements[all] : all;
-    });
+      return typeof replacements[all] !== "undefined" ? replacements[all] : all
+    })
   },
 
   /**
@@ -45,8 +45,8 @@ module.exports = {
    */
   async sleep(sleepTime) {
     return new Promise((resolve) => {
-      setTimeout(resolve, sleepTime);
-    });
+      setTimeout(resolve, sleepTime)
+    })
   },
 
   /**
@@ -56,23 +56,23 @@ module.exports = {
    * @returns {string} The output string
    */
   simplifyNumbers(numbers) {
-    const output = [];
-    let rangeStart;
+    const output = []
+    let rangeStart
     for (let i = 0; i < numbers.length; i++) {
-      const number = numbers[i];
-      const next = numbers[i + 1];
+      const number = numbers[i]
+      const next = numbers[i + 1]
 
       if (rangeStart != null && (next - number !== 1 || next == null)) {
-        output.push(`${rangeStart}-${number}`);
-        rangeStart = null;
+        output.push(`${rangeStart}-${number}`)
+        rangeStart = null
       } else if (next == null || next - number !== 1) {
-        output.push(`${number}`);
+        output.push(`${number}`)
       } else if (rangeStart == null) {
-        rangeStart = number;
+        rangeStart = number
       }
     }
 
-    return output.join(", ");
+    return output.join(", ")
   },
 
   /**
@@ -82,24 +82,24 @@ module.exports = {
    * @returns {string} The compressed number
    */
   toHumanReadableNumber(toCompress) {
-    const numberAbbreviations = ["K", "M", "B", "T"];
-    let compressedNumber = parseInt(toCompress, 10).toFixed(1);
+    const numberAbbreviations = ["K", "M", "B", "T"]
+    let compressedNumber = parseInt(toCompress, 10).toFixed(1)
 
     // Count how many times the place is shifted
-    let placeShift = 0;
+    let placeShift = 0
     while (compressedNumber >= 1000) {
-      compressedNumber = (compressedNumber / 1000).toFixed(1);
-      placeShift++;
+      compressedNumber = (compressedNumber / 1000).toFixed(1)
+      placeShift++
     }
 
     // If the number was simplified, put a number abbreviation on the end
     // Removes the decimal if it wasn't
     if (placeShift > 0) {
-      compressedNumber += numberAbbreviations[placeShift - 1];
+      compressedNumber += numberAbbreviations[placeShift - 1]
     } else {
-      compressedNumber = Math.floor(compressedNumber);
+      compressedNumber = Math.floor(compressedNumber)
     }
-    return compressedNumber;
+    return compressedNumber
   },
 
   /**
@@ -109,7 +109,7 @@ module.exports = {
    * @returns {string} The md5 hash of the string.
    */
   md5(string) {
-    return crypto.createHash("md5").update(string).digest("hex");
+    return crypto.createHash("md5").update(string).digest("hex")
   },
 
   /**
@@ -120,30 +120,30 @@ module.exports = {
    * @returns {string} The binding in human-readable format.
    */
   getBindingText(binding, addCodeBlock = false) {
-    let bindingMessage = addCodeBlock ? "```markdown\n" : "";
+    let bindingMessage = addCodeBlock ? "```markdown\n" : ""
 
     if (binding.groups == null) {
-      return `\nInvalid Group Format - Unbind role ${binding.role} to fix this problem.\n`;
+      return `\nInvalid Group Format - Unbind role ${binding.role} to fix this problem.\n`
     }
 
     for (const [index, group] of binding.groups.entries()) {
-      if (index > 0) bindingMessage += "...or\n";
+      if (index > 0) bindingMessage += "...or\n"
 
       if (group.id.match(/[a-z]/i)) {
-        bindingMessage += `# Virtual Group ${group.id}\n`;
+        bindingMessage += `# Virtual Group ${group.id}\n`
         bindingMessage += `Argument ${
           group.ranks.length > 0 ? group.ranks[0] : "none"
-        }`;
+        }`
       } else {
-        bindingMessage += `# Group ${group.id}\n`;
+        bindingMessage += `# Group ${group.id}\n`
         bindingMessage +=
           `Rank${group.ranks.length === 1 ? "" : "s"} ` +
-          module.exports.simplifyNumbers(group.ranks);
+          module.exports.simplifyNumbers(group.ranks)
       }
-      bindingMessage += "\n\n";
+      bindingMessage += "\n\n"
     }
 
-    return addCodeBlock ? bindingMessage + "\n```" : bindingMessage;
+    return addCodeBlock ? bindingMessage + "\n```" : bindingMessage
   },
 
   /**
@@ -155,6 +155,6 @@ module.exports = {
    * @returns {string} The link to the verification site
    */
   getVerifyLink(guild) {
-    return "<https://rover.link/verify>"; // /?from=${guild.id}`
+    return "<https://rover.link/verify>" // /?from=${guild.id}`
   },
-};
+}

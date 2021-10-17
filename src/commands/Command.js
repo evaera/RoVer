@@ -1,9 +1,8 @@
-const Commando = require('discord.js-commando')
+const Commando = require("discord.js-commando")
 
-module.exports =
-class Command extends Commando.Command {
-  constructor (client, info) {
-    info.group = 'rover'
+module.exports = class Command extends Commando.Command {
+  constructor(client, info) {
+    info.group = "rover"
     info.guildOnly = info.guildOnly == null ? true : info.guildOnly
     info.memberName = info.name
     info.argsPromptLimit = 1
@@ -11,16 +10,21 @@ class Command extends Commando.Command {
     super(client, info)
 
     this.properName = info.properName
-    this.userPermissions = info.userPermissions || ['MANAGE_GUILD']
+    this.userPermissions = info.userPermissions || ["MANAGE_GUILD"]
     this.discordBot = this.client.discordBot
   }
 
-  hasPermission (msg) {
-    return this.client.isOwner(msg.author) || !msg.guild || msg.member.hasPermission(this.userPermissions) || msg.member.roles.cache.find(role => role.name === 'RoVer Admin')
+  hasPermission(msg) {
+    return (
+      this.client.isOwner(msg.author) ||
+      !msg.guild ||
+      msg.member.hasPermission(this.userPermissions) ||
+      msg.member.roles.cache.find((role) => role.name === "RoVer Admin")
+    )
   }
 
-  async run (msg, args, pattern) {
-    this.server = msg.guild && await this.discordBot.getServer(msg.guild.id)
+  async run(msg, args, pattern) {
+    this.server = msg.guild && (await this.discordBot.getServer(msg.guild.id))
     this.me = msg.guild.me
     // Fetch the bot member in the case that .me is null
     if (!this.me) this.me = await msg.guild.members.fetch(msg.client.user.id)

@@ -1,49 +1,54 @@
 // This file is the entry point for the bot.
 
-const path = require('path')
-const request = require('request-promise')
-const Discord = require('discord.js')
-const { GlobalCache } = require('./GlobalCache')
-const config = require('./data/client.json')
-const updateServer = require('./UpdateServer.js')
-const Util = require('./Util.js')
+const path = require("path")
+const request = require("request-promise")
+const Discord = require("discord.js")
+const { GlobalCache } = require("./GlobalCache")
+const config = require("./data/client.json")
+const updateServer = require("./UpdateServer.js")
+const Util = require("./Util.js")
 
 // Set up the sharding manager, a helper class that separates handling
 // guilds into grouped processes called Shards.
-const shardingManager = new Discord.ShardingManager(path.join(__dirname, 'Shard.js'), {
-  token: config.token,
-  totalShards: config.totalShards || 'auto',
-  shardArgs: typeof v8debug === 'object' ? ['--inspect'] : undefined,
-  execArgv: ['--trace-warnings']
-})
+const shardingManager = new Discord.ShardingManager(
+  path.join(__dirname, "Shard.js"),
+  {
+    token: config.token,
+    totalShards: config.totalShards || "auto",
+    shardArgs: typeof v8debug === "object" ? ["--inspect"] : undefined,
+    execArgv: ["--trace-warnings"],
+  },
+)
 
-shardingManager.on('shardCreate', shard => {
+shardingManager.on("shardCreate", (shard) => {
   console.log(`Launching shard ${shard.id + 1}/${shardingManager.totalShards}`)
 })
 
 // Instantiate a GlobalCache, which will cache information from the shards.
 global.GlobalCache = new GlobalCache(shardingManager)
-
 ;(async () => {
   if (config.banServer) {
-    const res = await request(`https://discord.com/api/v9/guilds/${config.banServer}/bans`, {
-      headers: {
-        authorization: `Bot ${config.token}`
+    const res = await request(
+      `https://discord.com/api/v9/guilds/${config.banServer}/bans`,
+      {
+        headers: {
+          authorization: `Bot ${config.token}`,
+        },
+        json: true,
+        resolveWithFullResponse: true,
+        simple: false,
       },
-      json: true,
-      resolveWithFullResponse: true,
-      simple: false
-    }).catch(e => console.error(e))
+    ).catch((e) => console.error(e))
     if (res && res.statusCode === 200) global.GlobalCache.setBlacklist(res.body)
   }
-  await shardingManager.spawn(config.totalShards || 'auto', 8000, -1)
+  await shardingManager.spawn(config.totalShards || "auto", 8000, -1)
 })()
 
 // Set bot status messages
 let currentActivity = 0
 let totalUsers = null
 
-async function getNextActivity () {
+async function getNextActivity() {
   currentActivity++
   if (currentActivity === 2 && totalUsers == null) currentActivity++
 
@@ -53,22 +58,24 @@ async function getNextActivity () {
 
   switch (currentActivity) {
     case 0:
-      return { text: 'https://RoVer.link' }
+      return { text: "https://RoVer.link" }
     case 1: {
-      let totalGuilds = (await shardingManager.fetchClientValues('guilds.cache.size')).reduce((prev, val) => prev + val, 0)
+      let totalGuilds = (
+        await shardingManager.fetchClientValues("guilds.cache.size")
+      ).reduce((prev, val) => prev + val, 0)
       totalGuilds = Util.toHumanReadableNumber(totalGuilds)
-      return { text: `${totalGuilds} servers`, type: 'WATCHING' }
-    } case 2:
-      return { text: `${totalUsers} users`, type: 'LISTENING' }
+      return { text: `${totalGuilds} servers`, type: "WATCHING" }
+    }
+    case 2:
+      return { text: `${totalUsers} users`, type: "LISTENING" }
     case 3:
-      return { text: '!rover', type: 'LISTENING' }
+      return { text: "!rover", type: "LISTENING" }
   }
 }
 
-request('https://verify.eryn.io/api/count')
-  .then(count => {
-    totalUsers = Util.toHumanReadableNumber(count)
-  })
+request("https://verify.eryn.io/api/count").then((count) => {
+  totalUsers = Util.toHumanReadableNumber(count)
+})
 
 /*setInterval(async () => {
   if (shardingManager.shards.size === shardingManager.totalShards) {
@@ -87,7 +94,7 @@ if (config.updateServer) {
 if (config.mainLifeTime) {
   setTimeout(() => {
     shardingManager.respawn = false
-    shardingManager.broadcastEval('process.exit()')
+    shardingManager.broadcastEval("process.exit()")
   }, config.mainLifeTime * 1000)
 
   setTimeout(() => {

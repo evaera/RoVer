@@ -1,11 +1,11 @@
 /* global Cache */
 
-const path = require('path')
-const fs = require('mz/fs')
-const request = require('request-promise')
-const VirtualGroups = require('./VirtualGroups.js')
-const DiscordMember = require('./DiscordMember')
-const Util = require('./Util')
+const path = require("path")
+const fs = require("mz/fs")
+const request = require("request-promise")
+const VirtualGroups = require("./VirtualGroups.js")
+const DiscordMember = require("./DiscordMember")
+const Util = require("./Util")
 
 // The default settings for DiscordServer.
 const DefaultSettings = {
@@ -16,9 +16,9 @@ const DefaultSettings = {
   joinDM: true,
   verifyChannel: null,
   announceChannel: null,
-  nicknameFormat: '%USERNAME%',
-  welcomeMessage: 'Welcome to %SERVER%, %USERNAME%!',
-  groupRankBindings: []
+  nicknameFormat: "%USERNAME%",
+  welcomeMessage: "Welcome to %SERVER%, %USERNAME%!",
+  groupRankBindings: [],
 }
 
 /**
@@ -31,7 +31,7 @@ class DiscordServer {
    * @param {DiscordBot} discordBot The discord bot that the server belongs to.
    * @param {Snowflake} id The guild id
    */
-  constructor (discordBot, id) {
+  constructor(discordBot, id) {
     this.id = id
     this.discordBot = discordBot
     this.bot = this.discordBot.bot
@@ -53,15 +53,18 @@ class DiscordServer {
     this.settings = {}
     this.areSettingsLoaded = false
     this.ongoingSettingsUpdate = false
-    this.settingsPath = path.join(__dirname, 'data', `${id}.json`)
+    this.settingsPath = path.join(__dirname, "data", `${id}.json`)
 
     // We will load the settings in DiscordBot.getServer in order to know when
     // the server is ready from the promise it returns.
     // this.loadSettings();
   }
 
-  isAuthorized () {
-    return !this.discordBot.isPremium() || this.discordBot.authorizedOwners.includes(this.server.ownerID)
+  isAuthorized() {
+    return (
+      !this.discordBot.isPremium() ||
+      this.discordBot.authorizedOwners.includes(this.server.ownerID)
+    )
   }
 
   /**
@@ -70,13 +73,13 @@ class DiscordServer {
    * @returns {undefined}
    * @memberof DiscordServer
    */
-  async loadSettings () {
+  async loadSettings() {
     // If there's no settings file for this server, create one.
-    if (!await fs.exists(this.settingsPath)) {
+    if (!(await fs.exists(this.settingsPath))) {
       await fs.writeFile(this.settingsPath, JSON.stringify(DefaultSettings))
     }
 
-    if (!await fs.exists(this.settingsPath)) {
+    if (!(await fs.exists(this.settingsPath))) {
       throw new Error(`Couldn't write settings file: ${this.settingsPath}`)
     }
 
@@ -92,7 +95,10 @@ class DiscordServer {
       console.log(`${this.settingsPath} appears to be corrupted.`)
     }
 
-    if (this.settings.commando != null && this.settings.commando.prefix != null) {
+    if (
+      this.settings.commando != null &&
+      this.settings.commando.prefix != null
+    ) {
       this.server._commandPrefix = this.settings.commando.prefix
     }
 
@@ -105,8 +111,8 @@ class DiscordServer {
    * @param {Snowflake} id The Discord user id
    * @memberof DiscordServer
    */
-  static async clearMemberCache (id) {
-    await Cache.set('users', id, null)
+  static async clearMemberCache(id) {
+    await Cache.set("users", id, null)
   }
 
   /**
@@ -116,14 +122,16 @@ class DiscordServer {
    * @returns {any} The setting value
    * @memberof DiscordServer
    */
-  getSetting (key) {
+  getSetting(key) {
     if (!this.areSettingsLoaded) {
-      throw new Error('Attempt to get a setting from a server whose settings are not loaded')
+      throw new Error(
+        "Attempt to get a setting from a server whose settings are not loaded",
+      )
     }
 
-    if (typeof this.settings[key] !== 'undefined') {
+    if (typeof this.settings[key] !== "undefined") {
       return this.settings[key]
-    } else if (typeof DefaultSettings[key] !== 'undefined') {
+    } else if (typeof DefaultSettings[key] !== "undefined") {
       return DefaultSettings[key]
     } else {
       return null
@@ -136,22 +144,24 @@ class DiscordServer {
    * @param {any} value The setting value to set
    * @memberof DiscordServer
    */
-  async setSetting (key, value) {
+  async setSetting(key, value) {
     if (!this.areSettingsLoaded) {
-      throw new Error('Attempt to change a setting from a server whose settings are not loaded')
+      throw new Error(
+        "Attempt to change a setting from a server whose settings are not loaded",
+      )
     }
     this.ongoingSettingsUpdate = true
 
     this.settings[key] = value
 
-    const tmpSettingsPath = this.settingsPath + '.tmp'
+    const tmpSettingsPath = this.settingsPath + ".tmp"
     await fs.writeFile(tmpSettingsPath, JSON.stringify(this.settings))
 
     try {
-      JSON.parse(await fs.readFile(tmpSettingsPath, 'utf8')) // Throws if file got corrupted
+      JSON.parse(await fs.readFile(tmpSettingsPath, "utf8")) // Throws if file got corrupted
     } catch (e) {
       this.ongoingSettingsUpdate = false
-      throw new Error('Atomic save failed: file corrupted. Try again.')
+      throw new Error("Atomic save failed: file corrupted. Try again.")
     }
 
     await fs.rename(tmpSettingsPath, this.settingsPath)
@@ -165,15 +175,15 @@ class DiscordServer {
    * @returns {object} The binding in the new format
    * @memberof DiscordServer
    */
-  static convertOldBinding (binding) {
+  static convertOldBinding(binding) {
     const newBinding = { role: binding.role }
 
     const ranks = []
-    if (binding.operator === 'gt') {
+    if (binding.operator === "gt") {
       for (let i = binding.rank; i <= 255; i++) {
         ranks.push(i)
       }
-    } else if (binding.operator === 'lt') {
+    } else if (binding.operator === "lt") {
       for (let i = 1; i <= binding.rank; i++) {
         ranks.push(i)
       }
@@ -184,8 +194,8 @@ class DiscordServer {
     newBinding.groups = [
       {
         id: binding.group,
-        ranks
-      }
+        ranks,
+      },
     ]
 
     return newBinding
@@ -198,19 +208,21 @@ class DiscordServer {
    * @returns {object} The group information
    * @memberof DiscordServer
    */
-  static async getRobloxMemberGroups (userid) {
-    let groups = await Cache.get(`bindings.${userid}`, '__groups')
+  static async getRobloxMemberGroups(userid) {
+    let groups = await Cache.get(`bindings.${userid}`, "__groups")
     if (!groups) {
       groups = await request({
         uri: `https://groups.roblox.com/v2/users/${userid}/groups/roles`,
-        json: true
+        json: true,
       })
 
       if (!groups) {
-        throw new Error('Group rank HTTP request is malformed or in unknown format')
+        throw new Error(
+          "Group rank HTTP request is malformed or in unknown format",
+        )
       }
 
-      Cache.set(`bindings.${userid}`, '__groups', groups)
+      Cache.set(`bindings.${userid}`, "__groups", groups)
     }
 
     return groups.data
@@ -226,7 +238,7 @@ class DiscordServer {
    * @returns {boolean} The group binding resolution
    * @memberof DiscordServer
    */
-  static async resolveGroupRankBinding (binding, userid, username) {
+  static async resolveGroupRankBinding(binding, userid, username) {
     if (binding.group != null) {
       binding = this.convertOldBinding(binding)
     }
@@ -244,7 +256,11 @@ class DiscordServer {
 
     for (const group of binding.groups) {
       if (VirtualGroups[group.id]) {
-        returnValue = await VirtualGroups[group.id]({ id: userid, username }, group.ranks[0], DiscordServer)
+        returnValue = await VirtualGroups[group.id](
+          { id: userid, username },
+          group.ranks[0],
+          DiscordServer,
+        )
 
         if (returnValue) break
       } else {
@@ -276,22 +292,22 @@ class DiscordServer {
    * @param {Snowflake} roleid The role id to clear all bindings that are associated with it.
    * @memberof DiscordServer
    */
-  deleteGroupRankBinding (roleid) {
-    if (roleid === 'all') {
-      return this.setSetting('groupRankBindings', [])
+  deleteGroupRankBinding(roleid) {
+    if (roleid === "all") {
+      return this.setSetting("groupRankBindings", [])
     }
 
-    const rankBindings = this.getSetting('groupRankBindings')
+    const rankBindings = this.getSetting("groupRankBindings")
 
     for (let i = 0; i < rankBindings.length; i++) {
       const binding = rankBindings[i]
 
-      if (binding.role === roleid || roleid === 'all') {
+      if (binding.role === roleid || roleid === "all") {
         rankBindings.splice(i, 1)
       }
     }
 
-    this.setSetting('groupRankBindings', rankBindings)
+    this.setSetting("groupRankBindings", rankBindings)
   }
 
   /**
@@ -300,26 +316,39 @@ class DiscordServer {
    * @param {Channel} [noticeChannel] The channel to post the deletion notice to in a last resort if the owner is unreachable
    * @memberof DiscordServer
    */
-  async cleanupRankBindings (lastResortChannel) {
-    const verifiedRole = this.getSetting('verifiedRole')
-    const unverifiedRole = this.getSetting('verifiedRemovedRole')
+  async cleanupRankBindings(lastResortChannel) {
+    const verifiedRole = this.getSetting("verifiedRole")
+    const unverifiedRole = this.getSetting("verifiedRemovedRole")
 
-    if (verifiedRole && !await this.server.roles.fetch(verifiedRole)) {
-      this.setSetting('verifiedRole', null)
-      this.announce('Verified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the verified role, so users will no longer get that when they verify.', { important: true, lastResortChannel })
+    if (verifiedRole && !(await this.server.roles.fetch(verifiedRole))) {
+      this.setSetting("verifiedRole", null)
+      this.announce(
+        "Verified Role Deleted",
+        "Heads up! Looks like you (or someone) has deleted the verified role, so users will no longer get that when they verify.",
+        { important: true, lastResortChannel },
+      )
     }
 
-    if (unverifiedRole && !await this.server.roles.fetch(unverifiedRole)) {
-      this.setSetting('verifiedRemovedRole', null)
-      this.announce('Unverified Role Deleted', 'Heads up! Looks like you (or someone) has deleted the unverified role, so unverified users will no longer receive that role.', { important: true, lastResortChannel })
+    if (unverifiedRole && !(await this.server.roles.fetch(unverifiedRole))) {
+      this.setSetting("verifiedRemovedRole", null)
+      this.announce(
+        "Unverified Role Deleted",
+        "Heads up! Looks like you (or someone) has deleted the unverified role, so unverified users will no longer receive that role.",
+        { important: true, lastResortChannel },
+      )
     }
 
-    for (const binding of this.getSetting('groupRankBindings')) {
+    for (const binding of this.getSetting("groupRankBindings")) {
       const id = binding.role
-      if (!await this.server.roles.fetch(id)) {
+      if (!(await this.server.roles.fetch(id))) {
         this.deleteGroupRankBinding(id)
 
-        this.announce('Bound Role Deleted', 'Heads up! Looks like you (or someone) has deleted a Discord role that was bound to ' + Util.getBindingText(binding, true), { important: true, lastResortChannel })
+        this.announce(
+          "Bound Role Deleted",
+          "Heads up! Looks like you (or someone) has deleted a Discord role that was bound to " +
+            Util.getBindingText(binding, true),
+          { important: true, lastResortChannel },
+        )
       }
     }
   }
@@ -333,19 +362,23 @@ class DiscordServer {
    * @param {boolean} options.important If this is an important announcement, the server owner will be mentioned or DM'd if no announce channel is set.
    * @memberof DiscordServer
    */
-  async announce (title, text, options = {}) {
+  async announce(title, text, options = {}) {
     const embed = {
       color: options.important ? 0xe74c3c : 0x0064ba,
       title,
-      description: text
+      description: text,
     }
 
-    if (this.getSetting('announceChannel')) {
-      const channel = await this.server.channels.cache.get(this.getSetting('announceChannel'))
+    if (this.getSetting("announceChannel")) {
+      const channel = await this.server.channels.cache.get(
+        this.getSetting("announceChannel"),
+      )
 
       if (channel) {
         try {
-          await channel.send(options.important ? `${this.server.owner}` : '', { embed })
+          await channel.send(options.important ? `${this.server.owner}` : "", {
+            embed,
+          })
           return
         } catch (e) {}
       }
@@ -353,20 +386,29 @@ class DiscordServer {
 
     if (options.important) {
       try {
-        await this.server.owner.send(`An important notice was triggered in your server "${this.server.name}" and there is no announcement channel configured, so it has been sent to you here:`, { embed })
+        await this.server.owner.send(
+          `An important notice was triggered in your server "${this.server.name}" and there is no announcement channel configured, so it has been sent to you here:`,
+          { embed },
+        )
         return
       } catch (e) {}
 
       if (this.server.systemChannel) {
         try {
-          await this.server.systemChannel.send(`${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here:`, { embed })
+          await this.server.systemChannel.send(
+            `${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here:`,
+            { embed },
+          )
           return
         } catch (e) {}
       }
 
       if (options.lastResortChannel) {
         try {
-          await options.lastResortChannel.send(`${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here as a last resort:`, { embed })
+          await options.lastResortChannel.send(
+            `${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here as a last resort:`,
+            { embed },
+          )
         } catch (e) {}
       }
     }
@@ -379,11 +421,23 @@ class DiscordServer {
    * @returns {string} The processed string
    * @memberof DiscordServer
    */
-  getWelcomeMessage (data, member) {
+  getWelcomeMessage(data, member) {
     if (this.hasCustomWelcomeMessage()) {
-      return Util.formatDataString(`You joined ${this.server.name}! Here's a message from the server owners: ${this.getSetting('welcomeMessage')}`, data, member)
+      return Util.formatDataString(
+        `You joined ${
+          this.server.name
+        }! Here's a message from the server owners: ${this.getSetting(
+          "welcomeMessage",
+        )}`,
+        data,
+        member,
+      )
     } else {
-      return Util.formatDataString(this.getSetting('welcomeMessage'), data, member)
+      return Util.formatDataString(
+        this.getSetting("welcomeMessage"),
+        data,
+        member,
+      )
     }
   }
 
@@ -392,8 +446,8 @@ class DiscordServer {
    * @returns {boolean} True if this server has a custom welcome message
    * @memberof DiscordServer
    */
-  hasCustomWelcomeMessage () {
-    return DefaultSettings.welcomeMessage !== this.getSetting('welcomeMessage')
+  hasCustomWelcomeMessage() {
+    return DefaultSettings.welcomeMessage !== this.getSetting("welcomeMessage")
   }
 
   /**
@@ -402,7 +456,7 @@ class DiscordServer {
    * @returns {Promise<DiscordMember>} The new discord member
    * @memberof DiscordServer
    */
-  async getMember (id) {
+  async getMember(id) {
     return DiscordMember.new(this, id)
   }
 
@@ -413,19 +467,19 @@ class DiscordServer {
    * @returns {boolean} True if the role is in use
    * @memberof DiscordServer
    */
-  isRoleInUse (id) {
-    if (this.getSetting('verifiedRole') === id) return true
-    if (this.getSetting('verifiedRemovedRole') === id) return true
+  isRoleInUse(id) {
+    if (this.getSetting("verifiedRole") === id) return true
+    if (this.getSetting("verifiedRemovedRole") === id) return true
 
-    for (const binding of this.getSetting('groupRankBindings')) {
+    for (const binding of this.getSetting("groupRankBindings")) {
       if (binding.role === id) return true
     }
 
     return false
   }
 
-  canManageRole (roleResolvable) {
-    if (!this.server.me.hasPermission('MANAGE_ROLES')) return false
+  canManageRole(roleResolvable) {
+    if (!this.server.me.hasPermission("MANAGE_ROLES")) return false
 
     const role = this.server.roles.cache.get(roleResolvable)
 

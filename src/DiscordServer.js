@@ -101,6 +101,12 @@ class DiscordServer {
       this.server._commandPrefix = this.settings.commando.prefix
     }
 
+    await this.checkPremium()
+
+    this.cleanupRankBindings()
+  }
+
+  async checkPremium() {
     if (this.discordBot.isPremium()) {
       if (config.patreonOverrideOwners.includes(this.server.ownerID)) {
         this.premium = true
@@ -140,8 +146,6 @@ class DiscordServer {
         this.premiumReason = response.reason
       }
     }
-
-    this.cleanupRankBindings()
   }
 
   /**

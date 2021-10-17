@@ -119,6 +119,7 @@ class DiscordBot {
 
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor((msg) => {
+        if (!msg.guild) return
         const server = this.servers[msg.guild.id]
 
         if (server) {

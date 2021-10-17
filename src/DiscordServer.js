@@ -102,6 +102,13 @@ class DiscordServer {
     }
 
     if (this.discordBot.isPremium()) {
+      if (config.patreonOverrideOwners.includes(this.server.ownerID)) {
+        this.premium = true
+        this.premiumReason = "Free lifetime"
+
+        return
+      }
+
       const response = await request({
         uri: `https://registry.rover.link/is-premium/${this.server.ownerID}`,
         json: true,

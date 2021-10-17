@@ -8,6 +8,9 @@ const DiscordMember = require("./DiscordMember")
 const Util = require("./Util")
 const config = require("./data/client.json")
 
+const PLUS_ERROR_MESSAGE =
+  "There's something wrong with your RoVer Plus subscription in your `{server}` server. Please have the owner of the subscription go to <https://rover.link/plus> and log in with Patreon. If this issue is not corrected by Tuesday, October 19, 2021, your server will lose Plus access. If you can't figure out what's wrong, please join our support server (link on website) and ask for help in the Patrons channel"
+
 // The default settings for DiscordServer.
 const DefaultSettings = {
   verifiedRole: null,
@@ -140,6 +143,22 @@ class DiscordServer {
             },
           }).catch(console.error)
         }
+
+        const general = this.server.channels.cache.find(
+          (channel) =>
+            (channel.name.includes("general") ||
+              channel.name.includes("chat")) &&
+            channel.type === "text",
+        )
+
+        this.announce(
+          "RoVer Plus Subscription Error",
+          PLUS_ERROR_MESSAGE.replace("{server}", this.server.name),
+          {
+            important: true,
+            lastResortChannel: general || this.server.channels.cache.first(),
+          },
+        )
       }
 
       if (response.reason) {
@@ -419,15 +438,20 @@ class DiscordServer {
 
       if (channel) {
         try {
-          await channel.send(options.important ? `${this.server.owner}` : "", {
-            embed,
-          })
+          await channel.send(
+            options.important ? `<@${this.server.ownerID}>` : "",
+            {
+              embed,
+            },
+          )
           return
         } catch (e) {}
       }
     }
 
     if (options.important) {
+      await this.server.members.fetch(this.server.ownerID)
+
       try {
         await this.server.owner.send(
           `An important notice was triggered in your server "${this.server.name}" and there is no announcement channel configured, so it has been sent to you here:`,
@@ -439,7 +463,7 @@ class DiscordServer {
       if (this.server.systemChannel) {
         try {
           await this.server.systemChannel.send(
-            `${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here:`,
+            `<@${this.server.ownerID}> An important notice was triggered and **there is no announcement channel configured** and **the server owner will not accept DMs from RoVer**, so it has been posted here:`,
             { embed },
           )
           return
@@ -449,7 +473,7 @@ class DiscordServer {
       if (options.lastResortChannel) {
         try {
           await options.lastResortChannel.send(
-            `${this.server.owner} An important notice was triggered and there is no announcement channel configured and the server owner will not accept DMs from RoVer, so it has been posted here as a last resort:`,
+            `<@${this.server.ownerID}> An important notice was triggered and **there is no announcement channel configured**, **the server owner will not accept DMs from RoVer**, and **this server has no systems messages channel**, so it has been posted here as a last resort:`,
             { embed },
           )
         } catch (e) {}

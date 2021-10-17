@@ -9,6 +9,9 @@ const SettingProvider = require("./commands/SettingProvider")
 const Util = require("./Util")
 const fs = require("mz/fs")
 
+const PLUS_ERROR_MESSAGE =
+  "Hey, server staff! There's something wrong with your subscription. Please have the owner of the subscription go to <https://rover.link/plus> and log in with Patreon. If this issue is not corrected by Tuesday, October 19, 2021, your server will lose Plus access. If you can't figure out what's wrong, please join our support server (link on website) and ask for help in the Patrons channel"
+
 if (config.loud)
   requestDebug(request, (type, data) =>
     console.log(`${type} ${data.debugId} : ${data.uri || data.statusCode}`),
@@ -134,9 +137,7 @@ class DiscordBot {
             //   }`,
             // ) // notify sender to donate only if they're an "admin"
             // return "not_premium"
-            msg.channel.send(
-              "Hey, server staff! There's something wrong with your subscription. Please have the owner of the subscription go to <https://rover.link/plus> and log in with Patreon. If this issue is not corrected by Tuesday, October 19, 2021, your server will lose Plus access. If you can't figure out what's wrong, please join our support server (link on website) and ask for help in the Patrons channel",
-            )
+            msg.channel.send(PLUS_ERROR_MESSAGE)
           }
         } else {
           // msg.reply(
@@ -151,9 +152,7 @@ class DiscordBot {
               // msg.reply(
               //   `Sorry, it turns out this server isn't authorized to use Plus. Have the server owner or staff visit <https://rover.link/plus> for more info.\n\nUnauthorized reason: ${server.premiumReason}`,
               // )
-              msg.channel.send(
-                "Hey, server staff! There's something wrong with your subscription. Please have the owner of the subscription go to <https://rover.link/plus> and log in with Patreon. If this issue is not corrected by Tuesday, October 19, 2021, your server will lose Plus access. If you can't figure out what's wrong, please join our support server (link on website) and ask for help in the Patrons channel",
-              )
+              msg.channel.send(PLUS_ERROR_MESSAGE)
             }
           })
           // return "not_sure_if_premium"

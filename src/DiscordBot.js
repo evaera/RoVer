@@ -9,9 +9,6 @@ const SettingProvider = require("./commands/SettingProvider")
 const Util = require("./Util")
 const fs = require("mz/fs")
 
-const PLUS_ERROR_MESSAGE =
-  "Hey, server staff! There's something wrong with your subscription. Please have the owner of the subscription go to <https://rover.link/plus> and log in with Patreon. If this issue is not corrected by Tuesday, October 19, 2021, your server will lose Plus access. If you can't figure out what's wrong, please join our support server (link on website) and ask for help in the Patrons channel"
-
 if (config.loud)
   requestDebug(request, (type, data) =>
     console.log(`${type} ${data.debugId} : ${data.uri || data.statusCode}`),
@@ -127,35 +124,30 @@ class DiscordBot {
 
         if (server) {
           if (!server.isAuthorized()) {
-            // msg.reply(
-            //   `Sorry, this server isn't authorized to use RoVer Plus.${
-            //     msg.member.hasPermission(["MANAGE_GUILD"])
-            //       ? " The server owner needs to get plus at <https://rover.link/plus>, or you can invite the regular RoVer bot at <https://RoVer.link>."
-            //       : ""
-            //   } If you are a patron encountering this issue, try visiting <https://rover.link/plus>.\n\nUnauthorized reason: ${
-            //     server.premiumReason
-            //   }`,
-            // ) // notify sender to donate only if they're an "admin"
-            // return "not_premium"
-            msg.channel.send(PLUS_ERROR_MESSAGE)
+            msg.reply(
+              `Sorry, this server isn't authorized to use RoVer Plus.${
+                msg.member.hasPermission(["MANAGE_GUILD"])
+                  ? " The server owner needs to get plus at <https://rover.link/plus>, or you can invite the regular RoVer bot at <https://RoVer.link>."
+                  : ""
+              } If you are a patron encountering this issue, try visiting <https://rover.link/plus>.\n\nUnauthorized reason: ${
+                server.premiumReason
+              }`,
+            ) // notify sender to donate only if they're an "admin"
+            return "not_premium"
           }
         } else {
-          // msg.reply(
-          //   "Hold on, checking if this server is authorized to use Plus...",
-          // )
           this.getServer(msg.guild.id).then((server) => {
             if (server.isAuthorized()) {
-              // msg.reply(
-              //   "Hooray! This server is authorized. Please run your command again.",
-              // )
+              if (msg.command) {
+                msg.run()
+              }
             } else {
-              // msg.reply(
-              //   `Sorry, it turns out this server isn't authorized to use Plus. Have the server owner or staff visit <https://rover.link/plus> for more info.\n\nUnauthorized reason: ${server.premiumReason}`,
-              // )
-              msg.channel.send(PLUS_ERROR_MESSAGE)
+              msg.reply(
+                `Sorry, this server isn't authorized to use RoVer Plus. Have the server owner or staff visit <https://rover.link/plus> for more info.\n\nUnauthorized reason: ${server.premiumReason}`,
+              )
             }
           })
-          // return "not_sure_if_premium"
+          return "not_sure_if_premium"
         }
       })
     }

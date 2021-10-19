@@ -5,7 +5,7 @@ module.exports = class RecheckCOmmand extends Command {
     super(client, {
       name: "recheck",
       properName: "Recheck",
-      aliases: [],
+      aliases: ["subscription"],
       description: "Rechecks premium status",
       throttling: { usages: 1, duration: 30 },
     })

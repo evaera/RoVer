@@ -151,9 +151,9 @@ class DiscordMember {
       await this.discordServer.loadSettings()
     }
 
-    // if (!this.discordServer.isAuthorized()) {
-    //   return
-    // }
+    if (!this.discordServer.isAuthorized()) {
+      return
+    }
 
     // We only want to cleanup rank bindings if this is a manually-invoked verification.
     if (options.clearBindingsCache !== false) {

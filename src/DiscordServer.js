@@ -8,9 +8,6 @@ const DiscordMember = require("./DiscordMember")
 const Util = require("./Util")
 const config = require("./data/client.json")
 
-const PLUS_ERROR_MESSAGE =
-  "There's something wrong with your RoVer Plus subscription in your `{server}` server. Please have the owner of the subscription go to <https://rover.link/plus> and log in with Patreon. If this issue is not corrected by Tuesday, October 19, 2021, your server will lose Plus access. If you can't figure out what's wrong, please join our support server (link on website) and ask for help in the Patrons channel"
-
 // The default settings for DiscordServer.
 const DefaultSettings = {
   verifiedRole: null,
@@ -128,42 +125,6 @@ class DiscordServer {
 
       if (response.premium) {
         this.premium = true
-      } else if (config.alertWebhook) {
-        const memberCount = this.server.memberCount
-
-        if (memberCount > 5000) {
-          request({
-            uri: config.alertWebhook,
-            method: "POST",
-            body: JSON.stringify({
-              content: `${this.server.name} (${this.server.id}) with ${memberCount} members owned by <@${this.server.ownerID}> (${this.server.ownerID}) isn't authorized to use Plus because: ${response.reason}`,
-            }),
-            headers: {
-              ["Content-Type"]: "application/json",
-            },
-          }).catch(console.error)
-        }
-
-        const general = this.server.channels.cache.find(
-          (channel) =>
-            (channel.name.includes("general") ||
-              channel.name.includes("chat")) &&
-            channel.type === "text" &&
-            channel.viewable,
-        )
-
-        this.announce(
-          "RoVer Plus Subscription Error",
-          PLUS_ERROR_MESSAGE.replace("{server}", this.server.name),
-          {
-            important: true,
-            lastResortChannel:
-              general ||
-              this.server.channels.cache.find(
-                (channel) => channel.type === "text" && channel.viewable,
-              ),
-          },
-        )
       }
 
       if (response.reason) {
@@ -436,13 +397,6 @@ class DiscordServer {
       description: text,
     }
 
-    const log = options.important
-      ? (where) =>
-          console.log(
-            `${this.server.name}: alert sent in ${where} about ${title}`,
-          )
-      : () => {}
-
     if (this.getSetting("announceChannel")) {
       const channel = await this.server.channels.cache.get(
         this.getSetting("announceChannel"),
@@ -456,7 +410,6 @@ class DiscordServer {
               embed,
             },
           )
-          log("rover announcement channel")
           return
         } catch (e) {}
       }
@@ -470,7 +423,6 @@ class DiscordServer {
           `An important notice was triggered in your server "${this.server.name}" and there is no announcement channel configured, so it has been sent to you here:`,
           { embed },
         )
-        log("owner dm")
         return
       } catch (e) {}
 
@@ -480,7 +432,6 @@ class DiscordServer {
             `<@${this.server.ownerID}> An important notice was triggered and **there is no announcement channel configured** and **the server owner will not accept DMs from RoVer**, so it has been posted here:`,
             { embed },
           )
-          log("system channel")
           return
         } catch (e) {}
       }
@@ -491,7 +442,6 @@ class DiscordServer {
             `<@${this.server.ownerID}> An important notice was triggered and **there is no announcement channel configured**, **the server owner will not accept DMs from RoVer**, and **this server has no systems messages channel**, so it has been posted here as a last resort:`,
             { embed },
           )
-          log(options.lastResortChannel.name || "last resort channel")
         } catch (e) {}
       }
     }

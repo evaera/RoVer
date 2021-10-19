@@ -14,6 +14,13 @@ if (config.loud)
     console.log(`${type} ${data.debugId} : ${data.uri || data.statusCode}`),
   )
 
+const getUnauthorizedMessage = (member, server) =>
+  `Sorry, this server isn't authorized to use RoVer Plus.\n\n${
+    member.hasPermission(["MANAGE_GUILD"])
+      ? "The server owner needs to get plus at <https://rover.link/plus>, or you can invite the regular RoVer bot at <https://RoVer.link>."
+      : "**This isn't your fault, and there's nothing you can do** - please ask the server staff to update their RoVer Plus subscription."
+  } \n\nUnauthorized reason: ${server.premiumReason}`
+
 /**
  * The main Discord bot class, only one per shard.
  * @class DiscordBot
@@ -126,15 +133,7 @@ class DiscordBot {
 
         if (server) {
           if (!server.isAuthorized()) {
-            msg.reply(
-              `Sorry, this server isn't authorized to use RoVer Plus.${
-                msg.member.hasPermission(["MANAGE_GUILD"])
-                  ? " The server owner needs to get plus at <https://rover.link/plus>, or you can invite the regular RoVer bot at <https://RoVer.link>."
-                  : ""
-              } If you are a patron encountering this issue, try visiting <https://rover.link/plus>.\n\nUnauthorized reason: ${
-                server.premiumReason
-              }`,
-            ) // notify sender to donate only if they're an "admin"
+            msg.reply(getUnauthorizedMessage(msg.member, server)) // notify sender to donate only if they're an "admin"
             return "not_premium"
           }
         } else {
@@ -144,9 +143,7 @@ class DiscordBot {
                 msg.run()
               }
             } else {
-              msg.reply(
-                `Sorry, this server isn't authorized to use RoVer Plus. Have the server owner or staff visit <https://rover.link/plus> for more info.\n\nUnauthorized reason: ${server.premiumReason}`,
-              )
+              msg.reply(getUnauthorizedMessage(msg.member, server))
             }
           })
           return "not_sure_if_premium"

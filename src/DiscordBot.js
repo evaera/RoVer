@@ -120,6 +120,8 @@ class DiscordBot {
     if (this.isPremium()) {
       this.bot.dispatcher.addInhibitor((msg) => {
         if (!msg.guild) return
+        if (msg.command.name === "subscription") return
+
         const server = this.servers[msg.guild.id]
 
         if (server) {

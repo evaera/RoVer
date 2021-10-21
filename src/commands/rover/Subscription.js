@@ -1,4 +1,5 @@
 const Command = require("../Command")
+const Accolades = require("../../Accolades.json")
 
 module.exports = class SubscriptionCommand extends Command {
   constructor(client) {

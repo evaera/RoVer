@@ -7,7 +7,7 @@ module.exports = class Command extends Commando.Command {
     info.memberName = info.name
     info.argsPromptLimit = 1
 
-    super(client, info);
+    super(client, info)
 
     this.properName = info.properName
     this.userPermissions = info.userPermissions || ["MANAGE_GUILD"]

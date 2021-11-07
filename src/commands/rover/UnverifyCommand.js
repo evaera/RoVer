@@ -1,4 +1,4 @@
-const Command = require("../Command");
+const Command = require("../Command")
 
 module.exports = class UnverifyCommand extends Command {
   constructor(client) {
@@ -8,21 +8,21 @@ module.exports = class UnverifyCommand extends Command {
       description: "Displays instructions on how to unverify",
       aliases: ["unlink"],
       userPermissions: [],
-    });
+    })
   }
 
   async fn(msg) {
     msg.author
       .send(
-        "Before we get started, you do **not** need to be unverified to verify as a new account, to reverify, head to <https://rover.link/verify> and verify with the new account. \n\nTo unverify, you need to head to our support server at https://discord.gg/7yfwrat and ask one of the moderators to handle your unverification."
+        "To unverify, visit https://rover.link/verify and click on **Remove**.",
       )
       .then(() => {
-        msg.reply("Sent you a DM with information.");
+        msg.reply("Sent you a DM with information.")
       })
       .catch(() => {
         msg.reply(
-          "I can't seem to message you - please make sure your DMs are enabled!"
-        );
-      });
+          "I can't seem to message you - please make sure your DMs are enabled!",
+        )
+      })
   }
-};
+}

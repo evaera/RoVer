@@ -1,6 +1,6 @@
 /* global Cache */
 
-const request = require('request-promise')
+const request = require("request-promise")
 
 // VirtualGroups can be used in place of group IDs for
 // group bindings. They are defined as keys in the
@@ -13,21 +13,21 @@ const request = require('request-promise')
  * @param {object} user The user data
  * @returns {object} The DevForum profile data
  */
-async function getDevForumProfile (user) {
+async function getDevForumProfile(user) {
   const userId = user.id
-  let userProfile = await Cache.get(`bindings.${user.id}`, 'DevForumProfile')
+  let userProfile = await Cache.get(`bindings.${user.id}`, "DevForumProfile")
 
   if (!userProfile) {
     try {
       const devForumData = await request({
         uri: `https://devforum.roblox.com/u/by-external/${userId}.json`,
         json: true,
-        simple: false
+        simple: false,
       })
 
       userProfile = devForumData.user
 
-      Cache.set(`bindings.${user.id}`, 'DevForumProfile', userProfile)
+      Cache.set(`bindings.${user.id}`, "DevForumProfile", userProfile)
     } catch (e) {
       return false
     }
@@ -40,39 +40,40 @@ async function getDevForumProfile (user) {
  * @module VirtualGroups
  */
 module.exports = {
-  async DevForumTopContributor (user) {
+  async DevForumTopContributor(user) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.groups.find(g => g.name === 'Top_Contributor') != null
+    return userProfile.groups.find((g) => g.name === "Top_Contributor") != null
   },
 
-  async DevForumLeadTopContributor (user) { // old, left for compatability
+  async DevForumLeadTopContributor(user) {
+    // old, left for compatability
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.groups.find(g => g.name === 'Community_Sage') != null
+    return userProfile.groups.find((g) => g.name === "Community_Sage") != null
   },
 
-  async RobloxStaff (user) {
+  async RobloxStaff(user) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.groups.find(g => g.name === 'Roblox_Staff') != null
+    return userProfile.groups.find((g) => g.name === "Roblox_Staff") != null
   },
 
-  async CommunitySage (user) {
+  async CommunitySage(user) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.groups.find(g => g.name === 'Community_Sage') != null
+    return userProfile.groups.find((g) => g.name === "Community_Sage") != null
   },
 
-  async PostApproval (user) {
+  async PostApproval(user) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
-    return userProfile.groups.find(g => g.name === 'Post_Approval') != null
+    return userProfile.groups.find((g) => g.name === "Post_Approval") != null
   },
 
   /**
@@ -82,7 +83,7 @@ module.exports = {
    * @param {int} trustLevel The trust level to check against
    * @returns {boolean} The resolution of the binding
    */
-  async DevForumAccess (user, trustLevelCheck) {
+  async DevForumAccess(user, trustLevelCheck) {
     const userProfile = await getDevForumProfile(user)
     if (!userProfile) return
 
@@ -95,35 +96,43 @@ module.exports = {
     // !userTrustLevel also returns true when it is 0, causing it to return false
     // this is why we check it with == null, in case it is actually 0
     // if trustLevelCheck is null now, that means their trust level is 0
-    if (trustLevelCheck == null || userTrustLevel == null || !trustLevelCheck(userTrustLevel) || userProfile.suspended_till) {
+    if (
+      trustLevelCheck == null ||
+      userTrustLevel == null ||
+      !trustLevelCheck(userTrustLevel) ||
+      userProfile.suspended_till
+    ) {
       return false
     }
 
     return true
   },
 
-  async DevForum (user) { // old, left for compatibility
-    return module.exports.DevForumAccess(user, x => x === 2)
+  async DevForum(user) {
+    // old, left for compatibility
+    return module.exports.DevForumAccess(user, (x) => x === 2)
   },
 
-  async DevForumBasic (user) { // old, left for compatibility
-    return module.exports.DevForumAccess(user, x => x === 1)
+  async DevForumBasic(user) {
+    // old, left for compatibility
+    return module.exports.DevForumAccess(user, (x) => x === 1)
   },
 
-  async DevForumMember (user) { // old, left for compatibility
-    return module.exports.DevForumAccess(user, x => x >= 2)
+  async DevForumMember(user) {
+    // old, left for compatibility
+    return module.exports.DevForumAccess(user, (x) => x >= 2)
   },
 
-  async DevForumVisitor (user) {
-    return module.exports.DevForumAccess(user, x => x === 0)
+  async DevForumVisitor(user) {
+    return module.exports.DevForumAccess(user, (x) => x === 0)
   },
 
-  async DevForumNewMember (user) {
-    return module.exports.DevForumAccess(user, x => x === 1)
+  async DevForumNewMember(user) {
+    return module.exports.DevForumAccess(user, (x) => x === 1)
   },
 
-  async DevForumRegular (user) {
-    return module.exports.DevForumAccess(user, x => x >= 2)
+  async DevForumRegular(user) {
+    return module.exports.DevForumAccess(user, (x) => x >= 2)
   },
 
   /**
@@ -134,10 +143,10 @@ module.exports = {
    * @todo Fix the caching on this. Currently, as all bindings execute at the same time,
    * @todo this won't actually ever cache because they are all requesting. (only if more than one BC bound)
    */
-  async BuildersClub (user, bcType) {
-    const { cookie } = require('./data/client.json')
+  async BuildersClub(user, bcType) {
+    const { cookie } = require("./data/client.json")
     if (!cookie) return false
-    let bc = await Cache.get(`bindings.${user.id}`, 'bc')
+    let bc = await Cache.get(`bindings.${user.id}`, "bc")
     if (!bc) {
       const response = await request({
         uri: `https://premiumfeatures.roblox.com/v1/users/${user.id}/validate-membership`,
@@ -145,32 +154,32 @@ module.exports = {
         json: true,
         resolveWithFullResponse: true,
         headers: {
-          cookie: `.ROBLOSECURITY=${cookie}` // Send cookie as a header to avoid using another dependency to insert the cookie
-        }
+          cookie: `.ROBLOSECURITY=${cookie}`, // Send cookie as a header to avoid using another dependency to insert the cookie
+        },
       })
-      bc = 'NBC'
+      bc = "NBC"
       if (response.body && response.statusCode === 200) {
-        bc = 'Premium'
+        bc = "Premium"
       }
 
-      Cache.set(`bindings.${user.id}`, 'bc', bc)
+      Cache.set(`bindings.${user.id}`, "bc", bc)
     }
 
     if (bcType && bcType === bc) {
       return true
-    } else if (!bcType && bc !== 'NBC') {
+    } else if (!bcType && bc !== "NBC") {
       return true
     }
 
     return false
   },
 
-  async Premium (user) {
-    return module.exports.BuildersClub(user, 'Premium')
+  async Premium(user) {
+    return module.exports.BuildersClub(user, "Premium")
   },
 
-  async NBC (user) {
-    return module.exports.BuildersClub(user, 'NBC')
+  async NBC(user) {
+    return module.exports.BuildersClub(user, "NBC")
   },
 
   /**
@@ -181,9 +190,9 @@ module.exports = {
    * @param {"allies" | "enemies"} [relation] The relationship type to check.
    * @returns {boolean} True if user meets relationship requirement.
    */
-  async _Relationship (user, groupid, DiscordServer, relation = 'allies') {
-    if (relation !== 'allies' && relation !== 'enemies') {
-      throw new Error('Invalid relationship type!')
+  async _Relationship(user, groupid, DiscordServer, relation = "allies") {
+    if (relation !== "allies" && relation !== "enemies") {
+      throw new Error("Invalid relationship type!")
     }
 
     const userGroups = await DiscordServer.getRobloxMemberGroups(user.id)
@@ -194,9 +203,12 @@ module.exports = {
       allies = []
 
       // Roblox ally/enemy APIs must specify an amount. Only grab 60 relationships
-      const content = await request(`https://groups.roblox.com/v1/groups/${groupid}/relationships/${relation}?model.startRowIndex=0&model.maxRows=60`, {
-        json: true
-      })
+      const content = await request(
+        `https://groups.roblox.com/v1/groups/${groupid}/relationships/${relation}?model.startRowIndex=0&model.maxRows=60`,
+        {
+          json: true,
+        },
+      )
 
       for (const group of content.relatedGroups) {
         allies.push(group.id)
@@ -212,12 +224,12 @@ module.exports = {
     }
   },
 
-  async Ally (user, groupid, DiscordServer) {
-    return module.exports._Relationship(user, groupid, DiscordServer, 'allies')
+  async Ally(user, groupid, DiscordServer) {
+    return module.exports._Relationship(user, groupid, DiscordServer, "allies")
   },
 
-  async Enemy (user, groupid, DiscordServer) {
-    return module.exports._Relationship(user, groupid, DiscordServer, 'enemies')
+  async Enemy(user, groupid, DiscordServer) {
+    return module.exports._Relationship(user, groupid, DiscordServer, "enemies")
   },
 
   /**
@@ -226,20 +238,25 @@ module.exports = {
    * @param {number} friendid The friend id
    * @returns {boolean} True if user is friends with the given user.
    */
-  async Friend (user, friendid) {
+  async Friend(user, friendid) {
     try {
-      let friends = await Cache.get(`bindings.${user.id}`, 'friends')
+      let friends = await Cache.get(`bindings.${user.id}`, "friends")
       if (!friends) {
-        friends = (await request({
-          uri: `https://friends.roblox.com/v1/users/${user.id}/friends`,
-          simple: false,
-          json: true
-        })).data
+        friends = (
+          await request({
+            uri: `https://friends.roblox.com/v1/users/${user.id}/friends`,
+            simple: false,
+            json: true,
+          })
+        ).data
 
-        Cache.set(`bindings.${user.id}`, 'friends', friends)
+        Cache.set(`bindings.${user.id}`, "friends", friends)
       }
 
-      return friends.find(user => user.id.toString() === friendid.toString()) != null
+      return (
+        friends.find((user) => user.id.toString() === friendid.toString()) !=
+        null
+      )
     } catch (e) {
       // Do nothing
     }
@@ -255,14 +272,17 @@ module.exports = {
    * @param {string} [itemType='Asset'] The item type.
    * @returns
    */
-  async _Ownership (user, itemId, _, itemType = 'Asset') {
+  async _Ownership(user, itemId, _, itemType = "Asset") {
     try {
-      let doesHaveAsset = await Cache.get(`bindings.${user.id}`, `${itemType}.${itemId}`)
+      let doesHaveAsset = await Cache.get(
+        `bindings.${user.id}`,
+        `${itemType}.${itemId}`,
+      )
       if (doesHaveAsset == null) {
         const responseData = await request({
           uri: `https://inventory.roblox.com/v1/users/${user.id}/items/${itemType}/${itemId}`,
           simple: false,
-          json: true
+          json: true,
         })
 
         doesHaveAsset = responseData.data.length > 0
@@ -278,19 +298,19 @@ module.exports = {
   },
 
   // HasAsset for backwards compatibility
-  async HasAsset (user, itemId) {
-    return module.exports._Ownership(user, itemId, undefined, 'Asset')
+  async HasAsset(user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, "Asset")
   },
 
-  async Asset (user, itemId) {
-    return module.exports._Ownership(user, itemId, undefined, 'Asset')
+  async Asset(user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, "Asset")
   },
 
-  async GamePass (user, itemId) {
-    return module.exports._Ownership(user, itemId, undefined, 'GamePass')
+  async GamePass(user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, "GamePass")
   },
 
-  async Badge (user, itemId) {
-    return module.exports._Ownership(user, itemId, undefined, 'Badge')
-  }
+  async Badge(user, itemId) {
+    return module.exports._Ownership(user, itemId, undefined, "Badge")
+  },
 }

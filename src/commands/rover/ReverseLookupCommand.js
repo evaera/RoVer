@@ -1,33 +1,42 @@
-const Command = require('../Command')
-const request = require('request-promise')
-const config = require('../../data/client.json')
+const Command = require("../Command")
+const request = require("request-promise")
+const config = require("../../data/client.json")
 
-module.exports =
-class LookupCommand extends Command {
-  constructor (client) {
+module.exports = class LookupCommand extends Command {
+  constructor(client) {
     super(client, {
-      name: 'reverselookup',
-      properName: 'Reverse Lookup',
-      aliases: ['rlookup', 'rlook'],
-      description: "`<user id>` Get a Roblox User's Discord username if they are in your server.",
+      name: "reverselookup",
+      properName: "Reverse Lookup",
+      aliases: ["rlookup", "rlook"],
+      description:
+        "`<user id>` Get a Roblox User's Discord username if they are in your server.",
       args: [
         {
-          key: 'id',
-          label: 'user id',
-          prompt: 'What is their user id?',
-          type: 'integer'
-        }
-      ]
+          key: "id",
+          label: "user id",
+          prompt: "What is their user id?",
+          type: "integer",
+        },
+      ],
     })
   }
 
-  hasPermission (msg) {
-    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.cache.find(role => role.name === 'RoVer Admin') || msg.member.roles.cache.find(role => role.name === 'RoVer Reverse Lookup')
+  hasPermission(msg) {
+    return (
+      this.client.isOwner(msg.author) ||
+      msg.member.hasPermission(this.userPermissions) ||
+      msg.member.roles.cache.find((role) => role.name === "RoVer Admin") ||
+      msg.member.roles.cache.find(
+        (role) => role.name === "RoVer Reverse Lookup",
+      )
+    )
   }
 
-  async fn (msg, args) {
+  async fn(msg, args) {
     if (!config.reverseLookupApiKey) {
-      return msg.reply('Sorry, reverse lookup is only available on official versions of RoVer.')
+      return msg.reply(
+        "Sorry, reverse lookup is only available on official versions of RoVer.",
+      )
     }
 
     const userId = args.id
@@ -35,29 +44,35 @@ class LookupCommand extends Command {
     const data = await request({
       uri: `https://verify.eryn.io/api/roblox/${userId}?apiKey=${config.reverseLookupApiKey}`,
       json: true,
-      simple: false
+      simple: false,
     })
 
-    if (data.status !== 'ok') {
-      return msg.reply('API request failed, sorry!')
+    if (data.status !== "ok") {
+      return msg.reply("API request failed, sorry!")
     }
 
     const foundMembers = []
 
-    await Promise.all(data.users.map(async id => {
-      try {
-        const member = await msg.guild.members.fetch(id, false)
+    await Promise.all(
+      data.users.map(async (id) => {
+        try {
+          const member = await msg.guild.members.fetch(id, false)
 
-        if (member) {
-          foundMembers.push(`${member.displayName} (${member.user.tag}) [\`${member.id}\`]`)
-        }
-      } catch (e) { }
-    }))
+          if (member) {
+            foundMembers.push(
+              `${member.displayName} (${member.user.tag}) [\`${member.id}\`]`,
+            )
+          }
+        } catch (e) {}
+      }),
+    )
 
     if (foundMembers.length > 0) {
-      return msg.reply(`Results found:\n\n${foundMembers.join('\n')}`)
+      return msg.reply(`Results found:\n\n${foundMembers.join("\n")}`)
     } else {
-      return msg.reply('Sorry, no results found! Reverse lookup will only show members who are in this server.')
+      return msg.reply(
+        "Sorry, no results found! Reverse lookup will only show members who are in this server.",
+      )
     }
   }
 }

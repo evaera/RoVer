@@ -25,8 +25,8 @@ shardingManager.on("shardCreate", (shard) => {
 })
 
 // Instantiate a GlobalCache, which will cache information from the shards.
-global.GlobalCache = new GlobalCache(shardingManager)
-;(async () => {
+global.GlobalCache = new GlobalCache(shardingManager);
+(async () => {
   if (config.banServer) {
     const res = await request(
       `https://discord.com/api/v9/guilds/${config.banServer}/bans`,

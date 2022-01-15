@@ -236,9 +236,9 @@ class DiscordBot {
       server.getSetting("verifyChannel") === message.channel.id &&
       (
         message.cleanContent.toLowerCase() !==
-          message.guild.commandPrefix + "verify" ||
+          message.guild.commandPrefix + "verify" &&
         message.cleanContent.toLowerCase() !==
-          message.guild.commandPrefix + "update" ||
+          message.guild.commandPrefix + "update" &&
         message.cleanContent.toLowerCase() !==
           message.guild.commandPrefix + "getroles"
       ) &&

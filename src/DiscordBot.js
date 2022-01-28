@@ -232,10 +232,10 @@ class DiscordBot {
     if (!member) return
 
     // If this is the verify channel, we want to delete the message and just verify the user if they aren't an admin.
+    const whitelistedCommands = ["verify", "update", "getroles", "getrole", "roverupdate"];
     if (
       server.getSetting("verifyChannel") === message.channel.id &&
-      message.cleanContent.toLowerCase() !==
-        message.guild.commandPrefix + "verify" &&
+      !whitelistedCommands.includes(message.cleanContent.toLowerCase().substring(message.guild.commandPrefix.length)) &&
       !(
         this.bot.isOwner(message.author) ||
         message.member.hasPermission("MANAGE_GUILD") ||

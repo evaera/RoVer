@@ -235,7 +235,7 @@ class DiscordBot {
     const whitelistedCommands = ["verify", "update", "getroles", "getrole", "roverupdate"];
     if (
       server.getSetting("verifyChannel") === message.channel.id &&
-      !whitelistedCommands.includes(message.cleanContent.toLowerCase().substring(msg.guild.commandPrefix.length)) &&
+      !whitelistedCommands.includes(message.cleanContent.toLowerCase().substring(message.guild.commandPrefix.length)) &&
       !(
         this.bot.isOwner(message.author) ||
         message.member.hasPermission("MANAGE_GUILD") ||

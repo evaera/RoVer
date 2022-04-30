@@ -3,20 +3,11 @@ const DiscordServer = require("../../DiscordServer")
 const { Role } = require("discord.js")
 const config = require("../../data/client.json")
 
-async function recursiveUpdate(memberArray, server, msg, errors) {
+async function recursiveUpdate(memberArray, server, msg) {
   const nextMember = memberArray.pop()
   if (!nextMember) {
-    let errorText = ""
-    if (errors.length > 0) {
-      errorText = `\nThere was an error while updating the following members: \`\`\`${errors.join(
-        "\n",
-      )}\`\`\``
-    }
     return msg
-      .reply(
-        `:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected.${errorText}`,
-        { split: true },
-      )
+      .reply(`:white_check_mark: Finished bulk update! ${server.bulkUpdateCount} members affected (this may take a few more minutes)`)
       .then(() => {
         server.bulkUpdateCount = 0
         server.ongoingBulkUpdate = false
@@ -28,21 +19,20 @@ async function recursiveUpdate(memberArray, server, msg, errors) {
     if (member) {
       try {
         await member.verify({ skipWelcomeMessage: true })
+        server.bulkUpdateCount++
       } catch (e) {
-        errors.push(`${member.member.displayName}#${member.user.discriminator}`)
+        // Ignore - likely transient rate limit issue. If this is the case, an error here will still result in the user being updated.
       }
-
-      server.bulkUpdateCount++
     }
   }
-  return recursiveUpdate(memberArray, server, msg, errors)
+  return recursiveUpdate(memberArray, server, msg)
 }
 
 async function returnMembersOfRole(role) {
   return new Promise((resolve) => {
     role.guild.members.fetch().then((collection) => {
       let rolledMembers = collection.filter((member) =>
-        member.roles.cache.has(role.id),
+        (member.roles.cache.has(role.id) && !member.user.bot),
       )
       resolve(rolledMembers.array())
     })

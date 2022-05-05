@@ -74,8 +74,9 @@ module.exports = class BindGroupCommand extends Command {
     for (const groupString of args.groups) {
       const [groupId, ranksString] = groupString.split(":")
       const group = { id: groupId }
+      const groupIsInt = !groudId.match(/[^\d]/)
 
-      if (groupId.match(/[^\d]/) && !VirtualGroups[groupId]) {
+      if (!groupIsInt && !VirtualGroups[groupId]) {
         return msg.reply(
           stripIndents`:no_entry_sign: You have attempted to bind an invalid group (\`${groupId}\`). Possible causes:
 
@@ -87,7 +88,7 @@ module.exports = class BindGroupCommand extends Command {
         )
       }
 
-      if (groupId.match(/[^\d]/) && groupId.toLowerCase() == "premium") {
+      if (!groupIsInt && groupId.toLowerCase() == "premium") {
         if (!config.cookie) {
           return msg.reply(
             oneLine`:no_entry_sign: Unfortunately, due to Roblox API changes, an authorization cookie needs to be set in the configuration for this VirtualGroup to work.`,
@@ -95,7 +96,7 @@ module.exports = class BindGroupCommand extends Command {
         }
       }
 
-      if (!groupId.match(/[^\d]/) && groupId.length > 9)
+      if (groupIsInt && groupId.length > 9)
         return msg.reply(
           ":no_entry_sign: Sorry, but that group id is too long!",
         )
@@ -121,7 +122,7 @@ module.exports = class BindGroupCommand extends Command {
           }
         }
         group.ranks = ranks
-      } else if (!groupId.match(/[a-z]/i)) {
+      } else if (groupIsInt) {
         group.ranks = []
         for (let i = 1; i <= 255; i++) {
           group.ranks.push(i)

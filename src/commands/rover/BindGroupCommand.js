@@ -74,7 +74,7 @@ module.exports = class BindGroupCommand extends Command {
     for (const groupString of args.groups) {
       const [groupId, ranksString] = groupString.split(":")
       const group = { id: groupId }
-      const groupIsInt = !groudId.match(/[^\d]/)
+      const groupIsInt = !groupId.match(/[^\d]/)
 
       if (!groupIsInt && !VirtualGroups[groupId]) {
         return msg.reply(
@@ -107,6 +107,22 @@ module.exports = class BindGroupCommand extends Command {
         for (const rank of unparsedRanks) {
           const rangeMatch = rank.match(/(\d+)-(\d+)/)
           const rankNumber = parseInt(rank, 10)
+
+          if (
+            groupIsInt
+              ? rankNumber < 0 ||
+                rankNumber > 255 ||
+                (rangeMatch &&
+                  (rangeMatch[1] < 0 ||
+                    rangeMatch[1] > 255 ||
+                    rangeMatch[2] < 0 ||
+                    rangeMatch[2] > 255))
+              : rank.length > 12
+          ) {
+            return msg.reply(
+              ":no_entry_sign: You have attempted to bind an invalid rank/asset! Don't do that.",
+            )
+          }
 
           if (rangeMatch) {
             const start = parseInt(rangeMatch[1], 10)

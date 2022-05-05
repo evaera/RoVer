@@ -95,6 +95,11 @@ module.exports = class BindGroupCommand extends Command {
         }
       }
 
+      if (!groupId.match(/[^\d]/) && groupId.length > 9)
+        return msg.reply(
+          ":no_entry_sign: Sorry, but that group id is too long!",
+        )
+
       if (ranksString != null) {
         const ranks = []
         const unparsedRanks = ranksString.split(",")

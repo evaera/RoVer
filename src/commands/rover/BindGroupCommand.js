@@ -109,7 +109,8 @@ module.exports = class BindGroupCommand extends Command {
           const rankNumber = parseInt(rank, 10)
 
           if (
-            groupIsInt
+            isNaN(rank) ||
+            (groupIsInt
               ? rankNumber < 0 ||
                 rankNumber > 255 ||
                 (rangeMatch &&
@@ -117,7 +118,7 @@ module.exports = class BindGroupCommand extends Command {
                     rangeMatch[1] > 255 ||
                     rangeMatch[2] < 0 ||
                     rangeMatch[2] > 255))
-              : rank.length > 12
+              : rank.length > 12)
           ) {
             return msg.reply(
               ":no_entry_sign: You have attempted to bind an invalid rank/asset! Don't do that.",

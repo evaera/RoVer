@@ -559,6 +559,7 @@ class DiscordMember {
         robloxDisplayName: data.robloxDisplayName,
       })
     } else {
+      let changed = false
       // Status was not "ok".
       switch (data.errorCode) {
         case 404: {

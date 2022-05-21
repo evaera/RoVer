@@ -89,3 +89,4 @@ $RECYCLE.BIN/
 src/data/client.json
 
 .env
+metrics/*.txt

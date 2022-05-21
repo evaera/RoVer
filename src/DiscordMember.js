@@ -38,7 +38,7 @@ class DiscordMember {
   write(data) {
     fs.appendFileSync(
       `${path.join(__dirname, "..", "metrics")}/${this.bot.shard.ids[0]}.txt`,
-      JSON.stringify(data) + "\n",
+      JSON.stringify({ ...data, time: new Date().toISOString() }) + "\n",
     )
   }
 

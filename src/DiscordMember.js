@@ -547,6 +547,7 @@ class DiscordMember {
         status: "ok",
         changed,
         verified: true,
+        manual: !!options.message,
       })
 
       return status({
@@ -605,6 +606,7 @@ class DiscordMember {
             status: "ok",
             changed,
             verified: false,
+            manual: !!options.message,
           })
 
           return status({

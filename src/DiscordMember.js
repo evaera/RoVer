@@ -36,6 +36,8 @@ class DiscordMember {
   }
 
   write(data) {
+    if (!config.metrics) return
+
     fs.appendFileSync(
       `${path.join(__dirname, "..", "metrics")}/${this.bot.shard.ids[0]}.txt`,
       JSON.stringify({ ...data, time: new Date().toISOString() }) + "\n",
@@ -304,6 +306,7 @@ class DiscordMember {
 
     if (!this.member.manageable || !botMember.hasPermission("MANAGE_ROLES")) {
       this.write({
+        user: this.id,
         server: this.server.id,
         status: "fail",
         reason: "cant-manage",
@@ -338,6 +341,7 @@ class DiscordMember {
     } catch (e) {
       if (config.loud) console.log(e)
       this.write({
+        user: this.id,
         server: this.server.id,
         status: "fail",
         reason: "fetch-failed",
@@ -365,6 +369,7 @@ class DiscordMember {
         } catch (e) {
           if (config.loud) console.log(e)
           this.write({
+            user: this.id,
             server: this.server.id,
             status: "fail",
             reason: "fetch-fail",
@@ -526,6 +531,7 @@ class DiscordMember {
         } catch (e) {
           console.log(e)
           this.write({
+            user: this.id,
             server: this.server.id,
             status: "fail",
             reason: "roblox-api-fail",
@@ -543,6 +549,7 @@ class DiscordMember {
       VerificationAttempts.delete(this.id)
 
       this.write({
+        user: this.id,
         server: this.server.id,
         status: "ok",
         changed,
@@ -603,6 +610,7 @@ class DiscordMember {
           }
 
           this.write({
+            user: this.id,
             server: this.server.id,
             status: "ok",
             changed,

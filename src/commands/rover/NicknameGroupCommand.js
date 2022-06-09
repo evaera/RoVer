@@ -1,6 +1,8 @@
 const Command = require("../Command")
 const request = require("request-promise")
 
+const config = require("../../data/client.json")
+
 module.exports = class NicknameGroupCommand extends Command {
   constructor(client) {
     super(client, {
@@ -28,6 +30,8 @@ module.exports = class NicknameGroupCommand extends Command {
       return msg.reply(
         "Server settings are currently being saved - please try again in a few moments.",
       )
+    if (config.settingsFrozen) return msg.reply(config.settingsFrozen)
+
     if (args.groupid) {
       const data = await request({
         uri: `https://groups.roblox.com/v1/groups/${args.groupid}`,

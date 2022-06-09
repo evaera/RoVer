@@ -36,6 +36,7 @@ module.exports = class BindGroupCommand extends Command {
   }
 
   async fn(msg, args) {
+    if (config.settingsFrozen) return msg.reply(config.settingsFrozen)
     if (this.server.ongoingSettingsUpdate)
       return msg.reply(
         "Server settings are currently being saved - please try again in a few moments.",

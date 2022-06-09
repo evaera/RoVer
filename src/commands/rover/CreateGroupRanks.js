@@ -1,5 +1,6 @@
 const request = require("request-promise")
 const Command = require("../Command")
+const config = require("../../data/client.json")
 
 module.exports = class CreateGroupRanksCommand extends Command {
   constructor(client) {
@@ -22,6 +23,7 @@ module.exports = class CreateGroupRanksCommand extends Command {
   }
 
   async fn(msg, args) {
+    if (config.settingsFrozen) return msg.reply(config.settingsFrozen)
     if (!msg.guild.me.hasPermission("MANAGE_ROLES")) {
       return msg.reply(
         "RoVer needs the 'Manage Roles' permission in order to do this.",

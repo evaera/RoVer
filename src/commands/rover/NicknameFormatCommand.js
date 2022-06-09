@@ -1,4 +1,5 @@
 const Command = require("../Command")
+const config = require("../../data/client.json")
 
 module.exports = class NicknameFormatCommand extends Command {
   constructor(client) {
@@ -23,6 +24,7 @@ module.exports = class NicknameFormatCommand extends Command {
   }
 
   async fn(msg, args) {
+    if (config.settingsFrozen) return msg.reply(config.settingsFrozen)
     if (this.server.ongoingSettingsUpdate)
       return msg.reply(
         "Server settings are currently being saved - please try again in a few moments.",

@@ -178,6 +178,10 @@ class DiscordServer {
         "Attempt to change a setting from a server whose settings are not loaded",
       )
     }
+    if (config.settingsFrozen) {
+      throw new Error("Changing settings is frozen.")
+    }
+
     this.ongoingSettingsUpdate = true
 
     this.settings[key] = value

@@ -1,3 +1,4 @@
+const config = require("../../data/client.json")
 const Command = require("../Command")
 
 module.exports = class JoinMessageCommand extends Command {
@@ -22,6 +23,7 @@ module.exports = class JoinMessageCommand extends Command {
   }
 
   async fn(msg, args) {
+    if (config.settingsFrozen) return msg.reply(config.settingsFrozen)
     if (this.server.ongoingSettingsUpdate)
       return msg.reply(
         "Server settings are currently being saved - please try again in a few moments.",
